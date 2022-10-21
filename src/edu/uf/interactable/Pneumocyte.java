@@ -1,0 +1,178 @@
+package edu.uf.interactable;
+
+import edu.uf.compartments.Voxel;
+import edu.uf.intracellularState.BooleanNetwork;
+import edu.uf.intracellularState.EukaryoteSignalingNetwork;
+import edu.uf.intracellularState.Phenotypes;
+import edu.uf.time.Clock;
+import edu.uf.utils.Constants;
+import edu.uf.utils.Rand;
+import edu.uf.utils.Util;
+
+public class Pneumocyte extends Cell {
+    public static final String NAME = "Pneumocyte";
+
+    private static int totalCells = 0;
+    
+    private int iteration;
+    
+    public static final int RECEPTOR_IDX = Molecule.getReceptors();
+
+    public Pneumocyte() {
+        super();
+        this.iteration = 0;
+        Pneumocyte.totalCells = Pneumocyte.totalCells + 1;
+        this.clock = Clock.createClock(3);
+    }
+
+    public static int getTotalCells() {
+		return totalCells;
+	}
+
+	public static void setTotalCells(int totalCells) {
+		Pneumocyte.totalCells = totalCells;
+	}
+
+	public int getIteration() {
+		return iteration;
+	}
+
+    
+    public void die() {
+        if(this.getStatus() != Phagocyte.DEAD) {
+            this.setStatus(Neutrophil.DEAD);  //##CAUTION!!!
+            Pneumocyte.totalCells--;
+        }
+    }
+
+    protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
+        if (interactable instanceof Afumigatus) {
+            Afumigatus interac = (Afumigatus) interactable;
+            EukaryoteSignalingNetwork.B_GLUC_e = Afumigatus.RECEPTOR_IDX;
+        	if(!this.isDead()) 
+                if(interac.getStatus() != Afumigatus.RESTING_CONIDIA) 
+                    if(!this.inPhenotype(Phenotypes.ACTIVE))
+                        if(Rand.getRand().randunif() < Constants.PR_P_INT) 
+                        	this.bind(Afumigatus.RECEPTOR_IDX);
+            return true;
+        }
+        
+        if (interactable instanceof IL6) { 
+        	if(this.inPhenotype(((IL6)interactable).getSecretionPhenotype())) 
+            	((Molecule)interactable).inc(Constants.P_IL6_QTTY, 0, x, y, z);
+            return true;
+        }
+        
+        if (interactable instanceof TNFa) {
+            Molecule interact = (Molecule) interactable;
+            EukaryoteSignalingNetwork.TNFa_e = TNFa.MOL_IDX;
+        	if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF, this.getClock())) 
+        		this.bind(TNFa.MOL_IDX);
+        	if(this.inPhenotype(interact.getSecretionPhenotype())) 
+            	interact.inc(Constants.P_TNF_QTTY, 0, x, y, z);
+            return true;
+        }
+        
+        /*if (interactable instanceof IL10) {
+            Molecule interact = (Molecule) interactable;
+            EukaryoteSignalingNetwork.IL10_e = IL10.MOL_IDX;
+        	if (Util.activationFunction(interact.values[0][x][y][z], Constants.Kd_IL10, this.getClock())) 
+        		this.bind(IL10.MOL_IDX);
+            return true;
+        }*/
+        
+        /*if (interactable instanceof TGFb) {
+            Molecule interact = (Molecule) interactable;
+            EukaryoteSignalingNetwork.TGFb_e = TGFb.MOL_IDX;
+        	if (Util.activationFunction(interact.values[0][x][y][z], Constants.Kd_TGF, this.getClock())) 
+        		this.bind(TGFb.MOL_IDX);
+            return true;
+        }*/
+		
+        return interactable.interact(this, x, y, z);
+    }
+
+    public void incIronPool(double qtty) {}
+
+    public void updateStatus() {
+    	this.processBooleanNetwork();
+    }
+            
+    public void move(Voxel oldVoxel, int steps) {}
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public int getMaxMoveSteps() {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	@Override
+	protected BooleanNetwork createNewBooleanNetwork() {
+		return new EukaryoteSignalingNetwork() {
+
+			public static final int size = 2;
+			
+			public static final int MIX_ACTIVE = 0;
+			public static final int ACTIVE = 1;
+			public static final int ITER_REST = 12;
+			private int iterations = 0;
+			
+			{
+				this.inputs = new int[NUM_RECEPTORS];
+				this.booleanNetwork = new int[size];
+			}
+			
+			private int countMix() {
+				if((this.booleanNetwork[MIX_ACTIVE]) == 0)
+					return 0;
+				if(iterations++ >= ITER_REST) {
+					iterations = 0;
+					return 0;
+				}
+				return 1;
+			}
+			
+			private int countActive() {
+				if((this.booleanNetwork[ACTIVE]) == 0)
+					return 0;
+				if(iterations++ >= ITER_REST) {
+					iterations = 0;
+					return 0;
+				}
+				return 1;
+			}
+			
+			
+			@Override
+			public void processBooleanNetwork() {
+				if(Pneumocyte.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
+					this.booleanNetwork[MIX_ACTIVE] =  (e(this.inputs, B_GLUC_e) | countMix()) & (-this.booleanNetwork[ACTIVE] + 1);
+					this.booleanNetwork[ACTIVE] = ((e(this.inputs, IL1B_e) | e(this.inputs, TNFa_e)) & this.booleanNetwork[MIX_ACTIVE]) | countActive();
+
+					this.iterations = e(this.inputs, B_GLUC_e) == 1 | e(this.inputs, IL1B_e) == 1 | e(this.inputs, TNFa_e) == 1 ? 0 : this.iterations;
+					
+					for(int i = 0; i < NUM_RECEPTORS; i++)
+						this.inputs[i] = 0;
+					
+					Pneumocyte.this.clearPhenotype();
+					
+					if(this.booleanNetwork[ACTIVE] == 1) {
+						Pneumocyte.this.addPhenotype(Phenotypes.ACTIVE);
+					} else if(this.booleanNetwork[MIX_ACTIVE] == 1) {
+						Pneumocyte.this.addPhenotype(Phenotypes.MIX_ACTIVE);
+					} else {
+						Pneumocyte.this.addPhenotype(Phenotypes.RESTING);
+					}
+					
+				}
+				
+			}
+			
+		};
+	}
+}
