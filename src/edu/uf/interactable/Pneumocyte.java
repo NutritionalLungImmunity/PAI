@@ -100,6 +100,7 @@ public class Pneumocyte extends Cell {
             
     public void move(Voxel oldVoxel, int steps) {}
 
+    
 	@Override
 	public String getName() {
 		return NAME;
