@@ -258,6 +258,7 @@ public class Liver extends Cell{
         	
         	this.logHepcidin = Math.log10(hepQtty);//hep.getTotalMolecule(0));
         	
+        	
             return true;
         }
         return interactable.interact(this, x, y, z);
