@@ -48,7 +48,7 @@ public class IL10 extends Molecule{
         		this.inc(Constants.MA_IL10_QTTY, 0, x, y, z);
         		//macro.secrete(NAME);
             if (!macro.isDead()) { 
-                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL10, macro.getClock())) {
+                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL10)) {
                 	macro.bind(MOL_IDX);
                 	//macro.setStatus(macro.getStatus() != Phagocyte.INACTIVE ? Phagocyte.INACTIVATING : Phagocyte.INACTIVE);
                 	//macro.interation = 0;
@@ -73,5 +73,10 @@ public class IL10 extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

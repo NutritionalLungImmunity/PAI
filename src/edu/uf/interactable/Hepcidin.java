@@ -45,7 +45,7 @@ public class Hepcidin extends Molecule{
     	EukaryoteSignalingNetwork.Hep_e = MOL_IDX;
         if (interactable instanceof Macrophage) {
         	Macrophage macro = (Macrophage) interactable;
-        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Hep, macro.getClock()))
+        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Hep))
         		macro.bind(MOL_IDX);
             return true; 
         }
@@ -65,5 +65,10 @@ public class Hepcidin extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

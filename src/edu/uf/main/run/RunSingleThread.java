@@ -43,7 +43,7 @@ public class RunSingleThread implements Run{
         for (int k = 0; k < iterations; k++) {
             if (k != 0)
                 Collections.shuffle(L);
-            if (Afumigatus.getTotalCells() > 3e6)//1.1e7)
+            if (Afumigatus.getTotalCells() > 3e5)//1.1e7)
                 return;
             for (int ii : L) {
 

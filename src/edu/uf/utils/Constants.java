@@ -12,9 +12,10 @@ public class Constants {
 	public static double UNIT_T = TIME_STEP_SIZE/((double) HALF_HOUR);
 	public static double STD_UNIT_T = TIME_STEP_SIZE/((double) HOUR);
 	public static double REL_CYT_BIND_UNIT_T = TIME_STEP_SIZE/((double) CYT_BIND_T);
+	public static double INV_UNIT_T = HALF_HOUR/((double)TIME_STEP_SIZE);
 	
-	public static int ITER_TO_SWELLING = 118;
-	public static double PR_ASPERGILLUS_CHANGE = 0.003850817669777474;
+	public static int ITER_TO_SWELLING = 8;//118;
+	public static double PR_ASPERGILLUS_CHANGE = 0.05776227;//0.003850817669777474;
 	public static int ITER_TO_GERMINATE = 1;//58;
 	
 	public static int ITER_TO_CHANGE_STATE = 60;
@@ -27,26 +28,26 @@ public class Constants {
 	public static double CONIDIA_VOL = 4.844e-14; // L
 	public static double MA_VOL = 4.849048e-12; // L
 	public static double SPACE_VOL = 6.4e-8; // L
-	public static double SERUM_VOL = 3e-3; // L (KIND OF DUMMY)
+	public static double SERUM_VOL = 3e-3; // L (KIND OF DUMMY) 
 	
 	public static double PR_BRANCH = 0.25; // 25%
 	
 	public static double TURNOVER_RATE = 0.9878452295470697;
-	public static double LAC_QTTY = 1.847e-17;// single shot! (https://doi.org/10.1038/s41598-019-49419-z) 4.3680e-17 * STD_UNIT_T;
+	public static double LAC_QTTY = 1.847e-17 * 15;// single shot! (https://doi.org/10.1038/s41598-019-49419-z) 4.3680e-17 * STD_UNIT_T;
 	
-	public static double TAFC_UP = (1e-12/VOXEL_VOL) * STD_UNIT_T;
+	public static double TAFC_UP = (1e-12/VOXEL_VOL) * STD_UNIT_T * 15;
 	
-	public static double TAFC_QTTY = 1.0000e-15 * STD_UNIT_T;
-	public static double HEMOLYSIN_QTTY = 1.386667e-10 * STD_UNIT_T;
-	public static double MA_IL6_QTTY = 1.4615e-20 * STD_UNIT_T;
-	public static double MA_IL8_QTTY = 5.072776e-19 * STD_UNIT_T;
-	public static double MA_MCP1_QTTY = 1.757245e-20 * STD_UNIT_T;
-	public static double MA_MIP1B_QTTY = 1.7896e-20 * STD_UNIT_T;
-	public static double MA_MIP2_QTTY = 1.1061e-19 * STD_UNIT_T;
-	public static double MA_IL10_QTTY = 6.9735e-22 * STD_UNIT_T;
-	public static double MA_TNF_QTTY = 3.2179e-20 * STD_UNIT_T;
-	public static double MA_TGF_QTTY = 1.0119e-21 * STD_UNIT_T;
-	public static double MA_IL1_QTTY = 5.645925e-21 * STD_UNIT_T;
+	public static double TAFC_QTTY = 1.0000e-15 * STD_UNIT_T * 15;
+	public static double HEMOLYSIN_QTTY = 1.386667e-10 * STD_UNIT_T * 15;
+	public static double MA_IL6_QTTY = 1.4615e-20 * STD_UNIT_T * 15;
+	public static double MA_IL8_QTTY = 5.072776e-19 * STD_UNIT_T * 15;
+	public static double MA_MCP1_QTTY = 1.757245e-20 * STD_UNIT_T * 15;
+	public static double MA_MIP1B_QTTY = 1.7896e-20 * STD_UNIT_T * 15;
+	public static double MA_MIP2_QTTY = 1.1061e-19 * STD_UNIT_T * 15;
+	public static double MA_IL10_QTTY = 6.9735e-22 * STD_UNIT_T * 15;
+	public static double MA_TNF_QTTY = 3.2179e-20 * STD_UNIT_T * 15;
+	public static double MA_TGF_QTTY = 1.0119e-21 * STD_UNIT_T * 15;
+	public static double MA_IL1_QTTY = 5.645925e-21 * STD_UNIT_T * 15;
 	public static double GRANULE_QTTY = 1; //AU
 
 	public static double N_IL6_QTTY = 0.005875191*MA_IL6_QTTY;
@@ -67,17 +68,17 @@ public class Constants {
 	
 	
 	//degradation rate: [Cytokine] = HALF_LIFE * [Cytokine]; HALF_LIFE=0.9768950939813351 -> 1h half-life
-	public static double IL6_HALF_LIFE = 0.9768950939813351;
-	public static double MIP1B_HALF_LIFE = 0.9768950939813351;
-	public static double MIP2_HALF_LIFE = 0.9768950939813351;
-	public static double IL10_HALF_LIFE = 0.9768950939813351;
-	public static double IL8_HALF_LIFE = 0.9768950939813351;
-	public static double MCP1_HALF_LIFE = 0.9768950939813351;
-	public static double TNF_HALF_LIFE = 0.9768950939813351;
-	public static double TGF_HALF_LIFE = 0.9768950939813351;
-	public static double IL1_HALF_LIFE = 0.9768950939813351;
-    public static double HEP_HALF_LIFE = 0.9768950939813351;
-    public static double GM_CSF_HALF_LIFE = 0.9768950939813351;
+	public static double IL6_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double MIP1B_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double MIP2_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double IL10_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double IL8_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double MCP1_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double TNF_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double TGF_HALF_LIFE = 0.9451153*0.9768950939813351;
+	public static double IL1_HALF_LIFE = 0.9451153*0.9768950939813351;
+    public static double HEP_HALF_LIFE = 0.9451153*0.9768950939813351;
+    public static double GM_CSF_HALF_LIFE = 0.9451153*0.9768950939813351;
     
 	public static double ANTI_TNF_HALF_LIFE = 0.9998074591165111; // five days -- 10.1002/eji.1830180221
 	public static double Granule_HALF_LIFE = 0.3068528; //1+log(0.5)
@@ -101,18 +102,19 @@ public class Constants {
     public static double Kd_TfR2 = 2.7e-8;
     public static double Kd_LPS = 3e-9; //~3nM
     public static double Kd_GM_CSF = 6e-11; //20-100pM
+    public static double Kd_BGLUCAN = 1.0;
 	
 	
-	public static double MA_IRON_IMPORT_RATE = 5.3333e-12/VOXEL_VOL;
-	public static double MA_IRON_EXPORT_RATE = 1367.3051298168639/VOXEL_VOL;
+	public static double MA_IRON_IMPORT_RATE = 5.3333e-12/VOXEL_VOL * 15;
+	public static double MA_IRON_EXPORT_RATE = 1367.3051298168639/VOXEL_VOL * 15;
 
 	public static double DRIFT_BIAS = 1e-100;
 	public static double PR_MOVE_ASP = 0.75; // DUMMY
 	
 	
 	//Average number of displaced voxels
-	public static double MA_MOVE_RATE_REST = 1.44*TIME_STEP_SIZE/VOXEL_LEN;
-	public static double MA_MOVE_RATE_ACT = 1.44*TIME_STEP_SIZE/VOXEL_LEN; //for NK 0.6-0.7 um/min (https://doi.org/10.3389/fimmu.2014.00080)
+	public static double MA_MOVE_RATE_REST = 1.44*TIME_STEP_SIZE/VOXEL_LEN * 15;
+	public static double MA_MOVE_RATE_ACT = 1.44*TIME_STEP_SIZE/VOXEL_LEN * 15; //for NK 0.6-0.7 um/min (https://doi.org/10.3389/fimmu.2014.00080)
 	
 	
 	public static double REC_BIAS = 0.9995; // DUMMY VALUE CREATED TO AVOID INFINTY LOOP!
@@ -133,7 +135,7 @@ public class Constants {
 	public static int N_MAX_CONIDIA = 3;
 	
 	
-	public static double PR_KILL = 0.012792139405522474;
+	public static double PR_KILL = 0.012792139405522474 * 15;
 
 	public static double K_M_TF_TAFC = 2.514985e-3;
 	public static double K_M_TF_LAC = 2.5052031141601793e-3;
@@ -143,8 +145,8 @@ public class Constants {
 	public static double CONIDIA_INIT_IRON = Kd_LIP * CONIDIA_VOL; // mols
 
 	//probability leukocytes die in one time-step (2 min): 6 and 24 hours half-life respectively
-	public static double NEUTROPHIL_HALF_LIFE = 0.003850817669777474;
-	public static double MA_HALF_LIFE = 0.0009627044174443685;
+	public static double NEUTROPHIL_HALF_LIFE = 0.05776227;//0.003850817669777474;
+	public static double MA_HALF_LIFE = 0.01444057;//0.0009627044174443685;
 	
 	
 	/* 
@@ -268,17 +270,17 @@ public class Constants {
     /** COVID-19 PARAMETERS**/
     
     public static double SarsCoV2_HALF_LIFE = 0.9959768; //(t1/2 influenza 10.1128/JVI.01623-05)      (0.99792 //https://doi.org/10.1098/rsos.210787)
-    public static double SarsCoV2_REP_RATE = 0.009210062*2.5; //https://doi.org/10.1038/s41586-020-2708-8
+    public static double SarsCoV2_REP_RATE = 0.009210062*2.5 * 15; //https://doi.org/10.1038/s41586-020-2708-8
     public static double MAX_VIRAL_LOAD = 3.824892e-20;//1e4*log(10) molecules (10-100 initial number https://doi.org/10.1073/pnas.2024815118)
-    public static double SarsCoV2_UPTAKE_QTTY = 1.66113e-21;//a thousand molecules
+    public static double SarsCoV2_UPTAKE_QTTY = 1.66113e-21 * 15;//a thousand molecules
     public static double DAMP_HALF_LIFE = 0.9768950939813351;
     public static double SAMP_HALF_LIFE = 0.9768950939813351;
     public static double VEGF_HALF_LIFE = 0.9768950939813351;
     public static double IFN1_HALF_LIFE = 0.9768950939813351;
     public static double IFN_I_HALF_LIFE = 0.9768950939813351;
-    public static double MA_IFN_QTTY =  4.983902e-22;//  1.495171e-21; // preliminary -- PCA with 8 eigen values and TNF alone. 
-    public static double DC_IFN_QTTY = 4.983902e-22;//https://doi.org/10.1182/blood-2006-05-023770     1.495171e-21; //5.922133e-19;
-    public static double VEGF_QTTY = 5.280638e-22; //10.3389/fonc.2013.00196
+    public static double MA_IFN_QTTY =  4.983902e-22 * 15;//  1.495171e-21; // preliminary -- PCA with 8 eigen values and TNF alone. 
+    public static double DC_IFN_QTTY = 4.983902e-22 * 15;//https://doi.org/10.1182/blood-2006-05-023770     1.495171e-21; //5.922133e-19;
+    public static double VEGF_QTTY = 5.280638e-22 * 15; //10.3389/fonc.2013.00196
     public static double Kd_IFNG = 3.0e-9; //median Ifnar2-EC (https://doi.org/10.1016/j.jmb.2006.11.053)
     public static double Kd_SAMP = 1; // 1 AU of SAMP has Kd of 1 by definition
     public static double Kd_DAMP = 1; // 1 AU of DAMP has Kd of 1 by definition
@@ -292,13 +294,13 @@ public class Constants {
     //public static double PR_INF_DIE = 2.02e-07; //X https://doi.org/10.1098/rsos.210787 -- 1-exp(-1.01e-7*2)
     public static double PR_NK_KILL = Math.exp(-1);//0.07675284; //DUMMY
     public static double MAX_NK = 160; //4% of 4e6 in 1 mL
-    public static double NK_HALF_LIFE = 0.0001375292; //~7 days (10.1111/j.1365-2567.2007.02573.x)
+    public static double NK_HALF_LIFE = 0.002062938; //0.0001375292; //~7 days (10.1111/j.1365-2567.2007.02573.x)
     public static double MIN_NK = 250; //https://doi.org/10.7554/eLife.74623
-    public static double N_DEFENSIN_QTTY = 2.834008e-16;// reference 81 -- poor estimate
+    public static double N_DEFENSIN_QTTY = 2.834008e-16 * 15;// reference 81 -- poor estimate
     public static double DEFENSIN_Kd = 4.547e-7;//https://doi.org/10.4049/jimmunol.0804049  //1.46e-7;//10.1016/j.jmb.2021.167225
     public static double DEFENSIN_RESTING_CONCENTRATION = 7.142857e-09;// * SERUM_VOL; //PMID: 8340706
     public static double Kd_H2O2 = 125e-6; //DOI:10.1167/ iovs.15-19039
-    public static double H2O2_QTTY = 2.38e-15; //DOI:10.1016/0014-5793(94)80241-6
+    public static double H2O2_QTTY = 2.38e-15 * 15; //DOI:10.1016/0014-5793(94)80241-6
     public static double H2O2_HALF_LIFE = 1.0+Math.log(0.5)/7.5; // DOI:10.1159/000276558
     public static double VIRAL_LAC_Kd = 2.980226e-07; //https://doi.org/10.1086/343809
     

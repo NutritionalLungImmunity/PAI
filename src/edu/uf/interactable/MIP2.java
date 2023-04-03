@@ -49,11 +49,11 @@ public class MIP2 extends Chemokine{
         if (interactable instanceof Neutrophil) {
             Neutrophil neutro = (Neutrophil) interactable;
             EukaryoteSignalingNetwork.MIP2_e = MOL_IDX;
-        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_MIP2, neutro.getClock())) 
+        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_MIP2)) 
                 neutro.bind(MOL_IDX);
         	else if (neutro.inPhenotype(this.getSecretionPhenotype())){//#interactable.status == Phagocyte.ACTIVE and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.N_MIP2_QTTY, 0, x, y, z);
-                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_MIP2, neutro.getClock())){}
+                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_MIP2)){}
                     //neutro.interaction = 0
             //#if Util.activation_function(this.values[0], Constants.Kd_MIP2) > random():
             //#    this.pdec(0.5)
@@ -93,5 +93,10 @@ public class MIP2 extends Chemokine{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

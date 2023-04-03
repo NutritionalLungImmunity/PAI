@@ -13,7 +13,7 @@ public abstract class Interactable {
 	private Set<Molecule> interactingMolecules = null;
 	private List<Interactable> removeList = new ArrayList<>();
 	
-	public void setInteractingMolecule(Collection<Molecule> interactingMolecules) {
+	/*public void setInteractingMolecule(Collection<Molecule> interactingMolecules) {
 		if(this.interactingMolecules == null) {
 			this.interactingMolecules = new HashSet<>();
 			for(Molecule mol :  interactingMolecules) 
@@ -29,9 +29,12 @@ public abstract class Interactable {
 		for(Interactable i : removeList) 
 			this.interactingMolecules.remove(i);
 		this.removeList.clear();
-	}
+	}*/
+	
+	public abstract boolean isTime();
 
 	public boolean interact(Interactable interactable, int x, int y, int z) {
+		//if(!interactable.isTime())return false;
         if(this.negativeInteractList.contains(interactable.getName())) {
         	return false; 
         }

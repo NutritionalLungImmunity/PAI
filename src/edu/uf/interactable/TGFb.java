@@ -49,7 +49,7 @@ public class TGFb extends Molecule{
         	if (macro.inPhenotype(this.getSecretionPhenotype())) 
         		this.inc(Constants.MA_TGF_QTTY, 0, x, y, z);
         	else if (!macro.isDead()) 
-                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_TGF, macro.getClock())) 
+                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_TGF)) 
                 	macro.bind(MOL_IDX);
             return true;
         }
@@ -72,5 +72,10 @@ public class TGFb extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

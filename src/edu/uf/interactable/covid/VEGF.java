@@ -46,7 +46,7 @@ public class VEGF extends Molecule{
         if(interactable instanceof EndothelialCells) {
         	EndothelialCells cell = (EndothelialCells) interactable;
 			EukaryoteSignalingNetwork.VEGF_e = VEGF.MOL_IDX;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_VEGF, cell.getClock()))
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_VEGF))
 	        	cell.bind(VEGF.MOL_IDX);
 	        if (cell.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.VEGF_QTTY, 0, x, y, z);
@@ -68,5 +68,10 @@ public class VEGF extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.Date;
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Chemokine;
-import edu.uf.time.Clock;
 
 public class Util {
 	
@@ -55,15 +54,12 @@ public class Util {
 		return sdf.format(now);
 	}
 	
-	public static boolean activationFunction(double x, double kd, Clock clock) {
-		return activationFunction(x, kd, Constants.VOXEL_VOL, clock);
+	public static boolean activationFunction(double x, double kd) {
+		return activationFunction(x, kd, Constants.VOXEL_VOL);
 	}
 	
-	public static boolean activationFunction(double x, double kd, double v, Clock clock) {
-		if(clock.toc(Cell.IT_CLOCK, Constants.CYT_BIND_T/Constants.TIME_STEP_SIZE)) {
-			return activationFunction(x, kd, v, 1.0) > Rand.getRand().randunif();
-		}
-        return false;
+	public static boolean activationFunction(double x, double kd, double v) {
+		return activationFunction(x, kd, v, 1.0) > Rand.getRand().randunif();
 	}
 	
 	public static double activationFunction(double x, double kd, double v, double b) {

@@ -63,7 +63,7 @@ public class IL6Complex extends Molecule{
         if(interactable instanceof EndothelialCells) {
         	EndothelialCells cell = (EndothelialCells) interactable;
 			EukaryoteSignalingNetwork.IL6_e = IL6Complex.MOL_IDX;
-	        if (Util.activationFunction(this.get(2, x, y, z), Constants.Kd_sIL6R, cell.getClock())) 
+	        if (Util.activationFunction(this.get(2, x, y, z), Constants.Kd_sIL6R)) 
 	        	cell.bind(IL6Complex.MOL_IDX);
 	        return true;
         }
@@ -108,5 +108,10 @@ public class IL6Complex extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

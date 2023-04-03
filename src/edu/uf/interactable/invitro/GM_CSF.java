@@ -56,7 +56,7 @@ public class GM_CSF extends Molecule{
             Macrophage macro = (Macrophage) interactable;
         	/*if (this.getSecretionPhenotype().contains(macro.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_TNF_QTTY, 0, x, y, z);*/
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_GM_CSF, macro.getClock()))
+            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_GM_CSF))
                 macro.bind(MOL_IDX);
             return true;
         }
@@ -84,5 +84,10 @@ public class GM_CSF extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

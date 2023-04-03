@@ -47,7 +47,6 @@ public class Lung implements Compartment{
 	
 	@Override
 	public void next() {
-    	Clock.updade();
     	for(int x = 0; x < xbin; x++)
     		for(int y = 0; y < ybin; y++)
     			for(int z = 0; z < zbin; z++) {

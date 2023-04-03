@@ -19,6 +19,10 @@ public class Alveolus extends Cell{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public boolean isTime() {
+		return true;
+	}
 
 	@Override
 	public void move(Voxel oldVoxel, int steps) {}

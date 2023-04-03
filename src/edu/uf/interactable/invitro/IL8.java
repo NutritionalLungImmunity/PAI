@@ -55,7 +55,7 @@ public class IL8 extends Chemokine{
                 neutro.bind(MOL_IDX);
         	else */if (neutro.inPhenotype(this.getSecretionPhenotype())){//#interactable.status == Phagocyte.ACTIVE and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.N_IL8_QTTY, 0, x, y, z);
-                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL8, neutro.getClock())){}
+                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL8)){}
                     //neutro.interaction = 0
             //#if Util.activation_function(this.values[0], Constants.Kd_MIP2) > random():
             //#    this.pdec(0.5)
@@ -95,6 +95,11 @@ public class IL8 extends Chemokine{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 	
 }

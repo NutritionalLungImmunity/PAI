@@ -82,5 +82,10 @@ public class MCP1 extends Chemokine{
 	public int getNumState() {
 		return NUM_STATES;
 	}
+
+	@Override
+	public boolean isTime() {
+		return true;
+	}
 	
 }

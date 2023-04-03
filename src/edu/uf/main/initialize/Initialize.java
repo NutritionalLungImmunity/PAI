@@ -16,6 +16,8 @@ public abstract class Initialize {
     
     static Random rand = new Random();
     
+    private int numSamples = -1;
+    
     public static double random() {
     	return rand.nextDouble();
     }
@@ -24,12 +26,20 @@ public abstract class Initialize {
     	return rand.nextInt(max - min) + min;
     }
     
+    public void setNumSamples(int numSamples) {
+    	this.numSamples = numSamples;
+    }
+    
+    public int getNumSamples() {
+    	return numSamples;
+    }
+    
     public Voxel[][][] createPeriodicGrid(int xbin, int ybin, int zbin){
     	Voxel[][][] grid = new Voxel[xbin][ybin][zbin];
         for(int x = 0; x < xbin; x++)
         	for(int y = 0; y < ybin; y++)
         		for(int z = 0; z < zbin; z++) {
-        			grid[x][y][z] = new Voxel(x,y,z);
+        			grid[x][y][z] = new Voxel(x,y,z, numSamples);
         		}
         
         

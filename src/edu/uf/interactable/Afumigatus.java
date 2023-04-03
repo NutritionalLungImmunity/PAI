@@ -119,56 +119,58 @@ public class Afumigatus extends PositionalInfectiousAgent{
         
         Afumigatus.totalIron = Afumigatus.totalIron + ironPool;
         Afumigatus.totalCells[0]++;
-        this.clock = Clock.createClock(3);
+        
+        this.clock = new Clock((int) Constants.INV_UNIT_T, 0);
         
         
         if(status >=  Afumigatus.RESTING_CONIDIA)Afumigatus.totalCells[status - Af_STATUS_START + 1]++;
     }
+    
+    public boolean isTime() {
+		return this.getClock().toc();
+	}
     
     protected BooleanNetwork createNewBooleanNetwork() {
     	BooleanNetwork network = new BooleanNetwork() {
 
 			@Override
 			public void processBooleanNetwork() {
-				if(this.getBnIteration() == 15) {
-		        	int[] temp = new int[SPECIES_NUM];
-		        	//for(int i = 0; i < Afumigatus.SPECIES_NUM; i++)
-		        	//	temp[i] = 0;
+	        	int[] temp = new int[SPECIES_NUM];
+	        	//for(int i = 0; i < Afumigatus.SPECIES_NUM; i++)
+	        	//	temp[i] = 0;
 
-		            temp[hapX] = -this.booleanNetwork[SreA] + 1;
-		            temp[sreA] = -this.booleanNetwork[HapX] + 1;
-		            temp[HapX] = this.booleanNetwork[hapX] & (-this.booleanNetwork[LIP] + 1);
-		            temp[SreA] = this.booleanNetwork[sreA] & this.booleanNetwork[LIP];
-		            temp[RIA] = -this.booleanNetwork[SreA] + 1;
-		            temp[EstB] = -this.booleanNetwork[SreA] + 1;
-		            temp[MirB] = this.booleanNetwork[HapX] & (-this.booleanNetwork[SreA] + 1);
-		            temp[SidA] = this.booleanNetwork[HapX] & (-this.booleanNetwork[SreA] + 1);
-		            temp[Tafc] = this.booleanNetwork[SidA];
-		            temp[ICP] = (-this.booleanNetwork[HapX] + 1) & (this.booleanNetwork[VAC] | this.booleanNetwork[FC1fe]);
-		            temp[LIP] = (this.booleanNetwork[Fe] & this.booleanNetwork[RIA]) | this.lipActivation();
-		            temp[CccA] = -this.booleanNetwork[HapX] + 1;
-		            temp[FC0fe] = this.booleanNetwork[SidA];
-		            temp[FC1fe] = this.booleanNetwork[LIP] & this.booleanNetwork[FC0fe];
-		            temp[VAC] = this.booleanNetwork[LIP] & this.booleanNetwork[CccA];
-		            temp[ROS] = (this.booleanNetwork[O] & (- (this.booleanNetwork[SOD2_3] & this.booleanNetwork[ThP] 
-		                                   & this.booleanNetwork[Cat1_2]) + 1)) 
-		                                  | (this.booleanNetwork[ROS] & (- (this.booleanNetwork[SOD2_3] 
-		                                   & (this.booleanNetwork[ThP] | this.booleanNetwork[Cat1_2])) + 1));
-		            temp[Yap1] = this.booleanNetwork[ROS];
-		            temp[SOD2_3] = this.booleanNetwork[Yap1];
-		            temp[Cat1_2] = this.booleanNetwork[Yap1] & (-this.booleanNetwork[HapX] + 1);
-		            temp[ThP] = this.booleanNetwork[Yap1];
+	            temp[hapX] = -this.booleanNetwork[SreA] + 1;
+	            temp[sreA] = -this.booleanNetwork[HapX] + 1;
+	            temp[HapX] = this.booleanNetwork[hapX] & (-this.booleanNetwork[LIP] + 1);
+	            temp[SreA] = this.booleanNetwork[sreA] & this.booleanNetwork[LIP];
+	            temp[RIA] = -this.booleanNetwork[SreA] + 1;
+	            temp[EstB] = -this.booleanNetwork[SreA] + 1;
+	            temp[MirB] = this.booleanNetwork[HapX] & (-this.booleanNetwork[SreA] + 1);
+	            temp[SidA] = this.booleanNetwork[HapX] & (-this.booleanNetwork[SreA] + 1);
+	            temp[Tafc] = this.booleanNetwork[SidA];
+	            temp[ICP] = (-this.booleanNetwork[HapX] + 1) & (this.booleanNetwork[VAC] | this.booleanNetwork[FC1fe]);
+	            temp[LIP] = (this.booleanNetwork[Fe] & this.booleanNetwork[RIA]) | this.lipActivation();
+	            temp[CccA] = -this.booleanNetwork[HapX] + 1;
+	            temp[FC0fe] = this.booleanNetwork[SidA];
+	            temp[FC1fe] = this.booleanNetwork[LIP] & this.booleanNetwork[FC0fe];
+	            temp[VAC] = this.booleanNetwork[LIP] & this.booleanNetwork[CccA];
+	            temp[ROS] = (this.booleanNetwork[O] & (- (this.booleanNetwork[SOD2_3] & this.booleanNetwork[ThP] 
+	                                   & this.booleanNetwork[Cat1_2]) + 1)) 
+	                                  | (this.booleanNetwork[ROS] & (- (this.booleanNetwork[SOD2_3] 
+	                                   & (this.booleanNetwork[ThP] | this.booleanNetwork[Cat1_2])) + 1));
+	            temp[Yap1] = this.booleanNetwork[ROS];
+	            temp[SOD2_3] = this.booleanNetwork[Yap1];
+	            temp[Cat1_2] = this.booleanNetwork[Yap1] & (-this.booleanNetwork[HapX] + 1);
+	            temp[ThP] = this.booleanNetwork[Yap1];
 
-		            temp[Fe] = 0; // might change according to iron environment?
-		            temp[O] = 0;
-		            //temp[Afumigatus.TAFCBI] = 0;
+	            temp[Fe] = 0; // might change according to iron environment?
+	            temp[O] = 0;
+	            //temp[Afumigatus.TAFCBI] = 0;
 
-		            //print(this.boolean_network)
-		            for(int i = 0; i < SPECIES_NUM; i++)
-		                this.booleanNetwork[i] = temp[i];
-		            this.setBnIteration(0);
-		        }else
-		            this.setBnIteration(this.getBnIteration() + 1);
+	            //print(this.boolean_network)
+	            for(int i = 0; i < SPECIES_NUM; i++)
+	                this.booleanNetwork[i] = temp[i];
+	            this.setBnIteration(0);
 				
 			}
 			
@@ -291,6 +293,11 @@ public class Afumigatus extends PositionalInfectiousAgent{
 	}
 	
 	public synchronized void grow(int xbin, int ybin, int zbin, Voxel[][][] grid, Phagocyte phagocyte) {
+		//System.out.println(this.getClock().iteration + " " + this.getClock().size);
+		if(!this.getClock().toc()) {
+			//System.out.println("XXX");
+			return;
+		}
         if(phagocyte instanceof Phagocyte) { // If instead of being in a voxel it is inside a phagosome
         	ArrayList<InfectiousAgent> tmpPhagossome = (ArrayList<InfectiousAgent>) ((ArrayList)phagocyte.getPhagosome()).clone();
         	Afumigatus phagent = null;
@@ -443,17 +450,16 @@ public class Afumigatus extends PositionalInfectiousAgent{
     }
 
     public void updateStatus() {
+    	super.updateStatus();
+    	if(!this.getClock().toc())return;
     	this.processBooleanNetwork();
         
-        this.getClock().tic(ST_CLOCK, true);
         if(this.getStatus() == Afumigatus.RESTING_CONIDIA && 
-        		this.getClock().toc(ST_CLOCK) >= Constants.ITER_TO_SWELLING && 
+        		this.getClock().getCount() >= Constants.ITER_TO_SWELLING && 
                 Rand.getRand().randunif() < Constants.PR_ASPERGILLUS_CHANGE) {
             this.setStatus(Afumigatus.SWELLING_CONIDIA);
-            this.getClock().tic(ST_CLOCK);
-        }else if(this.getStatus() == Afumigatus.SWELLING_CONIDIA && this.getClock().toc(ST_CLOCK) >= Constants.ITER_TO_GERMINATE){// and \
+        }else if(this.getStatus() == Afumigatus.SWELLING_CONIDIA && this.getClock().getCount() >= Constants.ITER_TO_GERMINATE){// and \
             this.setStatus(Afumigatus.GERM_TUBE);
-            this.getClock().tic(ST_CLOCK);
         }else if(this.getStatus() == Afumigatus.DYING) {
             this.die();
         }
@@ -465,8 +471,8 @@ public class Afumigatus extends PositionalInfectiousAgent{
             this.setState(Afumigatus.FREE); 
 
         this.diffuseIron();
-        //if(this.nextBranch == null)
-            //this.growable = true;
+        if(this.nextBranch == null)
+            this.growable = true;
     }
 
     public boolean isDead() {

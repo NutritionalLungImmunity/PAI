@@ -47,7 +47,7 @@ public class IL1 extends Molecule{
             Macrophage macro = (Macrophage) interactable;
             if(macro.inPhenotype(this.getSecretionPhenotype())) 
                 this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1, macro.getClock()))
+            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1))
             	((Macrophage)interactable).bind(MOL_IDX);
             return true;
         }
@@ -55,7 +55,7 @@ public class IL1 extends Molecule{
     		Pneumocyte pneumo = (Pneumocyte) interactable;
         	if(pneumo.inPhenotype(this.getSecretionPhenotype()))
                 this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1, pneumo.getClock()))
+            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1))
                 ((Pneumocyte)interactable).bind(MOL_IDX);
             return true;
         }
@@ -63,7 +63,7 @@ public class IL1 extends Molecule{
             Neutrophil neutro = (Neutrophil) interactable;
         	if(neutro.inPhenotype(this.getSecretionPhenotype()))
                 this.inc(Constants.N_IL1_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1, neutro.getClock())) 
+            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1)) 
                 ((Neutrophil)interactable).bind(MOL_IDX);
             return true;
         }
@@ -72,7 +72,7 @@ public class IL1 extends Molecule{
         	Liver liver = (Liver) interactable; 
         	for(int k = 0; k < Liver.ENSEMBLE_SIZE; k++) {
         		double globalQtty = this.getTotalMolecule(0)/(2*Constants.SPACE_VOL);
-        		if (Util.activationFunction(globalQtty, Constants.Kd_IL1, liver.getClock())) {
+        		if (Util.activationFunction(globalQtty, Constants.Kd_IL1)) {
         			liver.getBooleanNetwork()[k][Liver.IL1R] = 1;
         		}else {
         			liver.getBooleanNetwork()[k][Liver.IL1R] = 0;
@@ -102,6 +102,11 @@ public class IL1 extends Molecule{
 	public void resetCount() {
 		super.resetCount();
 		hasInteractWithLiver = false;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 	
 }

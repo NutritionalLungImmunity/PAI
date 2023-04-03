@@ -22,8 +22,11 @@ public class Pneumocyte extends Cell {
         super();
         this.iteration = 0;
         Pneumocyte.totalCells = Pneumocyte.totalCells + 1;
-        this.clock = Clock.createClock(3);
     }
+    
+    public boolean isTime() {
+		return this.getClock().toc();
+	}
 
     public static int getTotalCells() {
 		return totalCells;
@@ -66,7 +69,7 @@ public class Pneumocyte extends Cell {
         if (interactable instanceof TNFa) {
             Molecule interact = (Molecule) interactable;
             EukaryoteSignalingNetwork.TNFa_e = TNFa.MOL_IDX;
-        	if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF, this.getClock())) 
+        	if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF)) 
         		this.bind(TNFa.MOL_IDX);
         	if(this.inPhenotype(interact.getSecretionPhenotype())) 
             	interact.inc(Constants.P_TNF_QTTY, 0, x, y, z);
@@ -95,6 +98,8 @@ public class Pneumocyte extends Cell {
     public void incIronPool(double qtty) {}
 
     public void updateStatus() {
+    	super.updateStatus();
+    	if(!this.getClock().toc())return;
     	this.processBooleanNetwork();
     }
             
@@ -150,26 +155,24 @@ public class Pneumocyte extends Cell {
 			
 			@Override
 			public void processBooleanNetwork() {
-				if(Pneumocyte.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
-					this.booleanNetwork[MIX_ACTIVE] =  (e(this.inputs, B_GLUC_e) | countMix()) & (-this.booleanNetwork[ACTIVE] + 1);
-					this.booleanNetwork[ACTIVE] = ((e(this.inputs, IL1B_e) | e(this.inputs, TNFa_e)) & this.booleanNetwork[MIX_ACTIVE]) | countActive();
+				this.booleanNetwork[MIX_ACTIVE] =  (e(this.inputs, B_GLUC_e) | countMix()) & (-this.booleanNetwork[ACTIVE] + 1);
+				this.booleanNetwork[ACTIVE] = ((e(this.inputs, IL1B_e) | e(this.inputs, TNFa_e)) & this.booleanNetwork[MIX_ACTIVE]) | countActive();
 
-					this.iterations = e(this.inputs, B_GLUC_e) == 1 | e(this.inputs, IL1B_e) == 1 | e(this.inputs, TNFa_e) == 1 ? 0 : this.iterations;
-					
-					for(int i = 0; i < NUM_RECEPTORS; i++)
-						this.inputs[i] = 0;
-					
-					Pneumocyte.this.clearPhenotype();
-					
-					if(this.booleanNetwork[ACTIVE] == 1) {
-						Pneumocyte.this.addPhenotype(Phenotypes.ACTIVE);
-					} else if(this.booleanNetwork[MIX_ACTIVE] == 1) {
-						Pneumocyte.this.addPhenotype(Phenotypes.MIX_ACTIVE);
-					} else {
-						Pneumocyte.this.addPhenotype(Phenotypes.RESTING);
-					}
-					
+				this.iterations = e(this.inputs, B_GLUC_e) == 1 | e(this.inputs, IL1B_e) == 1 | e(this.inputs, TNFa_e) == 1 ? 0 : this.iterations;
+				
+				for(int i = 0; i < NUM_RECEPTORS; i++)
+					this.inputs[i] = 0;
+				
+				Pneumocyte.this.clearPhenotype();
+				
+				if(this.booleanNetwork[ACTIVE] == 1) {
+					Pneumocyte.this.addPhenotype(Phenotypes.ACTIVE);
+				} else if(this.booleanNetwork[MIX_ACTIVE] == 1) {
+					Pneumocyte.this.addPhenotype(Phenotypes.MIX_ACTIVE);
+				} else {
+					Pneumocyte.this.addPhenotype(Phenotypes.RESTING);
 				}
+					
 				
 			}
 			

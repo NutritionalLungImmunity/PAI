@@ -1,23 +1,16 @@
 package edu.uf.interactable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.time.Clock;
+import edu.uf.utils.Constants;
 
 public abstract class Cell extends Interactable{
 	
 	private int id;
-	
-	public static final int IT_CLOCK = 0;
-	public static final int ST_CLOCK = 1;
-	public static final int BN_CLOCK = 2;
 	
 	//private int phenotype = Phenotypes.RESTING;
 	private List<Integer> phenotypes = new ArrayList<>(10);
@@ -33,8 +26,14 @@ public abstract class Cell extends Interactable{
     private int status;
     private int state;
     private boolean engulfed;
-    protected BooleanNetwork booleanNetwork;
     protected Clock clock;
+    protected BooleanNetwork booleanNetwork;
+    
+    
+    public Cell() {
+    	this.clock = new Clock((int) Constants.INV_UNIT_T);
+    	this.id = Id.getId(); 
+    }
     
     public final BooleanNetwork createBooleanNetwork() {
     	if(booleanNetwork == null) {
@@ -130,11 +129,6 @@ public abstract class Cell extends Interactable{
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
-	public Cell() {
-		this.id = Id.getId(); 
-	}
 	
 	public void bind(int molIdx) {
 		createBooleanNetwork().activateReceptor(molIdx, 1);
@@ -153,7 +147,9 @@ public abstract class Cell extends Interactable{
 		return status == DEAD || status == DYING || status == APOPTOTIC || status == NECROTIC;
 	}
 
-    public abstract void updateStatus();
+    public void updateStatus() {
+    	this.clock.tic();
+    }
 
 
     public abstract void move(Voxel oldVoxel, int steps);

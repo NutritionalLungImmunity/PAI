@@ -34,8 +34,11 @@ public class NK extends Phagocyte{
     
     public NK() {
     	NK.totalCells = NK.totalCells + 1;
-    	this.clock = Clock.createClock(3);
     }
+    
+    public boolean isTime() {
+		return this.getClock().toc();
+	}
     
     public static int getTotalCells() {
 		return totalCells;
@@ -68,71 +71,69 @@ public class NK extends Phagocyte{
 
 			@Override
 			public void processBooleanNetwork() {
-				if(NK.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
-					int k = 0;
-					List<Integer> array = new ArrayList<>(size);
-					for(int i = 0; i < size; i++)
-						array.add(i);
-					//System.out.println();
-					while(true) {
-						if(k++ > Constants.MAX_BN_ITERATIONS)break;
-						Collections.shuffle(array, new Random());
-						for(int i : array) {
-							switch (i) {
-							case 0:
-								this.booleanNetwork[NKG2D] = and(e(this.inputs, INF_CELL_e), not(this.booleanNetwork[TGFR], 1));
-								break;
-							case 1:
-								this.booleanNetwork[ERK] = this.booleanNetwork[NKG2D];
-								break;
-							case 2:
-								this.booleanNetwork[NFAT] = this.booleanNetwork[NKG2D];
-								break;
-							case 3:
-								this.booleanNetwork[IFNg] = and(this.booleanNetwork[NFAT], not(this.booleanNetwork[TGFR], 1));
-								break;
-							case 4:
-								this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNg];
-								break;
-							case 5:
-								this.booleanNetwork[TRAIL] = this.booleanNetwork[IFNGR];
-								break;
-							case 6:
-								this.booleanNetwork[GRAN] = and(this.booleanNetwork[ERK], not(this.booleanNetwork[TGFR], 1));
-								break;
-							case 7:
-								this.booleanNetwork[IFNR] = e(this.inputs, IFN_e);
-								break;
-							case 8:
-								this.booleanNetwork[TNFR] = e(this.inputs, TNFa_e);
-								break;
-							case 9:
-								this.booleanNetwork[IL6R] = e(this.inputs, IL6_e);
-								break;
-							case 10:
-								this.booleanNetwork[TGFR] = e(this.inputs, TGFb_e);
-								break;
-							default:
-								System.err.println("No such rule " + i);
-							}
+				int k = 0;
+				List<Integer> array = new ArrayList<>(size);
+				for(int i = 0; i < size; i++)
+					array.add(i);
+				//System.out.println();
+				while(true) {
+					if(k++ > Constants.MAX_BN_ITERATIONS)break;
+					Collections.shuffle(array, new Random());
+					for(int i : array) {
+						switch (i) {
+						case 0:
+							this.booleanNetwork[NKG2D] = and(e(this.inputs, INF_CELL_e), not(this.booleanNetwork[TGFR], 1));
+							break;
+						case 1:
+							this.booleanNetwork[ERK] = this.booleanNetwork[NKG2D];
+							break;
+						case 2:
+							this.booleanNetwork[NFAT] = this.booleanNetwork[NKG2D];
+							break;
+						case 3:
+							this.booleanNetwork[IFNg] = and(this.booleanNetwork[NFAT], not(this.booleanNetwork[TGFR], 1));
+							break;
+						case 4:
+							this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNg];
+							break;
+						case 5:
+							this.booleanNetwork[TRAIL] = this.booleanNetwork[IFNGR];
+							break;
+						case 6:
+							this.booleanNetwork[GRAN] = and(this.booleanNetwork[ERK], not(this.booleanNetwork[TGFR], 1));
+							break;
+						case 7:
+							this.booleanNetwork[IFNR] = e(this.inputs, IFN_e);
+							break;
+						case 8:
+							this.booleanNetwork[TNFR] = e(this.inputs, TNFa_e);
+							break;
+						case 9:
+							this.booleanNetwork[IL6R] = e(this.inputs, IL6_e);
+							break;
+						case 10:
+							this.booleanNetwork[TGFR] = e(this.inputs, TGFb_e);
+							break;
+						default:
+							System.err.println("No such rule " + i);
 						}
 					}
-					
-					array = new ArrayList<>();
-					
-					for(int i = 0; i < NUM_RECEPTORS; i++) 
-						this.inputs[i] = 0;
-					
-					for(int i = 0; i < NUM_PHENOTYPES; i++)
-						array.add(i);
-					
-					NK.this.clearPhenotype();
-					
-					if(this.booleanNetwork[GRAN] == 1 || this.booleanNetwork[TRAIL] == 1)
-						NK.this.addPhenotype(Phenotypes.ACTIVE);
-					if(this.booleanNetwork[IFNg] == 1)
-						NK.this.addPhenotype(Phenotypes.SECRETING);
 				}
+				
+				array = new ArrayList<>();
+				
+				for(int i = 0; i < NUM_RECEPTORS; i++) 
+					this.inputs[i] = 0;
+				
+				for(int i = 0; i < NUM_PHENOTYPES; i++)
+					array.add(i);
+				
+				NK.this.clearPhenotype();
+				
+				if(this.booleanNetwork[GRAN] == 1 || this.booleanNetwork[TRAIL] == 1)
+					NK.this.addPhenotype(Phenotypes.ACTIVE);
+				if(this.booleanNetwork[IFNg] == 1)
+					NK.this.addPhenotype(Phenotypes.SECRETING);
 				
 			}
 			
@@ -141,6 +142,8 @@ public class NK extends Phagocyte{
 
 	@Override
 	public void updateStatus() {
+		super.updateStatus();
+    	if(!this.getClock().toc())return;
 		this.processBooleanNetwork();
 		engaged = false;
 		maxMoveStep = -1;
@@ -214,21 +217,21 @@ public class NK extends Phagocyte{
 		if(interactable instanceof IFN1) {
 			 Molecule interact = (Molecule) interactable;
 	         EukaryoteSignalingNetwork.IFN_e = IFN1.MOL_IDX;
-	         if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_IFNG, this.getClock())) 
+	         if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_IFNG)) 
 	        	this.bind(IFN1.MOL_IDX);
 	         return true;
 		}
 		if(interactable instanceof TNFa) {
 			 Molecule interact = (Molecule) interactable;
 	         EukaryoteSignalingNetwork.TNFa_e = TNFa.MOL_IDX;
-	        if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF, this.getClock())) 
+	        if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF)) 
 	        	this.bind(TNFa.MOL_IDX);
 	        return true;
 		}
 		if(interactable instanceof IL6Complex) {
 			 Molecule interact = (Molecule) interactable;
 	         EukaryoteSignalingNetwork.IL6_e = IL6Complex.MOL_IDX;
-	        if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_IL6, this.getClock())) 
+	        if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_IL6)) 
 	        	this.bind(IL6Complex.MOL_IDX);
 	        return true;
 		}

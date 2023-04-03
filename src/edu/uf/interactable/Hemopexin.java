@@ -85,7 +85,7 @@ public class Hemopexin extends Molecule{
     	}
         if (interactable instanceof Macrophage){//# or type(interactable) is Neutrophil: 
         	EukaryoteSignalingNetwork.Hpx_e = MOL_IDX;
-        	if(Util.activationFunction(this.get(1, x, y, z), Constants.Kd_HPX, ((Macrophage)interactable).getClock())) 
+        	if(Util.activationFunction(this.get(1, x, y, z), Constants.Kd_HPX)) 
         		((Macrophage)interactable).bind(MOL_IDX);
             return true;
         }
@@ -122,5 +122,10 @@ public class Hemopexin extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

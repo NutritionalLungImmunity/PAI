@@ -65,69 +65,67 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 			
 			@Override
 			public void processBooleanNetwork() {
-				if(Pneumocyte.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
-					int k = 0;
-					List<Integer> array = new ArrayList<>(size);
-					for(int i = 0; i < size; i++)
-						array.add(i);
-					//System.out.println();
-					//Pneumocyte.count = 0;
-					while(true) {
-						if(k++ > Constants.MAX_BN_ITERATIONS)break;
-						Collections.shuffle(array, new Random());
-						//if(this.booleanNetwork[VIRUS] == 1)Util.printIntArray(booleanNetwork);
-						//int virus_in = Util.activationFunction(Pneumocyte.this.viralLoad, Constants.Kd_SarsCoV2, Constants.MA_VOL, 1.0) > 
-						//	Rand.getRand().randunif() ? 1 : 0;
-						for(int i : array) {
-							switch (i) {
-							case 0:
-								this.booleanNetwork[VIRUS] = or(e(this.inputs, VIRUS_e), this.booleanNetwork[VIRUS]);
-								break;
-							case 1:
-								this.booleanNetwork[VIRAL_REP] = and(this.booleanNetwork[VIRUS], not(this.booleanNetwork[IRF9], 1));
-								break;
-							case 2:
-								this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];//or(this.booleanNetwork[RIG1], this.booleanNetwork[TLR4]);
-								break;
-							case 3:
-								this.booleanNetwork[STAT1] = this.booleanNetwork[IFNR];
-								break;
-							case 4:
-								this.booleanNetwork[IRF9] = this.booleanNetwork[STAT1];
-								break;
-							case 5:
-								this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
-								break;
-							case 6:
-								this.booleanNetwork[RIG1] = this.booleanNetwork[VIRAL_REP];
-								break;
-							case 7:
-								this.booleanNetwork[IFNR] = this.booleanNetwork[IFN];
-								break;	
-							case 8:
-								this.booleanNetwork[IFN] = or(this.booleanNetwork[IRF3], e(this.inputs, IFNG_e));
-								//r(this.inputs, IFNG_e);
-								break;
-							default:
-								System.err.println("No such rule " + i);
-							}
+				int k = 0;
+				List<Integer> array = new ArrayList<>(size);
+				for(int i = 0; i < size; i++)
+					array.add(i);
+				//System.out.println();
+				//Pneumocyte.count = 0;
+				while(true) {
+					if(k++ > Constants.MAX_BN_ITERATIONS)break;
+					Collections.shuffle(array, new Random());
+					//if(this.booleanNetwork[VIRUS] == 1)Util.printIntArray(booleanNetwork);
+					//int virus_in = Util.activationFunction(Pneumocyte.this.viralLoad, Constants.Kd_SarsCoV2, Constants.MA_VOL, 1.0) > 
+					//	Rand.getRand().randunif() ? 1 : 0;
+					for(int i : array) {
+						switch (i) {
+						case 0:
+							this.booleanNetwork[VIRUS] = or(e(this.inputs, VIRUS_e), this.booleanNetwork[VIRUS]);
+							break;
+						case 1:
+							this.booleanNetwork[VIRAL_REP] = and(this.booleanNetwork[VIRUS], not(this.booleanNetwork[IRF9], 1));
+							break;
+						case 2:
+							this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];//or(this.booleanNetwork[RIG1], this.booleanNetwork[TLR4]);
+							break;
+						case 3:
+							this.booleanNetwork[STAT1] = this.booleanNetwork[IFNR];
+							break;
+						case 4:
+							this.booleanNetwork[IRF9] = this.booleanNetwork[STAT1];
+							break;
+						case 5:
+							this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
+							break;
+						case 6:
+							this.booleanNetwork[RIG1] = this.booleanNetwork[VIRAL_REP];
+							break;
+						case 7:
+							this.booleanNetwork[IFNR] = this.booleanNetwork[IFN];
+							break;	
+						case 8:
+							this.booleanNetwork[IFN] = or(this.booleanNetwork[IRF3], e(this.inputs, IFNG_e));
+							//r(this.inputs, IFNG_e);
+							break;
+						default:
+							System.err.println("No such rule " + i);
 						}
 					}
-					array = new ArrayList<>();
-					
-					for(int i = 0; i < NUM_RECEPTORS; i++) 
-						this.inputs[i] = 0;
-					
-					for(int i = 0; i < NUM_PHENOTYPES; i++)
-						array.add(i);
-					
-					Pneumocyte.this.clearPhenotype();
-					
-					if(this.booleanNetwork[IRF9] == 1)
-						Pneumocyte.this.addPhenotype(Phenotypes.IRF9);
-					if(this.booleanNetwork[IRF3] == 1)
-						Pneumocyte.this.addPhenotype(Phenotypes.IRF3);
 				}
+				array = new ArrayList<>();
+				
+				for(int i = 0; i < NUM_RECEPTORS; i++) 
+					this.inputs[i] = 0;
+				
+				for(int i = 0; i < NUM_PHENOTYPES; i++)
+					array.add(i);
+				
+				Pneumocyte.this.clearPhenotype();
+				
+				if(this.booleanNetwork[IRF9] == 1)
+					Pneumocyte.this.addPhenotype(Phenotypes.IRF9);
+				if(this.booleanNetwork[IRF3] == 1)
+					Pneumocyte.this.addPhenotype(Phenotypes.IRF3);
 			}
 		};
 	}

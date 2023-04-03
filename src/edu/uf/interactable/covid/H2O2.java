@@ -52,7 +52,7 @@ public class H2O2 extends Molecule{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if(interactable instanceof Pneumocyte) {
         	Pneumocyte cell = (Pneumocyte) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z)*this.get(0, x, y, z), Constants.Kd_H2O2*Constants.Kd_H2O2, Constants.VOXEL_VOL*Constants.VOXEL_VOL, cell.getClock())) {
+	        if (Util.activationFunction(this.get(0, x, y, z)*this.get(0, x, y, z), Constants.Kd_H2O2*Constants.Kd_H2O2, Constants.VOXEL_VOL*Constants.VOXEL_VOL)) {
 	        	//System.out.println(this.get(0, x, y, z)/Constants.VOXEL_VOL + " " + Constants.Kd_H2O2);
 	        	cell.addPhenotype(Phenotypes.APOPTOTIC);
 	        }
@@ -80,6 +80,11 @@ public class H2O2 extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 	
 }

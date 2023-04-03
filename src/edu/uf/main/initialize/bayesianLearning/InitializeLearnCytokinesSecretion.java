@@ -102,6 +102,13 @@ public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
 		}
 	}
 	
+	public void removeSAMP(int xbin, int ybin, int zbin) {
+		for(int x = 0; x < xbin; x++) 
+        	for(int y = 0; y < ybin; y++)
+        		for(int z = 0; z < zbin; z++) 
+        			samp.set(0, 0, x, y, z);
+	}
+	
 	public void initializeTNF(int xbin, int ybin, int zbin, double qtty) {
     	for(int x = 0; x < xbin; x++) 
         	for(int y = 0; y < ybin; y++)
@@ -135,7 +142,7 @@ public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
 
 	@Override
 	protected void setSecretionPhenotypes() {
-		IL10.getMolecule().addPhenotype(Phenotypes.ACTIVE);
+		//IL10.getMolecule().addPhenotype(Phenotypes.ACTIVE); //
 		IL10.getMolecule().addPhenotype(Phenotypes.MIX_ACTIVE);
 		IL10.getMolecule().addPhenotype(Phenotypes.ALT_ACTIVE);
 		IL10.getMolecule().addPhenotype(Phenotypes.INACTIVE);

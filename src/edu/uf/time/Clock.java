@@ -1,31 +1,49 @@
 package edu.uf.time;
 
-import java.util.ArrayList;
-import java.util.List;
+import edu.uf.utils.Rand;
 
 public class Clock {
 	
-	private static int iteration = 0;
+	/*private static int iteration = 0;
 	private int i;
 	private int[] j;
-	private boolean[] b;
+	private boolean[] b;*/
 	
-	private static List<Clock> listClock = new ArrayList<>();
+	public int iteration  = 0;
+	public int size;
+	public long count = 0L;
 	
-	private Clock(int size) {
-		this.j = new int[size];
-		this.b = new boolean[size];
-		for(int i = 0; i < size; i++)
-			this.b[i] = true;
+	//private static List<Clock> listClock = new ArrayList<>();
+	
+	public Clock(int size) {
+		this.iteration = Rand.getRand().randunif(0, size);
+		this.size = size;
 	}
 	
-	public static Clock createClock(int size) {
+	public Clock(int size, int iteration) {
+		this.iteration = iteration;
+		this.size = size;
+	}
+	/*public static Clock createClock(int size) {
 		Clock clock = new Clock(size);
 		Clock.listClock.add(clock);
 		return clock;
+	}*/
+	
+	public void tic() {
+		this.iteration = (this.iteration + 1) % size;
+		if(this.iteration == 0)this.count++;
 	}
 	
-	public static void updade() {
+	public boolean toc() {
+		return iteration % size == 0;
+	}
+	
+	public long getCount() {
+		return this.count;
+	}
+	
+	/*public static void updade() {
 		Clock.iteration++;
 		for(Clock clock : listClock)
 			clock.updateClock();
@@ -63,6 +81,6 @@ public class Clock {
 	
 	public static int getIteration() {
 		return Clock.iteration;
-	}
+	}*/
 	
 }

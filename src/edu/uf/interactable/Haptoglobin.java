@@ -68,7 +68,7 @@ public class Haptoglobin extends Molecule{
     		return true; 
     	}
         if (interactable instanceof Macrophage){//# or type(interactable) is Neutrophil: 
-        	if(Util.activationFunction(this.get(1, x, y, z), Constants.Kd_HP, ((Macrophage)interactable).getClock())) {
+        	if(Util.activationFunction(this.get(1, x, y, z), Constants.Kd_HP)) {
         		((Macrophage)interactable).bind(MOL_IDX);
         	}
             return true;
@@ -97,6 +97,11 @@ public class Haptoglobin extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 
 }

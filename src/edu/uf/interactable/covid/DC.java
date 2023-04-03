@@ -29,8 +29,11 @@ public class DC extends Phagocyte{
 	public DC() {
     	DC.totalCells = DC.totalCells + 1;
         this.maxMoveStep = -1; 
-        this.clock = Clock.createClock(3);
     }
+	
+	public boolean isTime() {
+		return this.getClock().toc();
+	}
     
     public static String getChemokine() {
 		return chemokine;
@@ -69,7 +72,7 @@ public class DC extends Phagocyte{
     	if(interactable instanceof SarsCoV2) {
     		Molecule mol = (Molecule) interactable;
     		//mol.pdec(1-Constants.SarsCoV2_HALF_LIFE, 0, x, y, z);
-	        if (Util.activationFunction(mol.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2, this.getClock())) {//viral particle per infectious unity
+	        if (Util.activationFunction(mol.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {//viral particle per infectious unity
 	        	this.bind(SarsCoV2.MOL_IDX);
 	        	/*double qtty = Constants.SarsCoV2_UPTAKE_QTTY > this.get(0, x, y, z) ? this.get(0, x, y, z) : Constants.SarsCoV2_UPTAKE_QTTY;
 	        	double q = this.get(0, x, y, z);
@@ -82,6 +85,8 @@ public class DC extends Phagocyte{
 
 
     public void updateStatus() {
+    	super.updateStatus();
+    	if(!this.getClock().toc())return;
     	this.processBooleanNetwork();
         this.maxMoveStep = -1;
     }
@@ -130,49 +135,47 @@ public class DC extends Phagocyte{
 			
 			@Override
 			public void processBooleanNetwork() {
-				if(DC.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
-					int k = 0;
-					List<Integer> array = new ArrayList<>(size);
-					for(int i = 0; i < size; i++)
-						array.add(i);
-					while(true) {
-						if(k++ > Constants.MAX_BN_ITERATIONS)break;
-						Collections.shuffle(array, new Random());
-						for(int i : array) {
-							switch(i) {
-								case 0:
-									this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB] | e(this.inputs, IFNG_e);
-									break;
-								case 1:
-									this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
-									break;
-								case 2:
-									this.booleanNetwork[STAT1] = this.booleanNetwork[IFNGR];
-									break;
-								case 3:
-									this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];
-									break;
-								case 4:
-									this.booleanNetwork[IFNB] = this.booleanNetwork[IRF3] | this.booleanNetwork[STAT1];
-									break;
-								default:
-									System.err.println("No such interaction " + i + "!");
-									break;
-							}
+				int k = 0;
+				List<Integer> array = new ArrayList<>(size);
+				for(int i = 0; i < size; i++)
+					array.add(i);
+				while(true) {
+					if(k++ > Constants.MAX_BN_ITERATIONS)break;
+					Collections.shuffle(array, new Random());
+					for(int i : array) {
+						switch(i) {
+							case 0:
+								this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB] | e(this.inputs, IFNG_e);
+								break;
+							case 1:
+								this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
+								break;
+							case 2:
+								this.booleanNetwork[STAT1] = this.booleanNetwork[IFNGR];
+								break;
+							case 3:
+								this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];
+								break;
+							case 4:
+								this.booleanNetwork[IFNB] = this.booleanNetwork[IRF3] | this.booleanNetwork[STAT1];
+								break;
+							default:
+								System.err.println("No such interaction " + i + "!");
+								break;
 						}
 					}
-					
-					for(int i = 0; i < NUM_RECEPTORS; i++)
-						this.inputs[i] = 0;
-					
-					DC.this.clearPhenotype();
-					
-					if(this.booleanNetwork[STAT1] == 1 || this.booleanNetwork[IRF3] == 1)
-						DC.this.addPhenotype(Phenotypes.ACTIVE);
-					else
-						DC.this.addPhenotype(Phenotypes.RESTING);
-					
 				}
+				
+				for(int i = 0; i < NUM_RECEPTORS; i++)
+					this.inputs[i] = 0;
+				
+				DC.this.clearPhenotype();
+				
+				if(this.booleanNetwork[STAT1] == 1 || this.booleanNetwork[IRF3] == 1)
+					DC.this.addPhenotype(Phenotypes.ACTIVE);
+				else
+					DC.this.addPhenotype(Phenotypes.RESTING);
+					
 				
 			}
 			

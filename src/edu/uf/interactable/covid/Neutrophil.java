@@ -68,74 +68,72 @@ public class Neutrophil extends edu.uf.interactable.Neutrophil{
 			
 			@Override
 			public void processBooleanNetwork() {
-				if(Neutrophil.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
-					int k = 0;
-					List<Integer> array = new ArrayList<>(size);
-					for(int i = 0; i < size; i++)
-						array.add(i);
-					while(true) {
-						if(k++ > Constants.MAX_BN_ITERATIONS)break;
-						Collections.shuffle(array, new Random());
-						for(int i : array) {
-							switch(i) {
-								case 0:
-									this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
-									break;
-								case 1:
-									this.booleanNetwork[ROS] = this.booleanNetwork[TLR4];//or(this.booleanNetwork[TLR4], this.booleanNetwork[ROS]);
-									break;
-								case 2:
-									this.booleanNetwork[CASP8] = p(Constants.NEUTROPHIL_HALF_LIFE);//and(this.booleanNetwork[ROS], not(this.booleanNetwork[AKT], 1));
-									break;
-								case 3:
-									//this.booleanNetwork[AKT] = or(this.booleanNetwork[TLR4], and(this.booleanNetwork[AKT], not(this.booleanNetwork[SHIP], 1)));
-									//break;
-								case 4:
-									//this.booleanNetwork[SHIP] = this.booleanNetwork[ROS];
-									//break;
-								case 5:
-									//int ii = p(Constants.NEUTROPHIL_HALF_LIFE);
-									//System.out.println(this.booleanNetwork[CASP8] + " " + ii + " " + not(this.booleanNetwork[AKT], 1));
-									//this.booleanNetwork[APO]= and(or(this.booleanNetwork[CASP8], p(Constants.NEUTROPHIL_HALF_LIFE)), not(this.booleanNetwork[AKT], 1));
-									//break;
-								case 6:
-									//this.booleanNetwork[NET]=this.booleanNetwork[AKT];
-									//break;
-								default:
-									System.err.println("No such interaction " + i + "!");
-									break;
-							}
-						}
-					}
-					
-					array = new ArrayList<>();
-					
-					for(int i = 0; i < NUM_RECEPTORS; i++) 
-						this.inputs[i] = 0;
-					
-					for(int i = 0; i < NUM_PHENOTYPES; i++)
-						array.add(i);
-					
-					Neutrophil.this.clearPhenotype();
-					
+				int k = 0;
+				List<Integer> array = new ArrayList<>(size);
+				for(int i = 0; i < size; i++)
+					array.add(i);
+				while(true) {
+					if(k++ > Constants.MAX_BN_ITERATIONS)break;
 					Collections.shuffle(array, new Random());
 					for(int i : array) {
 						switch(i) {
 							case 0:
-								if(this.booleanNetwork[CASP8] == 1)
-									Neutrophil.this.addPhenotype(Phenotypes.APOPTOTIC);
-								return;
-							/*case 1:
-								if(this.booleanNetwork[NET] == 1)
-									Neutrophil.this.addPhenotype(Phenotypes.NECROTIC);
-								return;*/
+								this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
+								break;
 							case 1:
-								if(this.booleanNetwork[ROS] == 1)
-									Neutrophil.this.addPhenotype(Phenotypes.ACTIVE);
-								return;
+								this.booleanNetwork[ROS] = this.booleanNetwork[TLR4];//or(this.booleanNetwork[TLR4], this.booleanNetwork[ROS]);
+								break;
+							case 2:
+								this.booleanNetwork[CASP8] = p(Constants.NEUTROPHIL_HALF_LIFE);//and(this.booleanNetwork[ROS], not(this.booleanNetwork[AKT], 1));
+								break;
+							case 3:
+								//this.booleanNetwork[AKT] = or(this.booleanNetwork[TLR4], and(this.booleanNetwork[AKT], not(this.booleanNetwork[SHIP], 1)));
+								//break;
+							case 4:
+								//this.booleanNetwork[SHIP] = this.booleanNetwork[ROS];
+								//break;
+							case 5:
+								//int ii = p(Constants.NEUTROPHIL_HALF_LIFE);
+								//System.out.println(this.booleanNetwork[CASP8] + " " + ii + " " + not(this.booleanNetwork[AKT], 1));
+								//this.booleanNetwork[APO]= and(or(this.booleanNetwork[CASP8], p(Constants.NEUTROPHIL_HALF_LIFE)), not(this.booleanNetwork[AKT], 1));
+								//break;
+							case 6:
+								//this.booleanNetwork[NET]=this.booleanNetwork[AKT];
+								//break;
 							default:
-								System.err.println("No such phenotype " + i);
+								System.err.println("No such interaction " + i + "!");
+								break;
 						}
+					}
+				}
+				
+				array = new ArrayList<>();
+				
+				for(int i = 0; i < NUM_RECEPTORS; i++) 
+					this.inputs[i] = 0;
+				
+				for(int i = 0; i < NUM_PHENOTYPES; i++)
+					array.add(i);
+				
+				Neutrophil.this.clearPhenotype();
+				
+				Collections.shuffle(array, new Random());
+				for(int i : array) {
+					switch(i) {
+						case 0:
+							if(this.booleanNetwork[CASP8] == 1)
+								Neutrophil.this.addPhenotype(Phenotypes.APOPTOTIC);
+							return;
+						/*case 1:
+							if(this.booleanNetwork[NET] == 1)
+								Neutrophil.this.addPhenotype(Phenotypes.NECROTIC);
+							return;*/
+						case 1:
+							if(this.booleanNetwork[ROS] == 1)
+								Neutrophil.this.addPhenotype(Phenotypes.ACTIVE);
+							return;
+						default:
+							System.err.println("No such phenotype " + i);
 					}
 				}
 			}

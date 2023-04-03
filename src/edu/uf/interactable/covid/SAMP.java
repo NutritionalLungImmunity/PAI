@@ -66,7 +66,7 @@ public class SAMP extends Molecule{
         
         if(interactable instanceof Macrophage) {
         	Macrophage cell = (Macrophage) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_SAMP, cell.getClock())) {
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_SAMP)) {
 	        	cell.bind(SAMP.MOL_IDX);
 	        	this.dec(Constants.SAMP_QTTY, 0, x, y, z);
 	        }
@@ -88,5 +88,10 @@ public class SAMP extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

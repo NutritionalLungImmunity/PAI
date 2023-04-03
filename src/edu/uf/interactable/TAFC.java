@@ -128,4 +128,9 @@ public class TAFC extends Molecule{
 	public int getNumState() {
 		return NUM_STATES;
 	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
+	}
 }

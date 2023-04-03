@@ -34,8 +34,11 @@ public class Macrophage extends Phagocyte{
         this.maxMoveStep = -1; 
         this.engaged = false; //### CHANGE HERE!!!
         Macrophage.totalIron = Macrophage.totalIron + ironPool;
-        this.clock = Clock.createClock(3);
     }
+	
+	public boolean isTime() {
+		return this.getClock().toc();
+	}
     
     public static String getChemokine() {
 		return chemokine;
@@ -84,6 +87,9 @@ public class Macrophage extends Phagocyte{
 
 
     public void updateStatus() {
+    	super.updateStatus();
+    	if(!this.getClock().toc())return;
+    	
     	this.processBooleanNetwork();
     	
         if(this.getStatus() == Macrophage.DEAD)
@@ -175,137 +181,135 @@ public class Macrophage extends Phagocyte{
 			
 			@Override
 			public void processBooleanNetwork() {
-				if(Macrophage.this.getClock().toc(BN_CLOCK, Constants.HALF_HOUR/Constants.TIME_STEP_SIZE)) { //convet minutes in iterations
-					int k = 0;
-					List<Integer> array = new ArrayList<>(size);
-					for(int i = 0; i < size; i++)
-						array.add(i);
-					while(true) {
-						if(k++ > Constants.MAX_BN_ITERATIONS)break;
-						Collections.shuffle(array, new Random());
-						for(int i : array) {
-							switch(i) {
-								case 0:
-									this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB] | e(this.inputs, IFNG_e);
-									break;
-								case 1:
-									this.booleanNetwork[CSF2Ra] = e(this.inputs, GM_CSF_e);
-									break;
-								case 2:
-									this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | e(this.inputs, IL1B_e);
-									break;
-								case 3:
-									/*this.booleanNetwork[TLR4] = (e(this.inputs, LPS_e) | (e(this.inputs, Heme_e) & 
-											(-e(this.inputs, Hpx_e) + 1)) | e(this.inputs, DAMP_e) | e(this.inputs, VIRUS_e)) & 
-											(-this.booleanNetwork[FCGR] + 1);*/
-									this.booleanNetwork[TLR4] = (o(this.inputs, TLR4_o) | //e(this.inputs, LPS_e) | 
-											(e(this.inputs, Heme_e) & (-e(this.inputs, Hpx_e) + 1))) & (-this.booleanNetwork[FCGR] + 1);
-									break;
-								case 4:
-									this.booleanNetwork[FCGR] = (e(this.inputs, IC_e) & e(this.inputs, LPS_e)) | (e(this.inputs, IC_e) & e(this.inputs, IL1B_e));
-									break;
-								case 5:
-									this.booleanNetwork[IL4Ra] = e(this.inputs, IL4_e);
-									break;
-								case 6:
-									this.booleanNetwork[IL10R] = e(this.inputs, IL10_e) | this.booleanNetwork[IL10_out];
-									break;
-								case 7:
-									this.booleanNetwork[STAT1] = this.booleanNetwork[IFNGR] & (-(this.booleanNetwork[SOCS1] | this.booleanNetwork[STAT3]) + 1);
-									break;
-								case 8:
-									this.booleanNetwork[STAT5] = this.booleanNetwork[CSF2Ra] & (-(this.booleanNetwork[STAT3] | this.booleanNetwork[IRF4]) + 1);
-									break;
-								case 9:
-									this.booleanNetwork[NFkB] = (this.booleanNetwork[IL1R] | this.booleanNetwork[TLR4] | 
-											this.booleanNetwork[Dectin] | this.booleanNetwork[TNFR]) & (
-											-(this.booleanNetwork[STAT3] | this.booleanNetwork[FCGR] | this.booleanNetwork[PPARG] | this.booleanNetwork[KLF4])
-									+ 1);
-									break;
-								case 10:
-									this.booleanNetwork[PPARG] = this.booleanNetwork[IL4Ra];
-									break;
-								case 11:
-									this.booleanNetwork[STAT6] = this.booleanNetwork[IL4Ra];
-									break;
-								case 12:
-									this.booleanNetwork[JMJD3] = this.booleanNetwork[IL4Ra];
-									break;
-								case 13:
-									this.booleanNetwork[STAT3] = (this.booleanNetwork[IL10R] | this.booleanNetwork[SMAD2]) & (
-											-(this.booleanNetwork[FCGR] | this.booleanNetwork[PPARG]) + 1
-									);
-									break;
-								case 14:
-									this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];
-									break;
-								case 15:
-									this.booleanNetwork[ERK] = this.booleanNetwork[FCGR] | this.booleanNetwork[Dectin];
-									break;
-								case 16:
-									this.booleanNetwork[KLF4] = this.booleanNetwork[STAT6];
-									break;
-								case 17:
-									this.booleanNetwork[IL1B] = this.booleanNetwork[NFkB];
-									break;
-								case 18:
-									this.booleanNetwork[IFNB] = this.booleanNetwork[IRF3];
-									break;
-								case 19:
-									this.booleanNetwork[IL12_out] = this.booleanNetwork[STAT1] | this.booleanNetwork[STAT5] | this.booleanNetwork[NFkB];
-									break;
-								case 20: 
-									this.booleanNetwork[IL10_out] = this.booleanNetwork[PPARG] | this.booleanNetwork[STAT6] | this.booleanNetwork[JMJD3] | 
-										this.booleanNetwork[STAT3] | this.booleanNetwork[ERK] | this.booleanNetwork[PtSR];
-									break;
-								case 21:
-									this.booleanNetwork[TNFR] = e(this.inputs, TNFa_e);
-									break;
-								case 22:
-									this.booleanNetwork[Dectin] = e(this.inputs, B_GLUC_e);
-									break;
-								case 23:
-									this.booleanNetwork[SOCS1] = this.booleanNetwork[STAT6];
-									break;
-								case 24:
-									this.booleanNetwork[IRF4] = this.booleanNetwork[JMJD3];
-									break;
-								case 25:
-									this.booleanNetwork[ALK5] = e(this.inputs, TGFb_e);
-									break;
-								case 26:
-									this.booleanNetwork[SMAD2] = this.booleanNetwork[ALK5];
-									break;
-								case 27:
-									//this.booleanNetwork[PtSR] = e(this.inputs, SAMP_e);
-									break;
-								case 28:
-									this.booleanNetwork[FPN] = (-e(this.inputs, Hep_e) + 1);
-									break;
-								default:
-									System.err.println("No such interaction " + i + "!");
-									break;
-							}
+				int k = 0;
+				List<Integer> array = new ArrayList<>(size);
+				for(int i = 0; i < size; i++)
+					array.add(i);
+				while(true) {
+					if(k++ > Constants.MAX_BN_ITERATIONS)break;
+					Collections.shuffle(array, new Random());
+					for(int i : array) {
+						switch(i) {
+							case 0:
+								this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB] | e(this.inputs, IFNG_e);
+								break;
+							case 1:
+								this.booleanNetwork[CSF2Ra] = e(this.inputs, GM_CSF_e);
+								break;
+							case 2:
+								this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | e(this.inputs, IL1B_e);
+								break;
+							case 3:
+								/*this.booleanNetwork[TLR4] = (e(this.inputs, LPS_e) | (e(this.inputs, Heme_e) & 
+										(-e(this.inputs, Hpx_e) + 1)) | e(this.inputs, DAMP_e) | e(this.inputs, VIRUS_e)) & 
+										(-this.booleanNetwork[FCGR] + 1);*/
+								this.booleanNetwork[TLR4] = (o(this.inputs, TLR4_o) | //e(this.inputs, LPS_e) | 
+										(e(this.inputs, Heme_e) & (-e(this.inputs, Hpx_e) + 1))) & (-this.booleanNetwork[FCGR] + 1);
+								break;
+							case 4:
+								this.booleanNetwork[FCGR] = (e(this.inputs, IC_e) & e(this.inputs, LPS_e)) | (e(this.inputs, IC_e) & e(this.inputs, IL1B_e));
+								break;
+							case 5:
+								this.booleanNetwork[IL4Ra] = e(this.inputs, IL4_e);
+								break;
+							case 6:
+								this.booleanNetwork[IL10R] = e(this.inputs, IL10_e) | this.booleanNetwork[IL10_out];
+								break;
+							case 7:
+								this.booleanNetwork[STAT1] = this.booleanNetwork[IFNGR] & (-(this.booleanNetwork[SOCS1] | this.booleanNetwork[STAT3]) + 1);
+								break;
+							case 8:
+								this.booleanNetwork[STAT5] = this.booleanNetwork[CSF2Ra] & (-(this.booleanNetwork[STAT3] | this.booleanNetwork[IRF4]) + 1);
+								break;
+							case 9:
+								this.booleanNetwork[NFkB] = (this.booleanNetwork[IL1R] | this.booleanNetwork[TLR4] | 
+										this.booleanNetwork[Dectin] | this.booleanNetwork[TNFR]) & (
+										-(this.booleanNetwork[STAT3] | this.booleanNetwork[FCGR] | this.booleanNetwork[PPARG] | this.booleanNetwork[KLF4])
+								+ 1);
+								break;
+							case 10:
+								this.booleanNetwork[PPARG] = this.booleanNetwork[IL4Ra];
+								break;
+							case 11:
+								this.booleanNetwork[STAT6] = this.booleanNetwork[IL4Ra];
+								break;
+							case 12:
+								this.booleanNetwork[JMJD3] = this.booleanNetwork[IL4Ra];
+								break;
+							case 13:
+								this.booleanNetwork[STAT3] = (this.booleanNetwork[IL10R] | this.booleanNetwork[SMAD2]) & (
+										-(this.booleanNetwork[FCGR] | this.booleanNetwork[PPARG]) + 1
+								);
+								break;
+							case 14:
+								this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];
+								break;
+							case 15:
+								this.booleanNetwork[ERK] = this.booleanNetwork[FCGR];// | this.booleanNetwork[Dectin];
+								break;
+							case 16:
+								this.booleanNetwork[KLF4] = this.booleanNetwork[STAT6];
+								break;
+							case 17:
+								this.booleanNetwork[IL1B] = this.booleanNetwork[NFkB];
+								break;
+							case 18:
+								this.booleanNetwork[IFNB] = this.booleanNetwork[IRF3];
+								break;
+							case 19:
+								this.booleanNetwork[IL12_out] = this.booleanNetwork[STAT1] | this.booleanNetwork[STAT5] | this.booleanNetwork[NFkB];
+								break;
+							case 20: 
+								this.booleanNetwork[IL10_out] = this.booleanNetwork[PPARG] | this.booleanNetwork[STAT6] | this.booleanNetwork[JMJD3] | 
+									this.booleanNetwork[STAT3] | this.booleanNetwork[ERK] | this.booleanNetwork[PtSR];
+								break;
+							case 21:
+								this.booleanNetwork[TNFR] = e(this.inputs, TNFa_e);
+								break;
+							case 22:
+								this.booleanNetwork[Dectin] = e(this.inputs, B_GLUC_e);
+								break;
+							case 23:
+								this.booleanNetwork[SOCS1] = this.booleanNetwork[STAT6];
+								break;
+							case 24:
+								this.booleanNetwork[IRF4] = this.booleanNetwork[JMJD3];
+								break;
+							case 25:
+								this.booleanNetwork[ALK5] = e(this.inputs, TGFb_e);
+								break;
+							case 26:
+								this.booleanNetwork[SMAD2] = this.booleanNetwork[ALK5];
+								break;
+							case 27:
+								//this.booleanNetwork[PtSR] = e(this.inputs, SAMP_e);
+								break;
+							case 28:
+								this.booleanNetwork[FPN] = (-e(this.inputs, Hep_e) + 1);
+								break;
+							default:
+								System.err.println("No such interaction " + i + "!");
+								break;
 						}
 					}
-					
-					for(int i = 0; i < NUM_RECEPTORS; i++)
-						this.inputs[i] = 0;
-					
-					Macrophage.this.clearPhenotype();
-					
-					if(this.booleanNetwork[NFkB] == 1 || this.booleanNetwork[STAT1] == 1 || this.booleanNetwork[STAT5] == 1)
-						Macrophage.this.addPhenotype(Phenotypes.ACTIVE);
-					else if(this.booleanNetwork[STAT6] == 1)
-						Macrophage.this.addPhenotype(Phenotypes.ALT_ACTIVE);
-					else if(this.booleanNetwork[ERK] == 1)
-						Macrophage.this.addPhenotype(Phenotypes.MIX_ACTIVE);
-					else if(this.booleanNetwork[STAT3] == 1)
-						Macrophage.this.addPhenotype(Phenotypes.INACTIVE);
-					else
-						Macrophage.this.addPhenotype(Phenotypes.RESTING);
-					
 				}
+				
+				for(int i = 0; i < NUM_RECEPTORS; i++)
+					this.inputs[i] = 0;
+				
+				Macrophage.this.clearPhenotype();
+				
+				if(this.booleanNetwork[NFkB] == 1 || this.booleanNetwork[STAT1] == 1 || this.booleanNetwork[STAT5] == 1)
+					Macrophage.this.addPhenotype(Phenotypes.ACTIVE);
+				else if(this.booleanNetwork[STAT6] == 1)
+					Macrophage.this.addPhenotype(Phenotypes.ALT_ACTIVE);
+				else if(this.booleanNetwork[ERK] == 1)
+					Macrophage.this.addPhenotype(Phenotypes.MIX_ACTIVE);
+				else if(this.booleanNetwork[STAT3] == 1)
+					Macrophage.this.addPhenotype(Phenotypes.INACTIVE);
+				else
+					Macrophage.this.addPhenotype(Phenotypes.RESTING);
+					
 				
 			}
 			

@@ -111,5 +111,10 @@ public class Erythrocyte extends Cell{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
+	}
 
 }

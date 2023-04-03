@@ -72,5 +72,10 @@ public class MIP1B extends Chemokine{
 	public int getNumState() {
 		return NUM_STATES;
 	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
+	}
     
 }

@@ -46,7 +46,7 @@ public class IFN1 extends Molecule{
     	EukaryoteSignalingNetwork.IFNG_e = IFN1.MOL_IDX;
         if(interactable instanceof Pneumocyte) {
         	Pneumocyte cell = (Pneumocyte) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IFNG, cell.getClock()))
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IFNG))
 	        	cell.bind(IFN1.MOL_IDX);
 	        if (cell.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_IFN_QTTY, 0, x, y, z);
@@ -54,7 +54,7 @@ public class IFN1 extends Molecule{
         }
         if(interactable instanceof Macrophage) {
         	Macrophage cell = (Macrophage) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IFNG, cell.getClock()))
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IFNG))
 	        	cell.bind(IFN1.MOL_IDX);
 	        if (cell.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_IFN_QTTY, 0, x, y, z);
@@ -76,5 +76,10 @@ public class IFN1 extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

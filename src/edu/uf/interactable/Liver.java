@@ -60,9 +60,11 @@ public class Liver extends Cell{
     	super();
         this.id = Id.getId();
         this.logHepcidin = LOG_NULL_VALUE;
-        this.clock = Clock.createClock(3);
-        this.getClock().tic(0);
     }
+    
+    public boolean isTime() {
+		return this.getClock().toc();
+	}
 
     public static Liver getLiver() {
     	if(liver == null) {
@@ -162,7 +164,7 @@ public class Liver extends Cell{
             	double totalTf = tfr.getTotalMolecule(2);
             	//double p = Util.activationFunction(totalTf, Constants.Kd_TfR2, Constants.STD_UNIT_T,  Constants.SPACE_VOL, 1);   
             	for(int i = 0; i < Liver.ENSEMBLE_SIZE; i++) {
-            		if(Util.activationFunction(totalTf, Constants.Kd_TfR2, Constants.SPACE_VOL, this.getClock())) {
+            		if(Util.activationFunction(totalTf, Constants.Kd_TfR2, Constants.SPACE_VOL)) {
             			this.booleanNetwork[i][TFR2] = 1;
             		}else {
             			this.booleanNetwork[i][TFR2] = 0;
@@ -203,7 +205,7 @@ public class Liver extends Cell{
         	//double p = Util.activationFunction(systemicIl6Concentration, Constants.Kd_IL6, Constants.STD_UNIT_T);
         	//System.out.println(p + "\t" + this.systemicIl6Concentration);
         	for(int i = 0; i < Liver.ENSEMBLE_SIZE; i++) {
-        		if(Util.activationFunction(systemicIl6Concentration, Constants.Kd_IL6, this.getClock())) {
+        		if(Util.activationFunction(systemicIl6Concentration, Constants.Kd_IL6)) {
         			this.booleanNetwork[i][IL6R] = 1;
         			
         		}else {
@@ -219,7 +221,7 @@ public class Liver extends Cell{
         	double systemicConcentration = tnfa.getTotalMolecule(0)/(2*Constants.SPACE_VOL);// #div 2 : serum
         	//double p = Util.activationFunction(systemicConcentration, Constants.Kd_TNF, Constants.STD_UNIT_T);
         	for(int i = 0; i < Liver.ENSEMBLE_SIZE; i++) {
-        		if(Util.activationFunction(systemicConcentration, Constants.Kd_TNF, this.getClock())) {
+        		if(Util.activationFunction(systemicConcentration, Constants.Kd_TNF)) {
         			this.booleanNetwork[i][TNFR] = 1;
         		}else {
         			this.booleanNetwork[i][TNFR] = 0;
@@ -234,7 +236,7 @@ public class Liver extends Cell{
         	double systemicConcentration = tgfb.getTotalMolecule(0)/(2*Constants.SPACE_VOL);// #div 2 : serum
         	//double p = Util.activationFunction(systemicConcentration, Constants.Kd_TGF, Constants.STD_UNIT_T);
         	for(int i = 0; i < Liver.ENSEMBLE_SIZE; i++) {
-        		if(Util.activationFunction(systemicConcentration, Constants.Kd_TGF, this.getClock())) {
+        		if(Util.activationFunction(systemicConcentration, Constants.Kd_TGF)) {
         			this.booleanNetwork[i][TGFR] = 1;
         		}else {
         			this.booleanNetwork[i][TGFR] = 0;
@@ -279,40 +281,38 @@ public class Liver extends Cell{
 	public void processBooleanNetwork() {
 		if(hasProcessBN)return;
 		hasProcessBN = true;
-		if(this.getClock().toc(0, 15)) {
-			int[] temp = new int[Liver.SPECIES_NUM];
-			for(int k = 0; k < ENSEMBLE_SIZE; k++) {
-				for(int i = 0; i < Liver.SPECIES_NUM; i++) 
-					temp[i] = 0;
-				
-				temp[Liver.IL1R] = this.booleanNetwork[k][Liver.IL1R];
-				temp[Liver.IL6R] = this.booleanNetwork[k][Liver.IL6R];
-				temp[Liver.TNFR] = this.booleanNetwork[k][Liver.TNFR];
-				temp[Liver.TGFR] = this.booleanNetwork[k][Liver.TGFR];
-				temp[Liver.TFR2] = this.booleanNetwork[k][Liver.TFR2];
+		int[] temp = new int[Liver.SPECIES_NUM];
+		for(int k = 0; k < ENSEMBLE_SIZE; k++) {
+			for(int i = 0; i < Liver.SPECIES_NUM; i++) 
+				temp[i] = 0;
+			
+			temp[Liver.IL1R] = this.booleanNetwork[k][Liver.IL1R];
+			temp[Liver.IL6R] = this.booleanNetwork[k][Liver.IL6R];
+			temp[Liver.TNFR] = this.booleanNetwork[k][Liver.TNFR];
+			temp[Liver.TGFR] = this.booleanNetwork[k][Liver.TGFR];
+			temp[Liver.TFR2] = this.booleanNetwork[k][Liver.TFR2];
 
-				temp[Liver.NFKB] = this.booleanNetwork[k][Liver.TNFR] | this.booleanNetwork[k][Liver.IL1R];
-				temp[Liver.MAPK] = this.booleanNetwork[k][Liver.TNFR] | this.booleanNetwork[k][Liver.IL1R] | this.booleanNetwork[k][Liver.IL6R];
-				temp[Liver.STAT3] = this.booleanNetwork[k][Liver.IL6R];
-				temp[Liver.SMAD_6_7] = this.booleanNetwork[k][Liver.TNFR] | this.booleanNetwork[k][Liver.TGFR];
-				temp[Liver.ERK] = this.booleanNetwork[k][Liver.TGFR];
-				temp[Liver.SMAD_1_5_8] = (this.booleanNetwork[k][Liver.TGFR] | this.booleanNetwork[k][Liver.TFR2]) & (-this.booleanNetwork[k][Liver.SMAD_6_7] + 1);
-				temp[Liver.CEBP] = this.booleanNetwork[k][Liver.MAPK] & (-this.booleanNetwork[k][Liver.ERK] + 1);
-				//temp[Liver.HP] = this.booleanNetwork[k][Liver.NFKB] & this.booleanNetwork[k][Liver.STAT3] & this.booleanNetwork[k][Liver.CEBP];
-				//temp[Liver.HPX] = this.booleanNetwork[k][Liver.NFKB] & this.booleanNetwork[k][Liver.STAT3] & this.booleanNetwork[k][Liver.CEBP];
-				temp[Liver.HP] = this.booleanNetwork[k][Liver.NFKB] | this.booleanNetwork[k][Liver.STAT3] | this.booleanNetwork[k][Liver.CEBP];
-				temp[Liver.HPX] = this.booleanNetwork[k][Liver.NFKB] | this.booleanNetwork[k][Liver.STAT3] | this.booleanNetwork[k][Liver.CEBP];
-				temp[Liver.HEP] = this.booleanNetwork[k][Liver.CEBP] | this.booleanNetwork[k][Liver.STAT3] | this.booleanNetwork[k][Liver.SMAD_1_5_8];
-				
-				for(int i = 0; i < Liver.SPECIES_NUM; i++) {
-					this.booleanNetwork[k][i] = temp[i];
-					if(k == 0)this.booleanEnsemble[i] = temp[i];///((double) ENSEMBLE_SIZE);
-					else this.booleanEnsemble[i] += temp[i];///((double) ENSEMBLE_SIZE);
-				}
-				//System.out.println();
-				
+			temp[Liver.NFKB] = this.booleanNetwork[k][Liver.TNFR] | this.booleanNetwork[k][Liver.IL1R];
+			temp[Liver.MAPK] = this.booleanNetwork[k][Liver.TNFR] | this.booleanNetwork[k][Liver.IL1R] | this.booleanNetwork[k][Liver.IL6R];
+			temp[Liver.STAT3] = this.booleanNetwork[k][Liver.IL6R];
+			temp[Liver.SMAD_6_7] = this.booleanNetwork[k][Liver.TNFR] | this.booleanNetwork[k][Liver.TGFR];
+			temp[Liver.ERK] = this.booleanNetwork[k][Liver.TGFR];
+			temp[Liver.SMAD_1_5_8] = (this.booleanNetwork[k][Liver.TGFR] | this.booleanNetwork[k][Liver.TFR2]) & (-this.booleanNetwork[k][Liver.SMAD_6_7] + 1);
+			temp[Liver.CEBP] = this.booleanNetwork[k][Liver.MAPK] & (-this.booleanNetwork[k][Liver.ERK] + 1);
+			//temp[Liver.HP] = this.booleanNetwork[k][Liver.NFKB] & this.booleanNetwork[k][Liver.STAT3] & this.booleanNetwork[k][Liver.CEBP];
+			//temp[Liver.HPX] = this.booleanNetwork[k][Liver.NFKB] & this.booleanNetwork[k][Liver.STAT3] & this.booleanNetwork[k][Liver.CEBP];
+			temp[Liver.HP] = this.booleanNetwork[k][Liver.NFKB] | this.booleanNetwork[k][Liver.STAT3] | this.booleanNetwork[k][Liver.CEBP];
+			temp[Liver.HPX] = this.booleanNetwork[k][Liver.NFKB] | this.booleanNetwork[k][Liver.STAT3] | this.booleanNetwork[k][Liver.CEBP];
+			temp[Liver.HEP] = this.booleanNetwork[k][Liver.CEBP] | this.booleanNetwork[k][Liver.STAT3] | this.booleanNetwork[k][Liver.SMAD_1_5_8];
+			
+			for(int i = 0; i < Liver.SPECIES_NUM; i++) {
+				this.booleanNetwork[k][i] = temp[i];
+				if(k == 0)this.booleanEnsemble[i] = temp[i];///((double) ENSEMBLE_SIZE);
+				else this.booleanEnsemble[i] += temp[i];///((double) ENSEMBLE_SIZE);
 			}
-        };
+			//System.out.println();
+			
+		}
 		
 		/*System.out.println(
 				//IL1.getMolecule().getTotalMolecule(0) + " " + 
@@ -347,6 +347,7 @@ public class Liver extends Cell{
 
 	@Override
 	public void updateStatus() {
+		super.updateStatus();
 		/*if(!hasUpdated) {
 			serumHep = serumHepAux;// - serumHep * Constants.HEP_HALF_LIFE;
 			System.out.println(this.booleanEnsemble[HEP] + " " + Constants.L_HEP_QTTY + " " + serumHep);

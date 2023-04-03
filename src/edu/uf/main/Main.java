@@ -22,6 +22,7 @@ import edu.uf.control.Exec;
 import edu.uf.interactable.Afumigatus;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
+import edu.uf.interactable.covid.Neutrophil;
 import edu.uf.interactable.covid.SarsCoV2;
 import edu.uf.main.initialize.Initialize;
 import edu.uf.main.initialize.InitializeBaseInvitroModel;
@@ -35,6 +36,7 @@ import edu.uf.main.initialize.InitializeInvitromacrophages;
 import edu.uf.main.print.PrintBaseInVitro;
 import edu.uf.main.print.PrintBaseModel;
 import edu.uf.main.print.PrintCitotoxicity;
+import edu.uf.main.print.PrintCoinjury;
 import edu.uf.main.print.PrintCovid;
 //import edu.uf.main.print.PrintHemeInVitroModel;
 import edu.uf.main.print.PrintHemorrhageModel;
@@ -113,7 +115,7 @@ public class Main {
         //recruiters[1] = new NeutrophilReplenisher();
         
         run.run(
-        		3750,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		2160,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
         		xbin, 
         		ybin, 
         		zbin, 
@@ -1178,9 +1180,94 @@ public class Main {
 	}
 	
 	
+	private static void baseCoinjury(String[] args) throws InterruptedException {
+		InitializeCoinjury initialize = new InitializeCoinjury();
+		Run run = new RunSingleThread();
+		PrintCoinjury stat = new PrintCoinjury();
+		
+		
+		int xbin = 10;
+		int ybin = 10;
+		int zbin = 10;
+		int xquadrant = 3;
+        int yquadrant = 3;
+        int zquadrant = 3;
+        
+        //int pne = (int) (xbin * ybin * zbin  * 0.64);
+        
+        String[] input = new String[]{"0", "20", args[3], "640", "0"};
+        //Constants.MAX_N = Constants.MAX_N;
+        //Constants.MAX_MA = Constants.MAX_MA;
+        
+        //Constants.Kd_Granule = 2e12;
+        
+        //Constants.ITER_TO_GROW_FAST = Integer.parseInt(args[0]);
+        Constants.ITER_TO_GROW = Integer.parseInt(args[0]);
+        
+        //Constants.Kd_Granule = Double.parseDouble(args[1]) * 2e12;
+        
+        Constants.PR_N_HYPHAE = Double.parseDouble(args[1])*Constants.PR_N_HYPHAE;
+        Constants.PR_MA_HYPHAE = Double.parseDouble(args[2])*Constants.PR_MA_HYPHAE;
+        //Constants.MA_MOVE_RATE_ACT = Constants.MA_MOVE_RATE_ACT*10;
+        //Constants.MA_MOVE_RATE_REST = Constants.MA_MOVE_RATE_ACT*10;
+        
+        //Constants.NEUTROPHIL_HALF_LIFE =  - Math.log(0.5) / (Double.parseDouble(args[3]) * (Constants.HOUR/((double) Constants.TIME_STEP_SIZE)));
+        
+        //Constants.Granule_HALF_LIFE = - Math.log(0.5) / (Double.parseDouble(args[4]) * (Constants.HOUR/((double) Constants.TIME_STEP_SIZE)));
+        
+        Constants.MAX_MA = Integer.parseInt(args[3]);
+        Constants.MAX_N = Integer.parseInt(args[4]);
+        
+        
+        
+        
+        
+        double f = 0.1;
+        double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE);
+        double dt = 1;
+        Diffuse diffusion = new FADIPeriodic(f, pdeFactor, dt);
+        
+        Voxel[][][] grid = initialize.createPeriodicGrid(xbin, ybin, zbin);
+        List<Quadrant> quadrants = initialize.createQuadrant(grid, xbin, ybin, zbin, xquadrant, yquadrant, zquadrant);
+        initialize.initializeMolecules(grid, xbin, ybin, zbin, diffusion, false);
+        initialize.initializePneumocytes(grid, xbin, ybin, zbin, Integer.parseInt(input[3]));
+        //initialize.initializeLiver(grid, xbin, ybin, zbin);
+        initialize.initializeMacrophage(grid, xbin, ybin, zbin, Integer.parseInt(input[2]));
+        initialize.initializeNeutrophils(grid, xbin, ybin, zbin, Integer.parseInt(input[4]));
+        initialize.infect(Integer.parseInt(input[1]), grid, xbin, ybin, zbin, Afumigatus.HYPHAE, Constants.CONIDIA_INIT_IRON, -1, false);
+        initialize.setQuadrant(grid, xbin, ybin, zbin);
+        //stat.setGrid(grid);
+
+
+        Recruiter[] recruiters = new Recruiter[2];
+        recruiters[0] = new MacrophageReplenisher();
+        recruiters[1] = new NeutrophilReplenisher();
+        
+        
+        
+        run.run( 
+        		720,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		xbin, 
+        		ybin, 
+        		zbin, 
+        		grid, 
+        		quadrants, 
+        		recruiters,
+        		false,
+        		null, //new File("/Users/henriquedeassis/eclipse-workspace/jISS_legacy/sample/out_" + args[5]), //new File("/Users/henriquedeassis/Documents/Projects/COVID19/data/baseClock.tsv"),
+        		-1,
+        		stat
+        );
+        
+        stat.close();
+
+        //System.out.println((toc - tic));
+	}
 	
 	
 	
+	
+	//THIS EXPERIMEENT IS NOT REPRODUCING OLD RESULT BECAUSE THERE IS NO TURN_OVER_RATE. WHICH TURN OUT TO BE MORE IMPORTANT THAN HALF LIFE
 
 	public static void main(String[] args) throws Exception {
 		//Turnover and degrade changed: Turnover now is automatic. In the future there should be turnover and then degrade in the serum.
@@ -1195,7 +1282,8 @@ public class Main {
 		//args = new String[] {"1", "1", "1"};
 		//args = new String[] {"1.62489565399917", "3.79496365105168", "0.361375652696199", "0.958874000197507", "1.10247187374883", "0.70986409581613", "3.38225794654421", "1.27171492281", "1.80649492166268", "2.25767252319005", "0.440499686750385", "2.50927171531779", "3.26703388702485", "0.718551707413203", "1.72616948763091", "3.0497288483525", "1.53019227580619", "0.392280692899905", "1.80643602247491"};
 		long tic = System.currentTimeMillis();
-		Main.saCovidModel(args);
+		//Main.baseCoinjury(new String[]{"29",   "1",   "1", "0", "488"});
+		Main.baseModel(args);
 		long toc = System.currentTimeMillis();
 		System.out.println((toc - tic));
 	}

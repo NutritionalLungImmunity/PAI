@@ -10,6 +10,7 @@ import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Phagocyte;
 import edu.uf.interactable.covid.NK;
 import edu.uf.interactable.covid.Neutrophil;
+import edu.uf.utils.Rand;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +38,14 @@ public class Voxel {
     private static Map<String, Molecule> infectiousAgentMolecules;
     private List<Voxel> neighbors;
     private Quadrant quadrant;
+    private int numSamples;
     
     static {
     	molecules = new HashMap<>();
     	infectiousAgentMolecules = new HashMap<>();
     }
 
-    public Voxel(int x, int y, int z) { 
+    public Voxel(int x, int y, int z, int numSamples) { 
         this.x = x;
         this.y = y;
         this.z = z;
@@ -56,6 +58,7 @@ public class Voxel {
         //this.infectiousAgentMolecules = new HashMap<>();
         this.neighbors = new ArrayList<>();
         this.quadrant = null;
+        this.numSamples = numSamples;
     }
     
     public int getX() {
@@ -248,11 +251,17 @@ public class Voxel {
         List<Molecule> infectiousMolecules = (List<Molecule>) this.toList(this.infectiousAgentMolecules);
         
         int size = cells.size();
-        if(size > 2) {
-        	Collections.shuffle(cells, new Random());
+        int[] cellsIndices = null;
+        int[] infIndices = new int[infectiousAgents.size()];
+        for(int i = 0; i < infectiousAgents.size(); i++)
+        	infIndices[i] = i;
+        //if(size > 2) {
+        	cellsIndices = Rand.getRand().sample(cells.size(), numSamples == -1 ? cells.size() : numSamples);
+        	if(numSamples != -1 ) infIndices = Rand.getRand().sample(infectiousMolecules.size(), numSamples);
+        	//Collections.shuffle(cells, new Random());
         	Collections.shuffle(mols, new Random());
         	Collections.shuffle(infectiousMolecules, new Random());
-        }	
+       // }	
             
         int molSize = mols.size();
         int cellSize = cells.size();
@@ -277,23 +286,33 @@ public class Voxel {
                 		}
                 break;
             case 1:
-            	for(int i = 0; i < cellSize; i++) 
-            		for(int j = i; j < cellSize; j++) 
+            	for(int i : cellsIndices) {
+            		if(!cells.get(i).isTime())continue;
+            		for(int j : cellsIndices) {
+            			//if(!cells.get(j).isTime())continue;
                         cells.get(i).interact(cells.get(j), this.x, this.y, this.z);
+            		}
+            	}
             	break;
             case 2:
-            	for(int i = 0; i < cellSize; i++) 
+            	for(int i : cellsIndices) {
+            		if(!cells.get(i).isTime())continue;
             		for(int j = 0; j < molSize; j++) 
                         cells.get(i).interact(mols.get(j), this.x, this.y, this.z);
+            	}
             	break;
             case 3:
-            	for(int i = 0; i < cellSize; i++) 
-            		for(int j = 0; j < infAgSize; j++)
+            	for(int i : cellsIndices) {
+            		if(!cells.get(i).isTime())continue;
+            		for(int j : infIndices) {
+            			//if(!infectiousAgents.get(j).isTime())continue;
             			cells.get(i).interact(infectiousAgents.get(j), this.x, this.y, this.z);
+            		}
+            	}
             	break;
             case 4:
             	for(int i = 0; i < infMolSize; i++) 
-            		for(int j = 0; j < infAgSize; j++)
+            		for(int j : infIndices)
             			infectiousMolecules.get(i).interact(infectiousAgents.get(j), this.x, this.y, this.z);
             	break;
             default:

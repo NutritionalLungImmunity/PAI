@@ -75,7 +75,7 @@ public class Heme extends Molecule{
         if(interactable instanceof Macrophage) {
         	Macrophage macrophage = (Macrophage) interactable;
         	EukaryoteSignalingNetwork.Heme_e = MOL_IDX;
-        	if(Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Heme, macrophage.getClock()))
+        	if(Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Heme))
         		macrophage.bind(MOL_IDX);
         	return true;
         }
@@ -95,6 +95,11 @@ public class Heme extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 
 }

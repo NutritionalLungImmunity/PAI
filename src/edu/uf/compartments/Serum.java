@@ -37,7 +37,6 @@ public class Serum implements Compartment{
 	
 	@Override
 	public void next() {
-    	Clock.updade();
     	this.interact();
     	this.update();
     }

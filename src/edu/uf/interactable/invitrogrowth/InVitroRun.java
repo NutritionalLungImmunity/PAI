@@ -13,7 +13,6 @@ public class InVitroRun {
 			Field.getField().next(i, k);
 			long toc = System.currentTimeMillis();
 			System.out.println(i + "\t" + Afumigatus.getCellCount() + "\t" + Field.objects + "\t" + (toc - tic));
-			Clock.updade();
 		}
 		
 	}

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.interactable.covid.IL6Complex;
 import edu.uf.utils.Constants;
 
 public abstract class Molecule extends Interactable{

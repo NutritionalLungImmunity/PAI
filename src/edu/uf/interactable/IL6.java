@@ -72,5 +72,10 @@ public class IL6 extends Molecule{
 	public int getNumState() {
 		return NUM_STATES;
 	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
+	}
 
 }

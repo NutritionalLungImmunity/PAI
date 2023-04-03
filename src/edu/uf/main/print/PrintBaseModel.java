@@ -40,15 +40,16 @@ public class PrintBaseModel extends PrintStat{
 	@Override
 	public void printStatistics(int k, File file){
 		//count();
+		if(k%15 != 0)return;
 		String str = k + "\t" + 
 	              Afumigatus.getTotalCells() + "\t" +
 	              Afumigatus.getTotalRestingConidia() + "\t" +
 	              Afumigatus.getTotalSwellingConidia() + "\t" +
 	              Afumigatus.getTotalGerminatingConidia() + "\t" +
 	              Afumigatus.getTotalHyphae() + "\t" +
-	              PResting + "\t" +
-	              PMixActive + "\t" +
-	              PActive + "\t" +
+	              //PResting + "\t" +
+	              //PMixActive + "\t" +
+	              //PActive + "\t" +
 	              /*(TAFC.getMolecule().getTotalMolecule(0) + TAFC.getMolecule().getTotalMolecule(1)) + "\t" +
 	              TAFC.getMolecule().getTotalMolecule(0) + "\t" +
 	              TAFC.getMolecule().getTotalMolecule(1) + "\t" +
@@ -67,10 +68,10 @@ public class PrintBaseModel extends PrintStat{
 	              //MIP1B.getMolecule().getTotalMolecule(0) + "\t" +
 	              MIP2.getMolecule().getTotalMolecule(0) + "\t" +
 	              //Erythrocyte.getTotalCells() + "\t" + 
-	              MAResting + "\t" +
+	              /*MAResting + "\t" +
 	              MAMixActive + "\t" +
 	              MAActive + "\t" +
-	              MAInactive + "\t" +
+	              MAInactive + "\t" +*/
 	              Macrophage.getTotalCells() + "\t" +
 	              Neutrophil.getTotalCells();
 		

@@ -63,11 +63,11 @@ public class SarsCoV2 extends Molecule{
     	EukaryoteSignalingNetwork.TLR4_o.add(SarsCoV2.MOL_IDX);
         if(interactable instanceof Pneumocyte) {
         	Pneumocyte cell = (Pneumocyte) interactable;
-        	if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2, cell.getClock())) {//TLR
+        	if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {//TLR
         		EukaryoteSignalingNetwork.VIRUS_e = -1;
 	        	cell.bind(SarsCoV2.MOL_IDX);
         	}
-        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_SarsCoV2, cell.getClock())) { //ACE2
+        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_SarsCoV2)) { //ACE2
         		EukaryoteSignalingNetwork.VIRUS_e = SarsCoV2.MOL_IDX;
         		cell.bind(SarsCoV2.MOL_IDX);
 	        	double qtty = Constants.SarsCoV2_UPTAKE_QTTY > this.get(0, x, y, z) ? this.get(0, x, y, z) : Constants.SarsCoV2_UPTAKE_QTTY;
@@ -86,7 +86,7 @@ public class SarsCoV2 extends Molecule{
         if(interactable instanceof Neutrophil) {
         	Neutrophil cell = (Neutrophil) interactable;
         	this.pdec(1-Constants.SarsCoV2_HALF_LIFE, 0, x, y, z);
-	        if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2, cell.getClock())) {
+	        if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {
 	        	cell.bind(SarsCoV2.MOL_IDX);
 	        }
 	        if(cell.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
@@ -98,7 +98,7 @@ public class SarsCoV2 extends Molecule{
         	
         	Macrophage cell = (Macrophage) interactable;
         	this.pdec(1-Constants.SarsCoV2_HALF_LIFE, 0, x, y, z);
-	        if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2, cell.getClock())) {
+	        if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {
 	        	cell.bind(SarsCoV2.MOL_IDX);
 	        	/*double qtty = Constants.SarsCoV2_UPTAKE_QTTY > this.get(0, x, y, z) ? this.get(0, x, y, z) : Constants.SarsCoV2_UPTAKE_QTTY;
 	        	double q = this.get(0, x, y, z);
@@ -144,5 +144,10 @@ public class SarsCoV2 extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

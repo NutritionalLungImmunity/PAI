@@ -52,20 +52,20 @@ public class LPS extends Molecule {
     	EukaryoteSignalingNetwork.TLR4_o.add(LPS.MOL_IDX);
         if(interactable instanceof Pneumocyte) {
         	Pneumocyte cell = (Pneumocyte) interactable;
-        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_LPS, cell.getClock()))
+        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_LPS))
 	        	cell.bind(LPS.MOL_IDX);
 	        return true;
         }
         if(interactable instanceof Neutrophil) {
         	Neutrophil cell = (Neutrophil) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_LPS, cell.getClock())) 
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_LPS)) 
 	        	cell.bind(LPS.MOL_IDX);
 	        return true;
         }
         
         if(interactable instanceof Macrophage) {
         	Macrophage cell = (Macrophage) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_LPS, cell.getClock())) 
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_LPS)) 
 	        	cell.bind(LPS.MOL_IDX);
 	        return true;
         }
@@ -85,5 +85,10 @@ public class LPS extends Molecule {
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }

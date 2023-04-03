@@ -93,4 +93,9 @@ public class Defensin extends Molecule{
 		return NUM_STATES;
 	}
 	
+	@Override
+	public boolean isTime() {
+		return true;
+	}
+	
 }

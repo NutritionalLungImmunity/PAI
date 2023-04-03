@@ -54,7 +54,7 @@ public class DAMP extends Molecule{
         }
         if(interactable instanceof Neutrophil) {
         	Neutrophil cell = (Neutrophil) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_DAMP, cell.getClock())) {
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_DAMP)) {
 	        	cell.bind(DAMP.MOL_IDX);
 	        	this.dec(Constants.DAMP_QTTY, 0, x, y, z);
 	        }
@@ -65,7 +65,7 @@ public class DAMP extends Molecule{
         
         if(interactable instanceof Macrophage) {
         	Macrophage cell = (Macrophage) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_DAMP, cell.getClock())) {
+	        if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_DAMP)) {
 	        	cell.bind(DAMP.MOL_IDX);
 	        	this.dec(Constants.DAMP_QTTY, 0, x, y, z);
 	        }
@@ -87,5 +87,10 @@ public class DAMP extends Molecule{
 	@Override
 	public int getNumState() {
 		return NUM_STATES;
+	}
+	
+	@Override
+	public boolean isTime() {
+		return true;
 	}
 }
