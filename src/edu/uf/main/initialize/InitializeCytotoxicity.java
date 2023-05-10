@@ -10,14 +10,13 @@ import edu.uf.interactable.covid.Neutrophil;
 import edu.uf.interactable.covid.Pneumocyte;
 import edu.uf.interactable.covid.SarsCoV2;
 import edu.uf.interactable.covid.H2O2;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 
 public class InitializeCytotoxicity extends InitializeBaseModel{
 
 	public void initializeMolecules(Voxel[][][] grid, int xbin, int ybin, int zbin, Diffuse diffuse, boolean verbose) {
-    	H2O2 h2o2 = H2O2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	SarsCoV2 cov = SarsCoV2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
+    	H2O2 h2o2 = H2O2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Neutrophil.ACTIVE});
+    	SarsCoV2 cov = SarsCoV2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {});
 
     	MultiThreadExec.setMolecule(h2o2);
     	MultiThreadExec.setMolecule(cov);
@@ -31,14 +30,14 @@ public class InitializeCytotoxicity extends InitializeBaseModel{
     	Voxel.setMolecule(SarsCoV2.NAME, cov);
     	
     	
-    	this.setSecretionPhenotypes();
+    	//this.setSecretionPhenotypes();
     	
     }
 	
-	@Override
+	/*@Override
 	protected void setSecretionPhenotypes() {
 		H2O2.getMolecule().addPhenotype(Phenotypes.ACTIVE);
-	}
+	}*/
 	
 	public List initializeNeutrophils(Voxel[][][] grid, int xbin, int ybin, int zbin,  int numNeut) {
     	List<Neutrophil> list = new ArrayList<>();

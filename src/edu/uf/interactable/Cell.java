@@ -1,19 +1,19 @@
 package edu.uf.interactable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.BooleanNetwork;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 
 public abstract class Cell extends Interactable{
 	
 	private int id;
 	
 	//private int phenotype = Phenotypes.RESTING;
-	private List<Integer> phenotypes = new ArrayList<>(10);
+	//private List<Integer> phenotypes = new ArrayList<>(10);
 	
 	public static final int ALIVE = 0;
 	public static final int APOPTOTIC = 1;
@@ -64,31 +64,29 @@ public abstract class Cell extends Interactable{
 		this.state = state;
 	}
 	
-	public void addPhenotype(int phenotype) {
+	/*public void addPhenotype(int phenotype) {
 		this.phenotypes.add(phenotype);
 	}
 	
 	public void clearPhenotype() {
 		this.phenotypes.clear();
+	}*/
+	
+	public boolean hasPhenotype(int phenotype) {
+		return createBooleanNetwork().getPhenotype().containsKey(phenotype);
 	}
 	
-	public boolean inPhenotype(int phenotype) {
-		for(Integer i : phenotypes) 
-			if(phenotype == i)return true;
+	public boolean hasPhenotype(List<Integer> phenotype) {
+		for(Integer p : phenotype)
+			if(createBooleanNetwork().getPhenotype().containsKey(p))
+				return true;
 		return false;
 	}
 	
-	public boolean inPhenotype(List<Integer> phenotype) {
-		for(Integer i : phenotypes) 
-			for(int j : phenotype)
-				if(j == i)return true;
-		return false;
-	}
-	
-	public boolean inPhenotype(int[] phenotype) {
-		for(Integer i : phenotypes) 
-			for(int j : phenotype)
-				if(j == i)return true;
+	public boolean hasPhenotype(int[] phenotype) {
+		for(Integer p : phenotype)
+			if(createBooleanNetwork().getPhenotype().containsKey(p))
+				return true;
 		return false;
 	}
 	
@@ -130,8 +128,8 @@ public abstract class Cell extends Interactable{
 		this.id = id;
 	}
 	
-	public void bind(int molIdx) {
-		createBooleanNetwork().activateReceptor(molIdx, 1);
+	public void bind(Interactable iter, int level) {
+		createBooleanNetwork().activateReceptor(iter.getInteractionId(), level);
 	}
 	
 	public Clock getClock() {

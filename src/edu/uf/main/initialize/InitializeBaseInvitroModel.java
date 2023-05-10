@@ -11,7 +11,7 @@ public class InitializeBaseInvitroModel extends InitializeBaseModel{
 	@Override
 	public void initializeMolecules(Voxel[][][] grid, int xbin, int ybin, int zbin, Diffuse diffuse, boolean verbose) {
 		// TODO Auto-generated method stub
-		this.setSecretionPhenotypes();
+		//this.setSecretionPhenotypes();
 	}
 
 	@Override

@@ -58,6 +58,20 @@ public class Util {
 		return activationFunction(x, kd, Constants.VOXEL_VOL);
 	}
 	
+	public static int activationFunction5(double x, double kd) {
+		double d = activationFunction(x, kd, Constants.VOXEL_VOL, 1.0);
+		if(d <= 0.01)
+			return 0;
+		if(d <= 0.1)
+			return 1;
+		if(d <= 0.4)
+			return 2;
+		if(d <= 0.775)
+			return 3;
+		else
+			return 4;
+	}
+	
 	public static boolean activationFunction(double x, double kd, double v) {
 		return activationFunction(x, kd, v, 1.0) > Rand.getRand().randunif();
 	}

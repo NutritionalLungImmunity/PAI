@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 
@@ -7,17 +9,16 @@ public class Iron extends Molecule{
 
 	public static final String NAME = "Iron";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static Iron molecule = null; 
     
-    private Iron(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Iron(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Iron getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Iron getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Iron(values, diffuse);
+    		molecule = new Iron(values, diffuse, phenotypes);
     	}
     	return molecule;
     }

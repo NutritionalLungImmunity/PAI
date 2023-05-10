@@ -24,7 +24,6 @@ import edu.uf.interactable.TNFa;
 import edu.uf.interactable.capa.CapaMacrophage;
 import edu.uf.interactable.capa.CapaNeutrophil;
 import edu.uf.interactable.capa.CapaPneumocyte;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 
 public class InitializeCoinjury extends InitializeBaseModel{
@@ -33,17 +32,17 @@ public class InitializeCoinjury extends InitializeBaseModel{
     	if(verbose) {
     		System.out.println("Initializing Iron, TAFC, Lactoferrin, Transferrin, Hepcidin, IL6, TNF-a, IL10, TGF-b, MIP2, MIP1-b");
     	}
-    	TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MIP1B mip1b = MIP1B.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	Granule gran = Granule.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
+    	TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B});
+    	IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2A, Macrophage.M2B, Macrophage.M2C});
+    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M2C});
+    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
+    	MIP1B mip1b = MIP1B.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
+    	Granule gran = Granule.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {}); //REVIEW
     	
     	
-    	Hepcidin.getMolecule(new double[1][1][1][1], null);
-    	IL6.getMolecule(new double[1][1][1][1], null);
-    	Lactoferrin.getMolecule(new double[1][1][1][1], null);
+    	Hepcidin.getMolecule(new double[1][1][1][1], null, new int[] {});
+    	IL6.getMolecule(new double[1][1][1][1], null, new int[] {Macrophage.M1, Macrophage.M2B});
+    	Lactoferrin.getMolecule(new double[1][1][1][1], null, new int[] {Neutrophil.ACTIVE});
     	/*MIP2 mip2 = MIP2.getMolecule(new double[1][1][1][1], null);
     	MIP1B mip1b = MIP1B.getMolecule(new double[1][1][1][1], null);
     	Granule gran = Granule.getMolecule(new double[1][1][1][1], null);*/
@@ -64,7 +63,7 @@ public class InitializeCoinjury extends InitializeBaseModel{
     	Voxel.setMolecule(MIP1B.NAME, mip1b);
     	Voxel.setMolecule(Granule.NAME, gran, true);
     	
-    	this.setSecretionPhenotypes();
+    	//this.setSecretionPhenotypes();
     }
 
     public void initializeLiver(Voxel[][][] grid, int xbin, int ybin, int zbin) {

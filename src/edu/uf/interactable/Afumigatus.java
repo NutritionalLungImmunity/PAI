@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 import edu.uf.utils.LinAlg;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
@@ -19,8 +19,6 @@ import java.util.HashSet;
 public class Afumigatus extends PositionalInfectiousAgent{
 
     public static final String NAME = "Afumigatus";
-    
-    public static final int RECEPTOR_IDX = Molecule.getReceptors();
     
     public static final int[] INIT_AFUMIGATUS_BOOLEAN_STATE = new int[] {1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     
@@ -81,6 +79,10 @@ public class Afumigatus extends PositionalInfectiousAgent{
     private double dy;
     private double dz;
     
+    private static int interactionId = Id.getMoleculeId();
+    
+    public static final Afumigatus DEF_OBJ = new Afumigatus();
+    
     
     public Afumigatus() {
     	this(0,0,0, 0,0,0, Rand.getRand().randunif(), Rand.getRand().randunif(), Rand.getRand().randunif(),
@@ -124,6 +126,10 @@ public class Afumigatus extends PositionalInfectiousAgent{
         
         
         if(status >=  Afumigatus.RESTING_CONIDIA)Afumigatus.totalCells[status - Af_STATUS_START + 1]++;
+    }
+    
+    public int getInteractionId() {
+    	return interactionId;
     }
     
     public boolean isTime() {
@@ -428,7 +434,7 @@ public class Afumigatus extends PositionalInfectiousAgent{
                     double prInteract = this.getStatus() == Afumigatus.HYPHAE ? Constants.PR_MA_HYPHAE : Constants.PR_MA_PHAG;
                     if(Rand.getRand().randunif() < prInteract) {
                         Phagocyte.intAspergillus(m, this, this.getStatus() != Afumigatus.HYPHAE);
-                        if(this.getStatus() == Afumigatus.HYPHAE && m.inPhenotype(new int[] {Phenotypes.ACTIVE, Phenotypes.MIX_ACTIVE})){ 
+                        if(this.getStatus() == Afumigatus.HYPHAE && m.hasPhenotype(new int[] {Macrophage.M1, Macrophage.M2B})){ 
                             this.setStatus(Afumigatus.DYING);
                             if(this.nextSepta != null) {
                                 this.nextSepta.isRoot = true;
@@ -436,7 +442,7 @@ public class Afumigatus extends PositionalInfectiousAgent{
                                 this.nextBranch.isRoot = true;
                             }
                         }else {
-                            if(this.getStatus() == Afumigatus.HYPHAE && m.inPhenotype(Phenotypes.ACTIVE)) {
+                            if(this.getStatus() == Afumigatus.HYPHAE && m.hasPhenotype(Macrophage.M1)) {
                             	m.setEngaged(true);
                             }
                         }

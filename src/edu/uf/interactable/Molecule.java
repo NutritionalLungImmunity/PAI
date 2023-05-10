@@ -5,10 +5,12 @@ import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 
-public abstract class Molecule extends Interactable{
+public abstract class Molecule extends Interactable {
 
 	private int id;
+	private int moleculeId;
 	
 	public static final int NUM_COMPARTMENTS = 2;
 	
@@ -17,19 +19,22 @@ public abstract class Molecule extends Interactable{
 	private double[] totalMolecules;
 	protected double[] totalMoleculesAux;
 	private Diffuse diffuse;
+	private List<Integer> phenotypes;
 	
-	private static int countReceptors;
+	//protected List<Integer> secretionPhenotypes = new ArrayList<>();
 	
-	protected List<Integer> secretionPhenotypes = new ArrayList<>();
-	
-	protected Molecule(double[][][][] qttys, Diffuse diffuse) {
+	protected Molecule(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
 		//countReceptors++;
 		this.compartimentValues = new double[qttys.length][NUM_COMPARTMENTS - 1];
         this.id = Id.getId();
+        this.moleculeId = Id.getMoleculeId();
         this.values = qttys ;
         this.totalMoleculesAux = new double[qttys.length];
         this.totalMolecules = new double[qttys.length];
         this.diffuse = diffuse;
+        this.phenotypes = new ArrayList<>();
+        for(int i : phenotypes)
+        	this.phenotypes.add(i);
         for(int i = 0; i < qttys.length; i++) {
         	for(double[][] matrix : qttys[i])
         		for(double[] array : matrix)
@@ -38,20 +43,16 @@ public abstract class Molecule extends Interactable{
         }
 	}
 	
-	public static int getNumReceptors() {
-		return Molecule.countReceptors;
+	public int getInteractionId() {
+		return moleculeId;
 	}
 	
-	public static int getReceptors() {
-		return ++countReceptors;
-	}
-	
-	public void addPhenotype(int phenotype) {
+	/*public void addPhenotype(int phenotype) {
 		this.secretionPhenotypes.add(phenotype);
-	}
+	}*/
 	
-	public List<Integer> getSecretionPhenotype(){
-		return secretionPhenotypes;
+	public List<Integer> getPhenotype(){
+		return phenotypes;
 	}
 	
 	private void incTotalMolecule(int index, double inc) {

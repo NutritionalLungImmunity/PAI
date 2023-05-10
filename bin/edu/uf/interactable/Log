@@ -1,0 +1,19 @@
+Phagossome has cells such as Aspergillus and Neutrophils but only Aspergillus has coordinates!
+phagocyte lines 61 and 76
+
+Lines 87, 88, 89
+                a.x = newVoxel.x + this.rand.nextDouble();
+                a.y = newVoxel.y + this.rand.nextDouble();
+                a.z = newVoxel.z + this.rand.nextDouble();
+shuld be x_root ...
+
+
+Neutrophil lack "public int get_max_conidia()" method
+
+Pneumocytes move is not returning anything! should return false!
+
+IL10 line 56 "macrophage.iteration = 0";
+TNF line 51 "macrophage.iteration = 0";
+TNF line 64 "neutrophil.iteration = 0";
+TGFb line 64 "macrophage.iteration = 0;
+MIP2 line 69 "neutrophil.interaction = 0";

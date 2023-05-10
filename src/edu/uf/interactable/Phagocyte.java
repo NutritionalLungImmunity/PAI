@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uf.compartments.Voxel;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
@@ -132,8 +131,7 @@ public abstract class Phagocyte extends Cell{
             if(aspergillus.getStatus() != Afumigatus.RESTING_CONIDIA) {
                 phagocyte.state = Phagocyte.INTERACTING;
                 if(phagocyte instanceof Macrophage) {
-                	EukaryoteSignalingNetwork.B_GLUC_e = Afumigatus.RECEPTOR_IDX;
-                	((Macrophage)phagocyte).bind(Afumigatus.RECEPTOR_IDX);
+                	((Macrophage)phagocyte).bind(aspergillus, 4);
                 }
                     
                 //else

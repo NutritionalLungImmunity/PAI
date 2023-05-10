@@ -1,7 +1,8 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -9,18 +10,17 @@ public class TGFb extends Molecule{
 
 	public static final String NAME = "TGFb";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static TGFb molecule = null;
     
 
-    private TGFb(double[][][][] qtty, Diffuse diffuse) {
-		super(qtty, diffuse);
+    private TGFb(double[][][][] qtty, Diffuse diffuse, int[] phenotypes) {
+		super(qtty, diffuse, phenotypes);
 	}
     
-    public static TGFb getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static TGFb getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new TGFb(values, diffuse);
+    		molecule = new TGFb(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -45,12 +45,10 @@ public class TGFb extends Molecule{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) {
             Macrophage macro = (Macrophage) interactable; //EukaryoteSignalingNetwork
-            EukaryoteSignalingNetwork.TGFb_e = MOL_IDX;
-        	if (macro.inPhenotype(this.getSecretionPhenotype())) 
+        	if (macro.hasPhenotype(this.getPhenotype())) 
         		this.inc(Constants.MA_TGF_QTTY, 0, x, y, z);
         	else if (!macro.isDead()) 
-                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_TGF)) 
-                	macro.bind(MOL_IDX);
+        		macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TGF));
             return true;
         }
         return interactable.interact(this, x, y, z); 

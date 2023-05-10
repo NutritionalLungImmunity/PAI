@@ -1,6 +1,7 @@
 package edu.uf.interactable.covid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
@@ -8,7 +9,6 @@ import edu.uf.interactable.IL6;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -17,7 +17,6 @@ public class IL6Complex extends Molecule{
 
 	public static final String NAME = "IL6Complex";
 	public static final int NUM_STATES = 3;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static IL6Complex molecule = null;
 	
@@ -30,13 +29,13 @@ public class IL6Complex extends Molecule{
     	INDEXES.put("IL6_sIL6R", 2);
     }
     
-    protected IL6Complex(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    protected IL6Complex(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static IL6Complex getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static IL6Complex getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new IL6Complex(values, diffuse);
+    		molecule = new IL6Complex(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -62,14 +61,12 @@ public class IL6Complex extends Molecule{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if(interactable instanceof EndothelialCells) {
         	EndothelialCells cell = (EndothelialCells) interactable;
-			EukaryoteSignalingNetwork.IL6_e = IL6Complex.MOL_IDX;
-	        if (Util.activationFunction(this.get(2, x, y, z), Constants.Kd_sIL6R)) 
-	        	cell.bind(IL6Complex.MOL_IDX);
+        	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_sIL6R));
 	        return true;
         }
         if (interactable instanceof Macrophage) {
             Macrophage macro = (Macrophage) interactable;
-        	if (macro.inPhenotype(IL6.getMolecule().getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	if (macro.hasPhenotype(IL6.getMolecule().getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_IL6_QTTY, 0, x, y, z);
             return true; 
         }
@@ -86,9 +83,9 @@ public class IL6Complex extends Molecule{
         if(interactable instanceof Pneumocyte) {
         	Pneumocyte cell = (Pneumocyte) interactable;
         	//System.out.println(IL6Complex.getMolecule().get(0, x, y, z));
-        	if (cell.inPhenotype(IL6.getMolecule().getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	if (cell.hasPhenotype(IL6.getMolecule().getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.P_IL6_QTTY, 0, x, y, z);
-        	if (cell.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	if (cell.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.sIL6R_QTTY, 1, x, y, z);
         	return true;
         }

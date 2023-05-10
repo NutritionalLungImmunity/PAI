@@ -7,15 +7,16 @@ import java.util.Random;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Cell;
+import edu.uf.interactable.IL6;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Phagocyte;
+import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
+import edu.uf.intracellularState.Phenotype;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
@@ -32,6 +33,11 @@ public class NK extends Phagocyte{
     private int maxMoveStep;
     private boolean engaged = false;
     
+    public static final int ACTIVE = Phenotype.createPhenotype();
+    public static final int FULL_ACTIVE = Phenotype.createPhenotype();
+	public static final int SECRETING = Phenotype.createPhenotype();
+	
+    
     public NK() {
     	NK.totalCells = NK.totalCells + 1;
     }
@@ -46,7 +52,7 @@ public class NK extends Phagocyte{
 
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		return new EukaryoteSignalingNetwork() {
+		return new BooleanNetwork() {
 			
 			static final int size = 10;
 			static final int NUM_PHENOTYPES = 3;
@@ -103,16 +109,16 @@ public class NK extends Phagocyte{
 							this.booleanNetwork[GRAN] = and(this.booleanNetwork[ERK], not(this.booleanNetwork[TGFR], 1));
 							break;
 						case 7:
-							this.booleanNetwork[IFNR] = e(this.inputs, IFN_e);
+							this.booleanNetwork[IFNR] = 0;//e(this.inputs, IFN_e);
 							break;
 						case 8:
-							this.booleanNetwork[TNFR] = e(this.inputs, TNFa_e);
+							this.booleanNetwork[TNFR] = input(TNFa.getMolecule());
 							break;
 						case 9:
-							this.booleanNetwork[IL6R] = e(this.inputs, IL6_e);
+							this.booleanNetwork[IL6R] = input(IL6.getMolecule());
 							break;
 						case 10:
-							this.booleanNetwork[TGFR] = e(this.inputs, TGFb_e);
+							this.booleanNetwork[TGFR] = input(TGFb.getMolecule());
 							break;
 						default:
 							System.err.println("No such rule " + i);
@@ -128,12 +134,12 @@ public class NK extends Phagocyte{
 				for(int i = 0; i < NUM_PHENOTYPES; i++)
 					array.add(i);
 				
-				NK.this.clearPhenotype();
+				this.clearPhenotype();
 				
 				if(this.booleanNetwork[GRAN] == 1 || this.booleanNetwork[TRAIL] == 1)
-					NK.this.addPhenotype(Phenotypes.ACTIVE);
+					this.getPhenotype().put(NK.this.ACTIVE, this.or(new int[] {this.booleanNetwork[GRAN], this.booleanNetwork[TRAIL]}));
 				if(this.booleanNetwork[IFNg] == 1)
-					NK.this.addPhenotype(Phenotypes.SECRETING);
+					this.getPhenotype().put(NK.this.SECRETING, this.booleanNetwork[IFNg]);
 				
 			}
 			
@@ -198,15 +204,13 @@ public class NK extends Phagocyte{
 		if(interactable instanceof Pneumocyte) {
 			Pneumocyte cell = (Pneumocyte) interactable;
 			if(cell.getViralLoad() > 0) {
-				EukaryoteSignalingNetwork.INF_CELL_e = Pneumocyte.RECEPTOR_IDX;
-				this.bind(Pneumocyte.RECEPTOR_IDX);
+				this.bind(cell, 5);
 				engaged = true;
 			
-				EukaryoteSignalingNetwork.IFNG_e = IFN1.MOL_IDX;
-				if(this.inPhenotype(new int[] {Phenotypes.SECRETING, Phenotypes.FULL_ACTIVE})) {
+				if(this.hasPhenotype(new int[] {Phenotypes.SECRETING, Phenotypes.FULL_ACTIVE})) {
 					cell.bind(IFN1.MOL_IDX); //simulate NK IFNg secretion
 				}
-				if(this.inPhenotype(new int[] {Phenotypes.ACTIVE, Phenotypes.FULL_ACTIVE}))
+				if(this.hasPhenotype(new int[] {Phenotypes.ACTIVE, Phenotypes.FULL_ACTIVE}))
 					if(Rand.getRand().randunif() < Constants.PR_NK_KILL) {
 						cell.addPhenotype(Phenotypes.APOPTOTIC);
 						cell.clearViralLoad();
@@ -216,23 +220,17 @@ public class NK extends Phagocyte{
 		}
 		if(interactable instanceof IFN1) {
 			 Molecule interact = (Molecule) interactable;
-	         EukaryoteSignalingNetwork.IFN_e = IFN1.MOL_IDX;
-	         if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_IFNG)) 
-	        	this.bind(IFN1.MOL_IDX);
+			 this.bind(interact, Util.activationFunction5(interact.get(0, x, y, z), Constants.Kd_IFNG));
 	         return true;
 		}
 		if(interactable instanceof TNFa) {
 			 Molecule interact = (Molecule) interactable;
-	         EukaryoteSignalingNetwork.TNFa_e = TNFa.MOL_IDX;
-	        if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF)) 
-	        	this.bind(TNFa.MOL_IDX);
+			 this.bind(interact, Util.activationFunction5(interact.get(0, x, y, z), Constants.Kd_TNF));
 	        return true;
 		}
 		if(interactable instanceof IL6Complex) {
 			 Molecule interact = (Molecule) interactable;
-	         EukaryoteSignalingNetwork.IL6_e = IL6Complex.MOL_IDX;
-	        if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_IL6)) 
-	        	this.bind(IL6Complex.MOL_IDX);
+			 this.bind(interact, Util.activationFunction5(interact.get(0, x, y, z), Constants.Kd_IL6));
 	        return true;
 		}
 		return false;
@@ -244,6 +242,12 @@ public class NK extends Phagocyte{
 
 	@Override
 	public int getMaxConidia() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getInteractionId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

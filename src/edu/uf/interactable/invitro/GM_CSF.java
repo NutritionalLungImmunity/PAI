@@ -1,12 +1,13 @@
 package edu.uf.interactable.invitro;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.TNFa;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -14,17 +15,16 @@ public class GM_CSF extends Molecule{
 	
 	public static final String NAME = "GM_CSF";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static GM_CSF molecule = null;
     
-    private GM_CSF(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private GM_CSF(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static GM_CSF getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static GM_CSF getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new GM_CSF(values, diffuse);
+    		molecule = new GM_CSF(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -51,13 +51,11 @@ public class GM_CSF extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	EukaryoteSignalingNetwork.GM_CSF_e = MOL_IDX;
         if (interactable instanceof Macrophage) {
             Macrophage macro = (Macrophage) interactable;
         	/*if (this.getSecretionPhenotype().contains(macro.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_TNF_QTTY, 0, x, y, z);*/
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_GM_CSF))
-                macro.bind(MOL_IDX);
+            macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_GM_CSF));
             return true;
         }
         /*if (interactable instanceof Neutrophil) { 

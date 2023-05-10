@@ -12,7 +12,6 @@ import edu.uf.interactable.covid.Pneumocyte;
 import edu.uf.interactable.covid.SarsCoV2;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.covid.H2O2;
-import edu.uf.intracellularState.Phenotypes;
 
 public class PrintCitotoxicity extends PrintStat{
 
@@ -62,9 +61,9 @@ public class PrintCitotoxicity extends PrintStat{
 						if(cell instanceof Neutrophil) {
 							neut++;
 							Neutrophil p = (Neutrophil) cell;
-							if(p.inPhenotype(Phenotypes.INACTIVE))PResting++;
-							if(p.inPhenotype(Phenotypes.ACTIVE))PActive++;
-							if(p.inPhenotype(new int[] {Phenotypes.APOPTOTIC, Phenotypes.NECROTIC}))dead++;
+							if(!p.hasPhenotype(Neutrophil.ACTIVE))PResting++; //REVIEW
+							if(p.hasPhenotype(Neutrophil.ACTIVE))PActive++;
+							if(p.hasPhenotype(new int[] {Neutrophil.APOPTOTIC, Neutrophil.NECROTIC}))dead++;
 						}
 					}
 				}

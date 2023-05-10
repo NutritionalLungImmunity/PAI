@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
@@ -8,18 +10,17 @@ public class MCP1 extends Chemokine{
 
 	public static final String NAME = "MCP1";
     public static final int NUM_STATES = 1;
-    public static final int MOL_IDX = getReceptors();
     
     private static MCP1 molecule = null;    
 
-    private MCP1(double[][][][] qttys, Diffuse diffuse) {
-        super(qttys, diffuse);
+    private MCP1(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+        super(qttys, diffuse, phenotypes);
         Macrophage.setChemokine(MCP1.NAME);
     }
     
-    public static MCP1 getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static MCP1 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new MCP1(values, diffuse); 
+    		molecule = new MCP1(values, diffuse, phenotypes); 
     	}
     	return molecule;
     }
@@ -48,7 +49,7 @@ public class MCP1 extends Chemokine{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Pneumocyte) {
-            if (((Pneumocyte)interactable).inPhenotype(this.getSecretionPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
+            if (((Pneumocyte)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
             	this.inc(Constants.P_MCP1_QTTY, 0, x, y, z);
             return true;
         }
@@ -56,7 +57,7 @@ public class MCP1 extends Chemokine{
         //#    return False
         if (interactable instanceof Macrophage) {
         	Macrophage macro = (Macrophage) interactable;
-            if (macro.inPhenotype(this.getSecretionPhenotype())) //#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
+            if (macro.hasPhenotype(this.getPhenotype())) //#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
             	this.inc(Constants.MA_MCP1_QTTY, 0, x, y, z);
             return true;
         }

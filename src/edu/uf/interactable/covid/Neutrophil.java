@@ -5,18 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import edu.uf.interactable.Interactable;
-import edu.uf.interactable.Molecule;
+import edu.uf.interactable.TLRBinder;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
+import edu.uf.intracellularState.Phenotype;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 
 public class Neutrophil extends edu.uf.interactable.Neutrophil{
 
-	public static final int RECEPTOR_IDX_2 = Molecule.getReceptors();
 	private boolean degranuled = false;
+	
+	public static final int ACTIVE = Phenotype.createPhenotype();
+	public static final int APOPTOTIC = Phenotype.createPhenotype();
 	
 	public Neutrophil() {
 		super(0.0);
@@ -45,7 +45,7 @@ public class Neutrophil extends edu.uf.interactable.Neutrophil{
 	
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		return new EukaryoteSignalingNetwork() {
+		return new BooleanNetwork() {
 
 			public static final int size = 3;
 			public static final int NUM_PHENOTYPES = 2;
@@ -78,7 +78,7 @@ public class Neutrophil extends edu.uf.interactable.Neutrophil{
 					for(int i : array) {
 						switch(i) {
 							case 0:
-								this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
+								this.booleanNetwork[TLR4] = input(TLRBinder.getBinder());
 								break;
 							case 1:
 								this.booleanNetwork[ROS] = this.booleanNetwork[TLR4];//or(this.booleanNetwork[TLR4], this.booleanNetwork[ROS]);
@@ -115,14 +115,14 @@ public class Neutrophil extends edu.uf.interactable.Neutrophil{
 				for(int i = 0; i < NUM_PHENOTYPES; i++)
 					array.add(i);
 				
-				Neutrophil.this.clearPhenotype();
+				this.clearPhenotype();
 				
 				Collections.shuffle(array, new Random());
 				for(int i : array) {
 					switch(i) {
 						case 0:
 							if(this.booleanNetwork[CASP8] == 1)
-								Neutrophil.this.addPhenotype(Phenotypes.APOPTOTIC);
+								this.getPhenotype().put(Neutrophil.this.APOPTOTIC, this.booleanNetwork[CASP8]);
 							return;
 						/*case 1:
 							if(this.booleanNetwork[NET] == 1)
@@ -130,7 +130,7 @@ public class Neutrophil extends edu.uf.interactable.Neutrophil{
 							return;*/
 						case 1:
 							if(this.booleanNetwork[ROS] == 1)
-								Neutrophil.this.addPhenotype(Phenotypes.ACTIVE);
+								this.getPhenotype().put(Neutrophil.this.ACTIVE, this.booleanNetwork[ROS]);
 							return;
 						default:
 							System.err.println("No such phenotype " + i);

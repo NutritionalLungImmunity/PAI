@@ -9,28 +9,19 @@ import edu.uf.compartments.Voxel;
 import edu.uf.control.MultiThreadExec;
 import edu.uf.interactable.Afumigatus;
 import edu.uf.interactable.Cell;
-import edu.uf.interactable.IL10;
-import edu.uf.interactable.IL6;
 import edu.uf.interactable.Lactoferrin;
-import edu.uf.interactable.MCP1;
 import edu.uf.interactable.covid.DAMP;
 import edu.uf.interactable.covid.DC;
-import edu.uf.interactable.covid.Defensin;
 import edu.uf.interactable.covid.EndothelialCells;
 import edu.uf.interactable.covid.H2O2;
 import edu.uf.interactable.covid.IFN1;
-import edu.uf.interactable.covid.IL6Complex;
 import edu.uf.interactable.covid.NK;
 import edu.uf.interactable.MIP2;
+import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.covid.Neutrophil;
 import edu.uf.interactable.covid.Pneumocyte;
-import edu.uf.interactable.TGFb;
-import edu.uf.interactable.TNFa;
 import edu.uf.interactable.covid.SAMP;
 import edu.uf.interactable.covid.SarsCoV2;
-import edu.uf.interactable.covid.VEGF;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 
@@ -46,15 +37,16 @@ public class InitializeCovidModel extends InitializeBaseModel{
     	//TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
     	//IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
     	//TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], null);
+    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {Macrophage.M1});
     	//MCP1 mcp1 = MCP1.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	IFN1 ifn1 = IFN1.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
+    	IFN1 ifn1 = IFN1.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1}); //REVIEW
+    	System.err.println("Warning InitializeCovidModel Line 51: IFN1 phenotypes initialization might be incomplete!");
     	//VEGF vegf = VEGF.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	SarsCoV2 virus = SarsCoV2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	SAMP samp = SAMP.getMolecule(new double[1][xbin][ybin][zbin], null);
-    	DAMP damp = DAMP.getMolecule(new double[1][xbin][ybin][zbin], null);
-    	Lactoferrin def = Lactoferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse);
-    	H2O2 h2o2 = H2O2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
+    	SarsCoV2 virus = SarsCoV2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {});
+    	SAMP samp = SAMP.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {Macrophage.APOPTOTIC});
+    	DAMP damp = DAMP.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {Macrophage.NECROTIC});
+    	Lactoferrin def = Lactoferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {Neutrophil.ACTIVE});
+    	H2O2 h2o2 = H2O2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Neutrophil.ACTIVE});
     	
     	//IL6.getMolecule(new double[1][1][1][1], null); //Dummy initialization. Necessary!
     	
@@ -93,7 +85,7 @@ public class InitializeCovidModel extends InitializeBaseModel{
     	Voxel.setMolecule(Lactoferrin.NAME, def);
     	Voxel.setMolecule(H2O2.NAME, h2o2);
     	
-    	this.setSecretionPhenotypes();
+    	//this.setSecretionPhenotypes();
 		
 	}
 	
@@ -113,7 +105,6 @@ public class InitializeCovidModel extends InitializeBaseModel{
 	
 	public void covidInfec(Voxel[][][] grid, int xbin, int ybin, int zbin, Diffuse diffuse, int qtty) {
     	
-    	EukaryoteSignalingNetwork.VIRUS_e = SarsCoV2.MOL_IDX;
 		int count = 0;
 		while(count < qtty) {
 			int x = randint(0, xbin-1);
@@ -122,7 +113,7 @@ public class InitializeCovidModel extends InitializeBaseModel{
             for(Entry<Integer, Cell> entry : grid[x][y][z].getCells().entrySet()) {
             	if(entry.getValue() instanceof Pneumocyte) {
             		((Pneumocyte) entry.getValue()).incViralLoad(Constants.SarsCoV2_UPTAKE_QTTY);
-            		((Pneumocyte) entry.getValue()).bind(SarsCoV2.MOL_IDX);
+            		((Pneumocyte) entry.getValue()).bind(SarsCoV2.getMolecule(), 1); //REVIEW: if generalized boolean might be more than 1
             		count++;
             	}
             }
@@ -262,7 +253,7 @@ public class InitializeCovidModel extends InitializeBaseModel{
 				}
 	}
 
-	@Override
+	/*@Override
 	protected void setSecretionPhenotypes() {
 		//IL10.getMolecule().addPhenotype(Phenotypes.ACTIVE);
 		//IL10.getMolecule().addPhenotype(Phenotypes.MIX_ACTIVE);
@@ -292,6 +283,6 @@ public class InitializeCovidModel extends InitializeBaseModel{
 		Lactoferrin.getMolecule().addPhenotype(Phenotypes.ACTIVE);
 		
 		
-	}
+	}*/
 
 }

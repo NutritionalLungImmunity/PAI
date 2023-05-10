@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
+import edu.uf.intracellularState.Phenotype;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 
 public class Neutrophil extends Phagocyte{
@@ -22,9 +22,13 @@ public class Neutrophil extends Phagocyte{
     private int maxMoveStep;
     private boolean degranulated = false;
     
-    public static final int RECEPTOR_IDX = Molecule.getReceptors();
+    public static final int ACTIVE = Phenotype.createPhenotype();
+    public static final int MIX_ACTIVE = Phenotype.createPhenotype();
+    
     
     public boolean depleted = false;
+    
+    private static int interactionId = Id.getMoleculeId();
 
     public Neutrophil(double ironPool) {
     	super(ironPool);
@@ -34,6 +38,10 @@ public class Neutrophil extends Phagocyte{
         this.maxMoveStep = -1;
         this.setEngaged(false);
     } 
+    
+    public int getInteractionId() {
+    	return interactionId;
+    }
     
     public boolean isTime() {
 		return this.getClock().toc();
@@ -108,20 +116,19 @@ public class Neutrophil extends Phagocyte{
         	if(this.isEngaged())
                 return true;
             if(!this.isDead()) {
-            	EukaryoteSignalingNetwork.B_GLUC_e = Afumigatus.RECEPTOR_IDX;
                 if(interac.getStatus() == Afumigatus.HYPHAE || interac.getStatus() == Afumigatus.GERM_TUBE) {
                     double pr = Constants.PR_N_HYPHAE;
                     //System.out.println(Rand.getRand().randunif());
                     if (Rand.getRand().randunif() < pr) {
                         Phagocyte.intAspergillus(this, interac);
                         interac.setStatus(Afumigatus.DYING);
-                        this.bind(Afumigatus.RECEPTOR_IDX);
+                        this.bind(interac, 4);
                     }else
                         this.setEngaged(true);
                 }else if (interac.getStatus() == Afumigatus.SWELLING_CONIDIA) {
                     if (Rand.getRand().randunif() < Constants.PR_N_PHAG) {
                         Phagocyte.intAspergillus(this, interac);
-                        this.bind(Afumigatus.RECEPTOR_IDX);
+                        this.bind(interac, 4);
                     }
                 }
             }
@@ -174,7 +181,7 @@ public class Neutrophil extends Phagocyte{
 
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		return new EukaryoteSignalingNetwork() {
+		return new BooleanNetwork() {
 
 			public static final int size = 7;
 			//public static final int NUM_RECEPTORS = 4;
@@ -206,7 +213,7 @@ public class Neutrophil extends Phagocyte{
 					for(int i : array) {
 						switch(i) {
 							case 0:
-								this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | e(this.inputs, IL1B_e);
+								this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | input(IL1.getMolecule());
 								break;
 							case 1:
 								this.booleanNetwork[NFkB] = (this.booleanNetwork[IL1R] | this.booleanNetwork[TNFR] | this.booleanNetwork[CXCL2R]) ;
@@ -218,13 +225,13 @@ public class Neutrophil extends Phagocyte{
 								this.booleanNetwork[IL1B] = this.booleanNetwork[NFkB];
 								break;
 							case 4:
-								this.booleanNetwork[TNFR] = e(this.inputs, TNFa_e);
+								this.booleanNetwork[TNFR] = input(TNFa.getMolecule());
 								break;
 							case 5:
-								this.booleanNetwork[Dectin] = e(this.inputs, B_GLUC_e);
+								this.booleanNetwork[Dectin] = 0;//e(B_GLUC);
 								break;
 							case 6:
-								this.booleanNetwork[CXCL2R] = e(this.inputs, MIP2_e);
+								this.booleanNetwork[CXCL2R] = input(MIP2.getMolecule());
 								break;
 							default:
 								System.err.println("No such interaction " + i + "!");
@@ -236,14 +243,13 @@ public class Neutrophil extends Phagocyte{
 				for(int i = 0; i < NUM_RECEPTORS; i++)
 					this.inputs[i] = 0;
 				
-				Neutrophil.this.clearPhenotype();
+				this.clearPhenotype();
 				
-				if(this.booleanNetwork[NFkB] == 1) {
-					Neutrophil.this.addPhenotype(Phenotypes.ACTIVE);
-				} else if(this.booleanNetwork[ERK] == 1) {
-					Neutrophil.this.addPhenotype(Phenotypes.MIX_ACTIVE);
-				} else {
-					Neutrophil.this.addPhenotype(Phenotypes.RESTING);
+				if(this.booleanNetwork[NFkB] > 0) {
+					this.getPhenotype().put(Neutrophil.this.ACTIVE, this.booleanNetwork[NFkB]);
+				} 
+				if(this.booleanNetwork[ERK] == 1) {
+					this.getPhenotype().put(Neutrophil.this.MIX_ACTIVE, this.booleanNetwork[ERK]);
 				}
 					
 				

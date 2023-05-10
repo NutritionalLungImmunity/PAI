@@ -1,7 +1,6 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -9,17 +8,16 @@ public class TNFa extends Molecule{
 
 	public static final String NAME = "TNFa";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static TNFa molecule = null;
     
-    private TNFa(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private TNFa(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static TNFa getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static TNFa getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new TNFa(values, diffuse);
+    		molecule = new TNFa(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -41,22 +39,19 @@ public class TNFa extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	EukaryoteSignalingNetwork.TNFa_e = MOL_IDX;
         if (interactable instanceof Macrophage) {
             Macrophage macro = (Macrophage) interactable;
             
-        	if (macro.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	if (macro.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_TNF_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_TNF))
-                macro.bind(MOL_IDX);
+            macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TNF));
             return true;
         }
         if (interactable instanceof Neutrophil) { 
             Neutrophil neutro = (Neutrophil) interactable;
-        	if (neutro.inPhenotype(this.getSecretionPhenotype())) //# and interactable.state == Neutrophil.INTERACTING:
+        	if (neutro.hasPhenotype(this.getPhenotype())) //# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.N_TNF_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_TNF))
-                neutro.bind(MOL_IDX);
+        	neutro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TNF));
             return true;
         }
         return interactable.interact(this, x, y, z);

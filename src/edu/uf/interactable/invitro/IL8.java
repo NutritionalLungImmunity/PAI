@@ -1,12 +1,13 @@
 package edu.uf.interactable.invitro;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.interactable.Chemokine;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.Pneumocyte;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -14,19 +15,18 @@ public class IL8 extends Chemokine{
 
 	public static final String NAME = "IL8";
     public static final int NUM_STATES = 1;
-    public static final int MOL_IDX = getReceptors();
     
     private static IL8 molecule = null;
     
 
-    private IL8(double[][][][] qttys, Diffuse diffuse) {
-    	super(qttys, diffuse);
+    private IL8(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+    	super(qttys, diffuse, phenotypes);
         //Neutrophil.setChemokine(IL8.NAME);
     }
 
-    public static IL8 getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static IL8 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new IL8(values, diffuse);
+    		molecule = new IL8(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -53,7 +53,7 @@ public class IL8 extends Chemokine{
             /*EukaryoteSignalingNetwork.MIP2_e = MOL_IDX;
         	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_MIP2, neutro.getClock())) 
                 neutro.bind(MOL_IDX);
-        	else */if (neutro.inPhenotype(this.getSecretionPhenotype())){//#interactable.status == Phagocyte.ACTIVE and interactable.state == Neutrophil.INTERACTING:
+        	else */if (neutro.hasPhenotype(this.getPhenotype())){//#interactable.status == Phagocyte.ACTIVE and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.N_IL8_QTTY, 0, x, y, z);
                 if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL8)){}
                     //neutro.interaction = 0
@@ -63,7 +63,7 @@ public class IL8 extends Chemokine{
             return true;
         }
         if (interactable instanceof Pneumocyte) {
-            if (((Pneumocyte)interactable).inPhenotype(this.getSecretionPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
+            if (((Pneumocyte)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
             	this.inc(Constants.N_IL8_QTTY, 0, x, y, z);
             return true; 
         }
@@ -71,7 +71,7 @@ public class IL8 extends Chemokine{
         //#    return False
         if (interactable instanceof Macrophage) {
         	Macrophage macro = (Macrophage) interactable;
-        	if(macro.inPhenotype(this.getSecretionPhenotype())) //#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
+        	if(macro.hasPhenotype(this.getPhenotype())) //#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.N_IL8_QTTY, 0, x, y, z);
             return true;
         }

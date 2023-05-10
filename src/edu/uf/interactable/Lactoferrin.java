@@ -1,6 +1,7 @@
 package edu.uf.interactable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
@@ -13,7 +14,6 @@ public class Lactoferrin extends Molecule{
 	public static final String NAME = "Lactoferrin";
 	public static final int NUM_STATES = 3;
     private static final double THRESHOLD = Constants.K_M_TF_LAC * Constants.VOXEL_VOL / 1.0e6;
-    public static final int MOL_IDX = getReceptors();
     
     private static Lactoferrin molecule = null; 
 
@@ -26,13 +26,13 @@ public class Lactoferrin extends Molecule{
     	INDEXES.put("LactoferrinFe2", 2);
     }
     
-    private Lactoferrin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Lactoferrin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Lactoferrin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Lactoferrin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Lactoferrin(values, diffuse);
+    		molecule = new Lactoferrin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -72,7 +72,7 @@ public class Lactoferrin extends Molecule{
         if (interactable instanceof Neutrophil) {
             Neutrophil neutro = (Neutrophil) interactable;
             //System.out.println((neutro.status == Neutrophil.ACTIVE) + " "  + (neutro.state == Neutrophil.INTERACTING));
-        	if (neutro.inPhenotype(this.getSecretionPhenotype()) && !neutro.hasDegranulated()){//(neutro.getStatus() == Neutrophil.ACTIVE && neutro.getState() == Neutrophil.INTERACTING) 
+        	if (neutro.hasPhenotype(this.getPhenotype()) && !neutro.hasDegranulated()){//(neutro.getStatus() == Neutrophil.ACTIVE && neutro.getState() == Neutrophil.INTERACTING) 
         		this.inc(Constants.LAC_QTTY, "Lactoferrin", x, y, z);
         		neutro.degranulate();
         	}

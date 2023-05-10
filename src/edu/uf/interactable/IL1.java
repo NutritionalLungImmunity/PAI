@@ -1,26 +1,26 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
 public class IL1 extends Molecule{
 	public static final String NAME = "IL1";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static IL1 molecule = null;   
 	
 	public boolean hasInteractWithLiver = false;
     
-    private IL1(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private IL1(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static IL1 getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static IL1 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new IL1(values, diffuse);
+    		molecule = new IL1(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -42,29 +42,25 @@ public class IL1 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	EukaryoteSignalingNetwork.IL1B_e = MOL_IDX;
     	if (interactable instanceof Macrophage) {
             Macrophage macro = (Macrophage) interactable;
-            if(macro.inPhenotype(this.getSecretionPhenotype())) 
+            if(macro.hasPhenotype(this.getPhenotype())) 
                 this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1))
-            	((Macrophage)interactable).bind(MOL_IDX);
+            macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
             return true;
         }
     	if (interactable instanceof Pneumocyte) {
     		Pneumocyte pneumo = (Pneumocyte) interactable;
-        	if(pneumo.inPhenotype(this.getSecretionPhenotype()))
+        	if(pneumo.hasPhenotype(this.getPhenotype()))
                 this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1))
-                ((Pneumocyte)interactable).bind(MOL_IDX);
+        	pneumo.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
             return true;
         }
         if (interactable instanceof Neutrophil) {
             Neutrophil neutro = (Neutrophil) interactable;
-        	if(neutro.inPhenotype(this.getSecretionPhenotype()))
+        	if(neutro.hasPhenotype(this.getPhenotype()))
                 this.inc(Constants.N_IL1_QTTY, 0, x, y, z);
-            if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_IL1)) 
-                ((Neutrophil)interactable).bind(MOL_IDX);
+        	neutro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
             return true;
         }
         if(interactable instanceof Liver) { //TO DO!!!

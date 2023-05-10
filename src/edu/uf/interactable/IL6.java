@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
@@ -9,17 +11,16 @@ public class IL6 extends Molecule{
 
 	public static final String NAME = "IL6";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static IL6 molecule = null;
     
-    protected IL6(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    protected IL6(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static IL6 getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static IL6 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new IL6(values, diffuse);
+    		molecule = new IL6(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -43,13 +44,13 @@ public class IL6 extends Molecule{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) {
             Macrophage macro = (Macrophage) interactable;
-        	if (macro.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	if (macro.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.MA_IL6_QTTY, 0, x, y, z);
             return true; 
         }
         if (interactable instanceof Neutrophil) {
         	Neutrophil neutro = (Neutrophil) interactable; 
-        	if (neutro.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	if (neutro.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(Constants.N_IL6_QTTY, 0, x, y, z);
             return true;
         }

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Interactable {
+public abstract class Interactable implements Binder{
 	
 	private Set<String> negativeInteractList= new HashSet<>();
 	private int callCounter = 0;
@@ -32,6 +32,7 @@ public abstract class Interactable {
 	}*/
 	
 	public abstract boolean isTime();
+	
 
 	public boolean interact(Interactable interactable, int x, int y, int z) {
 		//if(!interactable.isTime())return false;

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import edu.uf.interactable.covid.DAMP;
 import edu.uf.interactable.covid.SAMP;
 import edu.uf.interactable.covid.SarsCoV2;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 
 class NeutrophilTest {

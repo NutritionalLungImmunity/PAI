@@ -10,10 +10,12 @@ import edu.uf.interactable.Iron;
 import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.MIP1B;
 import edu.uf.interactable.MIP2;
+import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.TAFC;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.Transferrin;
+import edu.uf.interactable.covid.Neutrophil;
 import edu.uf.utils.Constants;
 
 public class InitializeInvitromacrophages extends InitializeBaseModel{
@@ -22,17 +24,17 @@ public class InitializeInvitromacrophages extends InitializeBaseModel{
     	if(verbose) {
     		System.out.println("Initializing Iron, TAFC, Lactoferrin, Transferrin, Hepcidin, IL6, TNF-a, IL10, TGF-b, MIP2, MIP1-b");
     	}
-    	Iron iron = Iron.getMolecule(new double[1][xbin][ybin][zbin], null);
-    	TAFC tafc = TAFC.getMolecule(new double[2][xbin][ybin][zbin], diffuse);
-    	Lactoferrin lactoferrin = Lactoferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse);
-    	Transferrin transferrin = Transferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse);
-    	Hepcidin hepcidin = Hepcidin.getMolecule(new double[1][xbin][ybin][zbin], null);
-    	IL6 il6 = IL6.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MIP1B mip1b = MIP1B.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
+    	Iron iron = Iron.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
+    	TAFC tafc = TAFC.getMolecule(new double[2][xbin][ybin][zbin], diffuse, new int[] {});
+    	Lactoferrin lactoferrin = Lactoferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {Neutrophil.ACTIVE});
+    	Transferrin transferrin = Transferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {});
+    	Hepcidin hepcidin = Hepcidin.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
+    	IL6 il6 = IL6.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B});
+    	TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B});
+    	IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2A, Macrophage.M2B, Macrophage.M2C});
+    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M2C});
+    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
+    	MIP1B mip1b = MIP1B.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
     	//Granule gran = Granule.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
     	
     	
@@ -72,7 +74,7 @@ public class InitializeInvitromacrophages extends InitializeBaseModel{
     	Voxel.setMolecule(MIP1B.NAME, mip1b);
     	//Voxel.setMolecule(Granule.NAME, gran, true);
     	
-    	this.setSecretionPhenotypes();
+    	//this.setSecretionPhenotypes();
     }
 	
 }

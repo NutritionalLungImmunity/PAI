@@ -1,8 +1,9 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.interactable.invitro.Invitro;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -10,20 +11,19 @@ public class Heme extends Molecule{
 
 	public static final String NAME = "Heme";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	//private static double xSystem = 0.0;
 	
-	private static Heme molecule = null;  
+	private static Heme molecule = null; 
   
     
-    private Heme(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Heme(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Heme getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Heme getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Heme(values, diffuse);
+    		molecule = new Heme(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -40,6 +40,10 @@ public class Heme extends Molecule{
 
     public void computeTotalMolecule(int x, int y, int z) {
     	this.totalMoleculesAux[0] = this.totalMoleculesAux[0] + this.get(0, x, y, z);
+    }
+    
+    public int getInteractionId() {
+    	return TLRBinder.getBinder().getInteractionId();
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
@@ -74,9 +78,7 @@ public class Heme extends Molecule{
         }
         if(interactable instanceof Macrophage) {
         	Macrophage macrophage = (Macrophage) interactable;
-        	EukaryoteSignalingNetwork.Heme_e = MOL_IDX;
-        	if(Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Heme))
-        		macrophage.bind(MOL_IDX);
+        	macrophage.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_Heme));
         	return true;
         }
         return interactable.interact(this, x, y, z);

@@ -4,6 +4,7 @@ import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.BooleanNetwork;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
 
@@ -56,10 +57,16 @@ public class Liver extends Cell{
     
     private static Liver liver;
     
+    private static int interactionId = Id.getMoleculeId();
+    
     private  Liver() {
     	super();
         this.id = Id.getId();
         this.logHepcidin = LOG_NULL_VALUE;
+    }
+    
+    public int getInteractionId() {
+    	return interactionId;
     }
     
     public boolean isTime() {

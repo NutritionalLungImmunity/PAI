@@ -3,6 +3,7 @@ package edu.uf.interactable;
 import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.BooleanNetwork;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 
 public class Erythrocyte extends Cell{
@@ -21,12 +22,18 @@ public class Erythrocyte extends Cell{
 	public static final int BURSTING = 2;
 	public static final int DEAD = 3;
 	
+	private static int interactionId = Id.getMoleculeId();
+	
 	public Erythrocyte(int rbc) {
 		super();
 		this.restingRBC = rbc;
 		this.hemorrhage = false; 
 		totalCells += rbc;
 	}
+	
+	public int getInteractionId() {
+    	return interactionId;
+    }
 	
 	public static int getTotalCells() {
 		return totalCells;

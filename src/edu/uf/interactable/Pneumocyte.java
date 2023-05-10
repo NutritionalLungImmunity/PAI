@@ -2,11 +2,9 @@ package edu.uf.interactable;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
-import edu.uf.time.Clock;
+import edu.uf.intracellularState.Phenotype;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Rand;
+import edu.uf.utils.Id;
 import edu.uf.utils.Util;
 
 public class Pneumocyte extends Cell {
@@ -16,12 +14,20 @@ public class Pneumocyte extends Cell {
     
     private int iteration;
     
-    public static final int RECEPTOR_IDX = Molecule.getReceptors();
+    public static final int ACTIVE = Phenotype.createPhenotype();
+    public static final int MIX_ACTIVE = Phenotype.createPhenotype();
+    
+    
+    private static int interactionId = Id.getMoleculeId();
 
     public Pneumocyte() {
         super();
         this.iteration = 0;
         Pneumocyte.totalCells = Pneumocyte.totalCells + 1;
+    }
+    
+    public int getInteractionId() {
+    	return interactionId;
     }
     
     public boolean isTime() {
@@ -51,27 +57,25 @@ public class Pneumocyte extends Cell {
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Afumigatus) {
             Afumigatus interac = (Afumigatus) interactable;
-            EukaryoteSignalingNetwork.B_GLUC_e = Afumigatus.RECEPTOR_IDX;
         	if(!this.isDead()) 
                 if(interac.getStatus() != Afumigatus.RESTING_CONIDIA) 
-                    if(!this.inPhenotype(Phenotypes.ACTIVE))
-                        if(Rand.getRand().randunif() < Constants.PR_P_INT) 
-                        	this.bind(Afumigatus.RECEPTOR_IDX);
+                    //if(!this.hasPhenotype(Macrophage.M1))  //REVIEW
+                    	this.bind(interac, 4);
+                        //if(Rand.getRand().randunif() < Constants.PR_P_INT) 
+                        //	this.bind(Afumigatus.RECEPTOR_IDX);
             return true;
         }
         
         if (interactable instanceof IL6) { 
-        	if(this.inPhenotype(((IL6)interactable).getSecretionPhenotype())) 
+        	if(this.hasPhenotype(((IL6)interactable).getPhenotype())) 
             	((Molecule)interactable).inc(Constants.P_IL6_QTTY, 0, x, y, z);
             return true;
         }
         
         if (interactable instanceof TNFa) {
             Molecule interact = (Molecule) interactable;
-            EukaryoteSignalingNetwork.TNFa_e = TNFa.MOL_IDX;
-        	if (Util.activationFunction(interact.get(0, x, y, z), Constants.Kd_TNF)) 
-        		this.bind(TNFa.MOL_IDX);
-        	if(this.inPhenotype(interact.getSecretionPhenotype())) 
+            this.bind(interactable, Util.activationFunction5(interact.get(0, x, y, z), Constants.Kd_TNF));
+        	if(this.hasPhenotype(interact.getPhenotype())) 
             	interact.inc(Constants.P_TNF_QTTY, 0, x, y, z);
             return true;
         }
@@ -118,14 +122,17 @@ public class Pneumocyte extends Cell {
 
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		return new EukaryoteSignalingNetwork() {
+		return new BooleanNetwork() {
 
 			public static final int size = 2;
 			
 			public static final int MIX_ACTIVE = 0;
 			public static final int ACTIVE = 1;
 			public static final int ITER_REST = 12;
-			private int iterations = 0;
+			private int iterations1 = 0;
+			private int iterations2 = 0;
+			
+			public static final int N = 4;
 			
 			{
 				this.inputs = new int[NUM_RECEPTORS];
@@ -135,8 +142,8 @@ public class Pneumocyte extends Cell {
 			private int countMix() {
 				if((this.booleanNetwork[MIX_ACTIVE]) == 0)
 					return 0;
-				if(iterations++ >= ITER_REST) {
-					iterations = 0;
+				if(iterations1++ >= ITER_REST) {
+					iterations1 = 0;
 					return 0;
 				}
 				return 1;
@@ -145,8 +152,8 @@ public class Pneumocyte extends Cell {
 			private int countActive() {
 				if((this.booleanNetwork[ACTIVE]) == 0)
 					return 0;
-				if(iterations++ >= ITER_REST) {
-					iterations = 0;
+				if(iterations2++ >= ITER_REST) {
+					iterations2 = 0;
 					return 0;
 				}
 				return 1;
@@ -155,24 +162,25 @@ public class Pneumocyte extends Cell {
 			
 			@Override
 			public void processBooleanNetwork() {
-				this.booleanNetwork[MIX_ACTIVE] =  (e(this.inputs, B_GLUC_e) | countMix()) & (-this.booleanNetwork[ACTIVE] + 1);
-				this.booleanNetwork[ACTIVE] = ((e(this.inputs, IL1B_e) | e(this.inputs, TNFa_e)) & this.booleanNetwork[MIX_ACTIVE]) | countActive();
+				this.booleanNetwork[MIX_ACTIVE] =  and(or(input(Afumigatus.DEF_OBJ), N*countMix()), (-this.booleanNetwork[ACTIVE] + N));
+				this.booleanNetwork[ACTIVE] = or(and((or(input(IL1.getMolecule()), input(TNFa.getMolecule()))), this.booleanNetwork[MIX_ACTIVE]), N*countActive());
 
-				this.iterations = e(this.inputs, B_GLUC_e) == 1 | e(this.inputs, IL1B_e) == 1 | e(this.inputs, TNFa_e) == 1 ? 0 : this.iterations;
+				this.iterations1 = input(Afumigatus.DEF_OBJ) > 0 | input(IL1.getMolecule()) > 0 | input(TNFa.getMolecule()) > 0 ? 0 : this.iterations1;
+				this.iterations2 = input(Afumigatus.DEF_OBJ) > 0 | input(IL1.getMolecule()) > 0 | input(TNFa.getMolecule()) > 0 ? 0 : this.iterations2;
 				
 				for(int i = 0; i < NUM_RECEPTORS; i++)
 					this.inputs[i] = 0;
 				
-				Pneumocyte.this.clearPhenotype();
+				this.clearPhenotype();
 				
-				if(this.booleanNetwork[ACTIVE] == 1) {
-					Pneumocyte.this.addPhenotype(Phenotypes.ACTIVE);
-				} else if(this.booleanNetwork[MIX_ACTIVE] == 1) {
-					Pneumocyte.this.addPhenotype(Phenotypes.MIX_ACTIVE);
-				} else {
-					Pneumocyte.this.addPhenotype(Phenotypes.RESTING);
+				if(this.booleanNetwork[ACTIVE] > 0) {
+					this.getPhenotype().put(Pneumocyte.this.ACTIVE, this.booleanNetwork[ACTIVE]);
+					//System.out.println("active");
+				} 
+				if(this.booleanNetwork[MIX_ACTIVE] > 0) {
+					this.getPhenotype().put(Pneumocyte.this.MIX_ACTIVE, this.booleanNetwork[MIX_ACTIVE]);
+					//System.out.println("mix active");
 				}
-					
 				
 			}
 			

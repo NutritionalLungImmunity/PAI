@@ -1,6 +1,7 @@
 package edu.uf.interactable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
@@ -11,7 +12,6 @@ public class Haptoglobin extends Molecule{
 
 	public static final String NAME = "Haptoglobin";
 	public static final int NUM_STATES = 2;
-	public static final int MOL_IDX = getReceptors();
 	
 	//private static double xSystem = 0.0;
 	
@@ -25,13 +25,13 @@ public class Haptoglobin extends Molecule{
     	INDEXES.put("HpHb", 1); 
     }
     
-    private Haptoglobin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Haptoglobin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Haptoglobin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Haptoglobin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Haptoglobin(values, diffuse);
+    		molecule = new Haptoglobin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -68,9 +68,7 @@ public class Haptoglobin extends Molecule{
     		return true; 
     	}
         if (interactable instanceof Macrophage){//# or type(interactable) is Neutrophil: 
-        	if(Util.activationFunction(this.get(1, x, y, z), Constants.Kd_HP)) {
-        		((Macrophage)interactable).bind(MOL_IDX);
-        	}
+        	((Macrophage)interactable).bind(this, Util.activationFunction5(this.get(1, x, y, z), Constants.Kd_HP));
             return true;
         }
         if(interactable instanceof Hemoglobin) {

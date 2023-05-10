@@ -9,11 +9,12 @@ import edu.uf.interactable.Interactable;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Phagocyte;
+import edu.uf.interactable.TLRBinder;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
+import edu.uf.intracellularState.Phenotype;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
 
@@ -25,6 +26,9 @@ public class DC extends Phagocyte{
     private static int totalCells = 0;
     
     private int maxMoveStep;
+    private static int interactionId = Id.getMoleculeId();
+    
+    public static final int ACTIVE = Phenotype.createPhenotype();
 
 	public DC() {
     	DC.totalCells = DC.totalCells + 1;
@@ -61,23 +65,16 @@ public class DC extends Phagocyte{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	EukaryoteSignalingNetwork.IFNG_e = IFN1.MOL_IDX;
     	if(interactable instanceof IFN1) {
     		Molecule mol = (Molecule) interactable;
-	        if (this.inPhenotype(mol.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+	        if (this.hasPhenotype(mol.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
 	        	mol.inc(Constants.DC_IFN_QTTY, 0, x, y, z);
     		return true;
     	}
-    	EukaryoteSignalingNetwork.TLR4_o.add(SarsCoV2.MOL_IDX);
     	if(interactable instanceof SarsCoV2) {
     		Molecule mol = (Molecule) interactable;
     		//mol.pdec(1-Constants.SarsCoV2_HALF_LIFE, 0, x, y, z);
-	        if (Util.activationFunction(mol.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {//viral particle per infectious unity
-	        	this.bind(SarsCoV2.MOL_IDX);
-	        	/*double qtty = Constants.SarsCoV2_UPTAKE_QTTY > this.get(0, x, y, z) ? this.get(0, x, y, z) : Constants.SarsCoV2_UPTAKE_QTTY;
-	        	double q = this.get(0, x, y, z);
-	        	this.dec(qtty, 0, x, y, z);*/
-	        }
+    		this.bind(mol, Util.activationFunction5(mol.get(0, x, y, z), Constants.Kd_SarsCoV2));
     		return true;
     	}
         return interactable.interact(this, x, y, z);
@@ -113,7 +110,7 @@ public class DC extends Phagocyte{
 
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		EukaryoteSignalingNetwork network = new EukaryoteSignalingNetwork() {
+		BooleanNetwork network = new BooleanNetwork() {
 
 			public static final int size = 5;
 			//public static final int NUM_RECEPTORS = 12;
@@ -145,10 +142,10 @@ public class DC extends Phagocyte{
 					for(int i : array) {
 						switch(i) {
 							case 0:
-								this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB] | e(this.inputs, IFNG_e);
+								this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB];// | e(this.inputs, IFNG_e);
 								break;
 							case 1:
-								this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
+								this.booleanNetwork[TLR4] = input(TLRBinder.getBinder());
 								break;
 							case 2:
 								this.booleanNetwork[STAT1] = this.booleanNetwork[IFNGR];
@@ -169,12 +166,11 @@ public class DC extends Phagocyte{
 				for(int i = 0; i < NUM_RECEPTORS; i++)
 					this.inputs[i] = 0;
 				
-				DC.this.clearPhenotype();
+				this.clearPhenotype();
 				
 				if(this.booleanNetwork[STAT1] == 1 || this.booleanNetwork[IRF3] == 1)
-					DC.this.addPhenotype(Phenotypes.ACTIVE);
-				else
-					DC.this.addPhenotype(Phenotypes.RESTING);
+					this.getPhenotype().put(DC.this.ACTIVE, this.or(new int[] {this.booleanNetwork[STAT1], this.booleanNetwork[IRF3]}));
+				
 					
 				
 			}
@@ -188,5 +184,10 @@ public class DC extends Phagocyte{
 	public void incIronPool(double ironPool) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int getInteractionId() {
+		return interactionId;
 	}
 }

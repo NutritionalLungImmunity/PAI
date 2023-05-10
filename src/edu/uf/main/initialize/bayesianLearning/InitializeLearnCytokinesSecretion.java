@@ -1,24 +1,21 @@
 package edu.uf.main.initialize.bayesianLearning;
 
-import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.Voxel;
 import edu.uf.control.MultiThreadExec;
-import edu.uf.interactable.Afumigatus;
 import edu.uf.interactable.IL1;
 import edu.uf.interactable.IL10;
 import edu.uf.interactable.IL6;
 import edu.uf.interactable.MCP1;
 import edu.uf.interactable.MIP2;
+import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.covid.SAMP;
 import edu.uf.interactable.invitro.BGlucan;
-import edu.uf.interactable.invitro.GM_CSF;
 import edu.uf.interactable.invitro.IL8;
 import edu.uf.interactable.invitro.LPS;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.main.initialize.InitializeBaseModel;
 
 public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
@@ -35,18 +32,18 @@ public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
 		if(verbose) {
     		System.out.println("Initializing Iron, TAFC, Lactoferrin, Transferrin, Hepcidin, IL6, TNF-a, IL10, TGF-b, MIP2, MIP1-b");
     	}
-		IL1 il1 = IL1.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	IL6 il6 = IL6.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	IL8 il8 = IL8.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
-    	MCP1 mcp1 = MCP1.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
+		IL1 il1 = IL1.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B});
+    	IL6 il6 = IL6.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B});
+    	IL8 il8 = IL8.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
+    	tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B});
+    	il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M2A, Macrophage.M2B, Macrophage.M2C});
+    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M2C});
+    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
+    	MCP1 mcp1 = MCP1.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1});
     	
-    	samp = SAMP.getMolecule(new double[1][xbin][ybin][zbin], null);
-    	lps = LPS.getMolecule(new double[1][xbin][ybin][zbin], null);
-    	bglucan = BGlucan.getMolecule(new double[1][xbin][ybin][zbin], null);
+    	samp = SAMP.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
+    	lps = LPS.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
+    	bglucan = BGlucan.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
     	
     	
     	MultiThreadExec.setMolecule(il1);
@@ -77,7 +74,7 @@ public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
     	Voxel.setMolecule(LPS.NAME, lps);
     	Voxel.setMolecule(BGlucan.NAME, bglucan);
     	
-    	this.setSecretionPhenotypes();
+    	//this.setSecretionPhenotypes();
 		
 	}
 
@@ -140,7 +137,7 @@ public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
     	
 	}
 
-	@Override
+	/*@Override
 	protected void setSecretionPhenotypes() {
 		//IL10.getMolecule().addPhenotype(Phenotypes.ACTIVE); //
 		IL10.getMolecule().addPhenotype(Phenotypes.MIX_ACTIVE);
@@ -157,6 +154,6 @@ public class InitializeLearnCytokinesSecretion extends InitializeBaseModel{
 		TNFa.getMolecule().addPhenotype(Phenotypes.ACTIVE);
 		TNFa.getMolecule().addPhenotype(Phenotypes.MIX_ACTIVE);
 		
-	}
+	}*/
 
 }

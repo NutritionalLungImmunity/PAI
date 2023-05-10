@@ -123,5 +123,5 @@ public abstract class Initialize {
     
     public abstract List<Afumigatus> infect(int numAspergillus, Voxel[][][] grid, int xbin, int ybin, int zbin, int status, double initIron, double sigma, boolean verbose);
     
-    protected abstract void setSecretionPhenotypes();
+    //protected abstract void setSecretionPhenotypes();
 }

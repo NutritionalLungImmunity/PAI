@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
@@ -7,18 +9,17 @@ import edu.uf.utils.Util;
 public class MIP1B extends Chemokine{
     public static final String NAME = "MIP1B";
     public static final int NUM_STATES = 1;
-    public static final int MOL_IDX = getReceptors();
     
     private static MIP1B molecule = null;    
 
-    private MIP1B(double[][][][] qttys, Diffuse diffuse) {
-        super(qttys, diffuse);
+    private MIP1B(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+        super(qttys, diffuse, phenotypes);
         Macrophage.setChemokine(MIP1B.NAME);
     }
     
-    public static MIP1B getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static MIP1B getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new MIP1B(values, diffuse); 
+    		molecule = new MIP1B(values, diffuse, phenotypes); 
     	}
     	return molecule;
     }
@@ -41,12 +42,12 @@ public class MIP1B extends Chemokine{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Pneumocyte) {
-            if (((Pneumocyte)interactable).inPhenotype(this.getSecretionPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
+            if (((Pneumocyte)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
             	this.inc(Constants.P_MIP1B_QTTY, 0, x, y, z);
             return true;
         }
         if (interactable instanceof Macrophage) {
-            if (((Macrophage)interactable).inPhenotype(this.getSecretionPhenotype()))//#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
+            if (((Macrophage)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
             	this.inc(Constants.MA_MIP1B_QTTY, 0, x, y, z);
             return true;
         }

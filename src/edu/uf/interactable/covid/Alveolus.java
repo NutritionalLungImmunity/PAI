@@ -49,4 +49,10 @@ public class Alveolus extends Cell{
 		return false;
 	}
 
+	@Override
+	public int getInteractionId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

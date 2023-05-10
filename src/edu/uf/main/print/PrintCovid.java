@@ -24,7 +24,6 @@ import edu.uf.interactable.covid.NK;
 import edu.uf.interactable.covid.SAMP;
 import edu.uf.interactable.covid.H2O2;
 import edu.uf.interactable.covid.SarsCoV2;
-import edu.uf.intracellularState.Phenotypes;
 
 public class PrintCovid extends PrintStat{
 
@@ -94,19 +93,19 @@ public class PrintCovid extends PrintStat{
 						
 						if(cell instanceof DC) {
 							DC p = (DC) cell;
-							if(p.inPhenotype(Phenotypes.ACTIVE))MActive++;
+							if(p.hasPhenotype(DC.ACTIVE))MActive++;
 						}
 						if(cell instanceof Neutrophil) {
 							neut++;
 							Neutrophil p = (Neutrophil) cell;
-							if(p.inPhenotype(Phenotypes.ACTIVE))NActive++;
+							if(p.hasPhenotype(DC.ACTIVE))NActive++;
 						}
 						if(cell instanceof Pneumocyte) {
 							neut++;
 							Pneumocyte p = (Pneumocyte) cell;
 							if(p.getViralLoad() > 0.0)infected++;
-							if(p.inPhenotype(Phenotypes.IRF3))PActive++;
-							if(p.inPhenotype(Phenotypes.IRF9))irf9++;
+							if(p.hasPhenotype(DC.IRF3))PActive++;
+							if(p.hasPhenotype(DC.IRF9))irf9++;
 						}
 					}
 				}

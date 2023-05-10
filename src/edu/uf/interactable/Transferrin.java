@@ -1,9 +1,9 @@
 package edu.uf.interactable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -14,7 +14,6 @@ public class Transferrin extends Molecule{
 	public static final String NAME = "Transferrin";
 	public static final int NUM_STATES = 3;
     private static final double THRESHOLD = Constants.K_M_TF_TAFC *Constants.VOXEL_VOL / 1.0e6;
-    public static final int MOL_IDX = getReceptors();
     
     private static Transferrin molecule = null;
 
@@ -27,13 +26,13 @@ public class Transferrin extends Molecule{
     	INDEXES.put("TfFe2", 2);
     }
     
-    private Transferrin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Transferrin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Transferrin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Transferrin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Transferrin(values, diffuse);
+    		molecule = new Transferrin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -70,7 +69,7 @@ public class Transferrin extends Molecule{
             this.dec(qttyFe, "TfFe", x, y, z);
             this.inc(qttyFe2 + qttyFe, "Tf", x, y, z);
             macro.incIronPool(2 * qttyFe2 + qttyFe);
-            if (macro.createBooleanNetwork().getBooleanNetwork()[Macrophage.FPN] == 1 && !macro.inPhenotype(Phenotypes.ACTIVE)) {
+            if (macro.createBooleanNetwork().getBooleanNetwork()[Macrophage.FPN] == 1 && !macro.hasPhenotype(Macrophage.M1)) {
                 double qtty = macro.getIronPool() * 
                 		this.get("Tf", x, y, z) * Constants.MA_IRON_EXPORT_RATE * Constants.STD_UNIT_T;
                 qtty = qtty <= 2*this.get("Tf", x, y, z) ? qtty : 2*this.get("Tf", x, y, z);

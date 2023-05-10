@@ -14,10 +14,10 @@ import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Pneumocyte;
 import edu.uf.interactable.TNFa;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
+import edu.uf.intracellularState.Phenotype;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Id;
 import edu.uf.utils.Util;
 
 public class EndothelialCells extends Cell{
@@ -25,8 +25,13 @@ public class EndothelialCells extends Cell{
 	public static final String NAME = "EC";
 	
 	private static int totalCells = 0;
+	private static int interactionId = Id.getMoleculeId();
 	
 	private Set<EndothelialCells> neighbors = new HashSet<>();
+	
+	public static final int STAT3  = Phenotype.createPhenotype();
+	public static final int NFKB = Phenotype.createPhenotype();
+	public static final int OPEN = Phenotype.createPhenotype();
 	
 	public EndothelialCells() {
 		totalCells++;
@@ -42,7 +47,7 @@ public class EndothelialCells extends Cell{
 
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		return new EukaryoteSignalingNetwork() {
+		return new BooleanNetwork() {
 
 			public static final int size = 9;
 			public static final int NUM_PHENOTYPES = 4;
@@ -51,7 +56,7 @@ public class EndothelialCells extends Cell{
 			public static final int STAT3 = 1;
 			public static final int VEGFR2 = 2;
 			public static final int AKT = 3;
-			public static final int VEGF = 4;
+			public static final int VEGFA = 4;
 			public static final int TNF = 5;
 			public static final int TNFR = 6;
 			public static final int NFkB = 7;
@@ -76,22 +81,22 @@ public class EndothelialCells extends Cell{
 					for(int i : array) {
 						switch(i) {
 							case 0:
-								this.booleanNetwork[sIL6R] = e(this.inputs, sIL6R_e);
+								this.booleanNetwork[sIL6R] = input(IL6Complex.getMolecule());
 								break;
 							case 1:
 								this.booleanNetwork[STAT3] = or(this.booleanNetwork[sIL6R], this.booleanNetwork[AKT]);
 								break;
 							case 2:
-								this.booleanNetwork[VEGFR2] = this.booleanNetwork[VEGF];
+								this.booleanNetwork[VEGFR2] = this.booleanNetwork[VEGFA];
 								break;
 							case 3:
 								this.booleanNetwork[AKT] = this.booleanNetwork[VEGFR2];
 								break;
 							case 4:
-								this.booleanNetwork[VEGF] = e(this.inputs, VEGF_e);
+								this.booleanNetwork[VEGFA] = input(VEGF.getMolecule());
 								break;
 							case 5:
-								this.booleanNetwork[TNF] = e(this.inputs, TNFa_e);
+								this.booleanNetwork[TNF] = input(TNFa.getMolecule());
 								break;
 							case 6:
 								this.booleanNetwork[TNFR] = this.booleanNetwork[TNF];
@@ -117,14 +122,14 @@ public class EndothelialCells extends Cell{
 				for(int i = 0; i < NUM_PHENOTYPES; i++)
 					array.add(i);
 				
-				EndothelialCells.this.clearPhenotype();
+				this.clearPhenotype();
 				
 				if(this.booleanNetwork[STAT3] == 1)
-					EndothelialCells.this.addPhenotype(Phenotypes.STAT3);
+					this.getPhenotype().put(EndothelialCells.this.STAT3, this.booleanNetwork[STAT3]);
 				if(this.booleanNetwork[NFkB] == 1)
-					EndothelialCells.this.addPhenotype(Phenotypes.NFkB);
+					this.getPhenotype().put(EndothelialCells.this.NFKB, this.booleanNetwork[NFkB]);
 				if(this.booleanNetwork[AKT] == 1)
-					EndothelialCells.this.addPhenotype(Phenotypes.OPEN);
+					this.getPhenotype().put(EndothelialCells.this.OPEN, this.booleanNetwork[AKT]);
 					
 			}
 		};
@@ -166,9 +171,7 @@ public class EndothelialCells extends Cell{
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if(interactable instanceof TNFa) {
 			Molecule mol = (Molecule) interactable;
-			EukaryoteSignalingNetwork.TNFa_e = TNFa.MOL_IDX;
-	        if (Util.activationFunction(mol.get(0, x, y, z), Constants.Kd_TNF))
-	        	this.bind(TNFa.MOL_IDX);
+			this.bind(mol, Util.activationFunction5(mol.get(0, x, y, z), Constants.Kd_TNF));
 	        return true;
 		}
 		if(interactable instanceof EndothelialCells) {
@@ -179,6 +182,11 @@ public class EndothelialCells extends Cell{
 			return true;
 		}
 		return interactable.interact(this, x, y, z);
+	}
+
+	@Override
+	public int getInteractionId() {
+		return interactionId;
 	}
 
 }

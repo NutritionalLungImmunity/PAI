@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
@@ -10,17 +12,16 @@ public class Granule extends Molecule{
 	   
 	public static final String NAME = "Granule";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static Granule molecule = null;    
     
-    private Granule(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Granule(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Granule getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Granule getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Granule(values, diffuse);
+    		molecule = new Granule(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -44,7 +45,7 @@ public class Granule extends Molecule{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Neutrophil){//# or type(interactable) is Neutrophil: 
         	Neutrophil neutrophil = (Neutrophil) interactable;
-        	if(neutrophil.inPhenotype(this.getSecretionPhenotype())) {
+        	if(neutrophil.hasPhenotype(this.getPhenotype())) {
         	//if((neutrophil.getStatus() == Macrophage.ACTIVE)){ // || Rand.getRand().getRand().randunif() < Constants.PR_DEPLETION) && !neutrophil.depleted){
         		this.inc(Constants.GRANULE_QTTY, 0, x, y, z);
         		//neutrophil.depleted = true;

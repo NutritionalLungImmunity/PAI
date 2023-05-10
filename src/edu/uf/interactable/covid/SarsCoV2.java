@@ -1,31 +1,30 @@
 package edu.uf.interactable.covid;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
 public class SarsCoV2 extends Molecule{
 	public static final String NAME = "SarsCoV2";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	private double internalLoad = 0.0;
 	
 	private static SarsCoV2 molecule = null;
     
-    protected SarsCoV2(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    protected SarsCoV2(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static SarsCoV2 getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static SarsCoV2 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new SarsCoV2(values, diffuse);
+    		molecule = new SarsCoV2(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -60,13 +59,14 @@ public class SarsCoV2 extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	
-    	EukaryoteSignalingNetwork.TLR4_o.add(SarsCoV2.MOL_IDX);
         if(interactable instanceof Pneumocyte) {
         	Pneumocyte cell = (Pneumocyte) interactable;
+        	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2));
         	if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {//TLR
         		EukaryoteSignalingNetwork.VIRUS_e = -1;
 	        	cell.bind(SarsCoV2.MOL_IDX);
         	}
+        	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_SarsCoV2));
         	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_SarsCoV2)) { //ACE2
         		EukaryoteSignalingNetwork.VIRUS_e = SarsCoV2.MOL_IDX;
         		cell.bind(SarsCoV2.MOL_IDX);
@@ -74,11 +74,11 @@ public class SarsCoV2 extends Molecule{
 	        	cell.incViralLoad(qtty);
 	        	this.dec(qtty, 0, x, y, z);
 	        }
-	        if(cell.inPhenotype(Phenotypes.NECROTIC) && cell.getStatus() == Cell.DEAD) {
+	        if(cell.hasPhenotype(Phenotypes.NECROTIC) && cell.getStatus() == Cell.DEAD) {
 	        	
 	        	this.inc(cell.getViralLoad(), 0, x, y, z);
 	        	cell.clearViralLoad();
-	        }else if(cell.inPhenotype(Phenotypes.APOPTOTIC) && cell.getStatus() == Cell.DEAD) {
+	        }else if(cell.hasPhenotype(Phenotypes.APOPTOTIC) && cell.getStatus() == Cell.DEAD) {
 	        	cell.clearViralLoad();
 	        }
 	        return true;
@@ -86,10 +86,8 @@ public class SarsCoV2 extends Molecule{
         if(interactable instanceof Neutrophil) {
         	Neutrophil cell = (Neutrophil) interactable;
         	this.pdec(1-Constants.SarsCoV2_HALF_LIFE, 0, x, y, z);
-	        if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {
-	        	cell.bind(SarsCoV2.MOL_IDX);
-	        }
-	        if(cell.inPhenotype(this.getSecretionPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
+        	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2));
+	        if(cell.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
         		this.inc(1.0, 0, x, y, z);
 	        return true;
         }
@@ -98,12 +96,7 @@ public class SarsCoV2 extends Molecule{
         	
         	Macrophage cell = (Macrophage) interactable;
         	this.pdec(1-Constants.SarsCoV2_HALF_LIFE, 0, x, y, z);
-	        if (Util.activationFunction(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2)) {
-	        	cell.bind(SarsCoV2.MOL_IDX);
-	        	/*double qtty = Constants.SarsCoV2_UPTAKE_QTTY > this.get(0, x, y, z) ? this.get(0, x, y, z) : Constants.SarsCoV2_UPTAKE_QTTY;
-	        	double q = this.get(0, x, y, z);
-	        	this.dec(qtty, 0, x, y, z);*/
-	        }
+        	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z)*10000, Constants.Kd_SarsCoV2));
 	        return true;
         }
         if(interactable instanceof Lactoferrin) {

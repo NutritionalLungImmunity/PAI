@@ -1,7 +1,8 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -9,17 +10,16 @@ public class Hepcidin extends Molecule{
 
 	public static final String NAME = "Hepcidin";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static Hepcidin molecule = null;    
     
-    private Hepcidin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Hepcidin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Hepcidin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Hepcidin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Hepcidin(values, diffuse);
+    		molecule = new Hepcidin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -42,11 +42,9 @@ public class Hepcidin extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	EukaryoteSignalingNetwork.Hep_e = MOL_IDX;
         if (interactable instanceof Macrophage) {
         	Macrophage macro = (Macrophage) interactable;
-        	if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Hep))
-        		macro.bind(MOL_IDX);
+        	macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_Hep));
             return true; 
         }
         return interactable.interact(this, x, y, z); 

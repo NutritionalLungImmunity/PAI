@@ -23,7 +23,6 @@ import edu.uf.interactable.TAFC;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.Transferrin;
-import edu.uf.intracellularState.Phenotypes;
 
 public class PrintBaseModel extends PrintStat{
 	

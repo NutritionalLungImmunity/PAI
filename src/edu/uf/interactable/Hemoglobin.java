@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
@@ -8,17 +10,16 @@ public class Hemoglobin extends Molecule{
 
 	public static final String NAME = "Hemoglobin";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static Hemoglobin molecule = null;    
     
-    private Hemoglobin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Hemoglobin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Hemoglobin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Hemoglobin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Hemoglobin(values, diffuse);
+    		molecule = new Hemoglobin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }

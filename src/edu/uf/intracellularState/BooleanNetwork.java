@@ -1,13 +1,25 @@
 package edu.uf.intracellularState;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+
+import edu.uf.interactable.Binder;
+import edu.uf.interactable.Interactable;
+import edu.uf.interactable.Molecule;
 
 public abstract class BooleanNetwork {
 
 	private int bnIteration;
 	protected int[] booleanNetwork;
 	protected int[] inputs;
+	private Map<Integer, Integer> phenotypes;
+	public static final int NUM_RECEPTORS = 100;
+	
+	public BooleanNetwork() {
+		this.phenotypes = new HashMap<>();
+		this.inputs = new int[NUM_RECEPTORS];
+	}
 	
 	public int getBnIteration() {
 		return bnIteration; 
@@ -31,12 +43,25 @@ public abstract class BooleanNetwork {
 	
 	public abstract void processBooleanNetwork();
 	
-	protected int e(int[] bn, int i) {
-		if(i<0)return 0;
-		return bn[i];
+	public Map<Integer, Integer> getPhenotype(){
+		return this.phenotypes;
 	}
 	
-	protected void r(int[] bn, int i) {
+	public void clearPhenotype() {
+		this.phenotypes.clear();
+	}
+	
+	/*protected int e(int[] bn, int i) {
+		if(i<0)return 0;
+		return bn[i];
+	}*/
+	
+	protected int input(Binder i) {
+		if(i == null)return 0;
+		return inputs[i.getInteractionId()];
+	}
+	
+	/*protected void r(int[] bn, int i) {
 		if(i<0)return;
 		bn[i] = 0;
 	}
@@ -45,7 +70,7 @@ public abstract class BooleanNetwork {
 		for(int i : idxs) 
 			if(bn[i] > 0)return bn[i];
 		return 0;
-	}
+	}*/
 	
 	protected int or(int[] a) {
 		int max = 0;

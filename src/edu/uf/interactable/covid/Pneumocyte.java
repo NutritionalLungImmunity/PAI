@@ -10,10 +10,9 @@ import edu.uf.interactable.IL6;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Molecule;
 import edu.uf.interactable.TGFb;
+import edu.uf.interactable.TLRBinder;
 import edu.uf.interactable.TNFa;
 import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
@@ -43,7 +42,7 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 	
 	@Override
 	protected BooleanNetwork createNewBooleanNetwork() {
-		return new EukaryoteSignalingNetwork() {
+		return new BooleanNetwork() {
 
 			static final int size = 9;
 			static final int NUM_PHENOTYPES = 3;
@@ -95,7 +94,7 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 							this.booleanNetwork[IRF9] = this.booleanNetwork[STAT1];
 							break;
 						case 5:
-							this.booleanNetwork[TLR4] = o(this.inputs, TLR4_o);
+							this.booleanNetwork[TLR4] = input(TLRBinder.getBinder());
 							break;
 						case 6:
 							this.booleanNetwork[RIG1] = this.booleanNetwork[VIRAL_REP];
@@ -104,7 +103,7 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 							this.booleanNetwork[IFNR] = this.booleanNetwork[IFN];
 							break;	
 						case 8:
-							this.booleanNetwork[IFN] = or(this.booleanNetwork[IRF3], e(this.inputs, IFNG_e));
+							this.booleanNetwork[IFN] = or(this.booleanNetwork[IRF3], 0);//e(this.inputs, IFNG_e));
 							//r(this.inputs, IFNG_e);
 							break;
 						default:
@@ -133,7 +132,7 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof TGFb) {
             Molecule interact = (Molecule) interactable;
-        	if(this.inPhenotype(interact.getSecretionPhenotype())) 
+        	if(this.hasPhenotype(interact.getPhenotype())) 
             	interact.inc(Constants.MA_TGF_QTTY, 0, x, y, z);
             return true;
         }
@@ -144,7 +143,7 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 	public void updateStatus() {
 		if(this.getStatus() == DEAD)return;
 		this.processBooleanNetwork();
-		if(!this.inPhenotype(Phenotypes.IRF9) && this.viralLoad > 0) {
+		if(!this.hasPhenotype(Phenotypes.IRF9) && this.viralLoad > 0) {
 			double qtty = this.viralLoad*Constants.SarsCoV2_REP_RATE;
 			this.viralLoad += qtty;
 			((SarsCoV2) SarsCoV2.getMolecule()).incInternalLoad(qtty);
@@ -155,7 +154,7 @@ public class Pneumocyte extends edu.uf.interactable.Pneumocyte{
 			Pneumocyte.this.addPhenotype(Phenotypes.NECROTIC);
 		
 		//if(this.getPhenotype() != 0)System.out.println(this.getPhenotype());
-		if(this.inPhenotype(new int[] {Phenotypes.APOPTOTIC, Phenotypes.NECROTIC})) 
+		if(this.hasPhenotype(new int[] {Phenotypes.APOPTOTIC, Phenotypes.NECROTIC})) 
 			this.die();
 	}
 }

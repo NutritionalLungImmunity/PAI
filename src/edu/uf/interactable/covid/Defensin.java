@@ -1,10 +1,11 @@
 package edu.uf.interactable.covid;
 
+import java.util.List;
+
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Molecule;
-import edu.uf.intracellularState.Phenotypes;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -12,17 +13,16 @@ public class Defensin extends Molecule{
 
 	public static final String NAME = "Defensin";
 	public static final int NUM_STATES = 1;
-	public static final int MOL_IDX = getReceptors();
 	
 	private static Defensin molecule = null;
     
-    protected Defensin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    protected Defensin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static Defensin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Defensin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Defensin(values, diffuse);
+    		molecule = new Defensin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -56,7 +56,7 @@ public class Defensin extends Molecule{
         if(interactable instanceof Neutrophil) {
         	Neutrophil cell = (Neutrophil) interactable;
         	
-	        if (cell.inPhenotype(Phenotypes.ACTIVE) && !cell.isDeganuled()) {// && cell.getClock().toc(Cell.IT_CLOCK, Constants.CYT_BIND_T/Constants.TIME_STEP_SIZE)) {
+	        if (cell.hasPhenotype(Neutrophil.ACTIVE) && !cell.isDeganuled()) {// && cell.getClock().toc(Cell.IT_CLOCK, Constants.CYT_BIND_T/Constants.TIME_STEP_SIZE)) {
 	        	//System.out.println(Constants.N_DEFENSIN_QTTY*10);
 	        	cell.degranuled();
         		this.inc(Constants.N_DEFENSIN_QTTY, 0, x, y, z);

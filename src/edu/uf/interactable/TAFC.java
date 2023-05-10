@@ -1,5 +1,6 @@
 package edu.uf.interactable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
@@ -12,7 +13,6 @@ public class TAFC extends Molecule{
 	public static final String NAME = "TAFC";
 	public static final int NUM_STATES = 2;
     private static final double THRESHOLD = Constants.K_M_TF_TAFC * Constants.VOXEL_VOL / 1.0e6;
-    public static final int MOL_IDX = getReceptors();
     
     private static TAFC molecule = null;
 
@@ -25,13 +25,13 @@ public class TAFC extends Molecule{
     }
     
     
-    private TAFC(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private TAFC(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 	}
     
-    public static TAFC getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static TAFC getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new TAFC(values, diffuse);
+    		molecule = new TAFC(values, diffuse, phenotypes);
     	}
     	return molecule;
     }

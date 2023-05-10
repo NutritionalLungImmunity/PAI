@@ -5,8 +5,8 @@ import edu.uf.Diffusion.Diffuse;
 public abstract class Chemokine extends Molecule{
 	
 	
-	protected Chemokine(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse); 
+	protected Chemokine(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes); 
 	}  
 	
 	public abstract String getName();

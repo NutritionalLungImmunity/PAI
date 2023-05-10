@@ -1,10 +1,10 @@
 package edu.uf.interactable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.intracellularState.EukaryoteSignalingNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -12,7 +12,6 @@ public class Hemopexin extends Molecule{
 	
 	public static final String NAME = "Hpx";
 	public static final int NUM_STATES = 2;
-	public static final int MOL_IDX = getReceptors();
 	
 	//private static double xSystem = 0.0;
 	
@@ -28,14 +27,14 @@ public class Hemopexin extends Molecule{
     	INDEXES.put("HpHb", 1);
     }
     
-    private Hemopexin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    private Hemopexin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+		super(qttys, diffuse, phenotypes);
 		this.hemopexinSystemConcentration = Constants.DEFAULT_HPX_CONCENTRATION;
 	}
     
-    public static Hemopexin getMolecule(double[][][][] values, Diffuse diffuse) {
+    public static Hemopexin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
     	if(molecule == null) {
-    		molecule = new Hemopexin(values, diffuse);
+    		molecule = new Hemopexin(values, diffuse, phenotypes);
     	}
     	return molecule;
     }
@@ -84,9 +83,7 @@ public class Hemopexin extends Molecule{
     		return true; 
     	}
         if (interactable instanceof Macrophage){//# or type(interactable) is Neutrophil: 
-        	EukaryoteSignalingNetwork.Hpx_e = MOL_IDX;
-        	if(Util.activationFunction(this.get(1, x, y, z), Constants.Kd_HPX)) 
-        		((Macrophage)interactable).bind(MOL_IDX);
+        	((Macrophage)interactable).bind(this, Util.activationFunction5(this.get(1, x, y, z), Constants.Kd_HPX));
             return true;
         }
         if(interactable instanceof Heme) {
