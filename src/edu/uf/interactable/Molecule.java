@@ -6,6 +6,7 @@ import java.util.List;
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
+import edu.uf.utils.Util;
 
 public abstract class Molecule extends Interactable {
 
@@ -178,7 +179,9 @@ public abstract class Molecule extends Interactable {
     
     public void turnOver(int x, int y, int z) {
     	for(int i = 0; i < this.values.length; i++) { 
+    		this.pdec(1-Util.turnoverRate(this.get(i, x, y, z), 0), i, x, y, z);
     		this.pdec(1-Constants.MCP1_HALF_LIFE, i, x, y, z);
+    		
     	}
     }
     

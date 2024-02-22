@@ -1,6 +1,6 @@
 package edu.uf.utils;
 
-import edu.uf.interactable.Afumigatus;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 
 public class LinAlg {
 	

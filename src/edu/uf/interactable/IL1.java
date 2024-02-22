@@ -1,6 +1,5 @@
 package edu.uf.interactable;
 
-import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
@@ -49,8 +48,8 @@ public class IL1 extends Molecule{
             macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
             return true;
         }
-    	if (interactable instanceof Pneumocyte) {
-    		Pneumocyte pneumo = (Pneumocyte) interactable;
+    	if (interactable instanceof PneumocyteII) {
+    		PneumocyteII pneumo = (PneumocyteII) interactable;
         	if(pneumo.hasPhenotype(this.getPhenotype()))
                 this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
         	pneumo.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
@@ -69,9 +68,9 @@ public class IL1 extends Molecule{
         	for(int k = 0; k < Liver.ENSEMBLE_SIZE; k++) {
         		double globalQtty = this.getTotalMolecule(0)/(2*Constants.SPACE_VOL);
         		if (Util.activationFunction(globalQtty, Constants.Kd_IL1)) {
-        			liver.getBooleanNetwork()[k][Liver.IL1R] = 1;
+        			liver.getBooleanNetworkEnsemble()[k][Liver.IL1R] = 1;
         		}else {
-        			liver.getBooleanNetwork()[k][Liver.IL1R] = 0;
+        			liver.getBooleanNetworkEnsemble()[k][Liver.IL1R] = 0;
         		}
         	}
         }

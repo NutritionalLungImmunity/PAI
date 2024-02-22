@@ -1,9 +1,9 @@
 package edu.uf.interactable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.intracellularState.FMacrophageBooleanNetwork;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -69,7 +69,7 @@ public class Transferrin extends Molecule{
             this.dec(qttyFe, "TfFe", x, y, z);
             this.inc(qttyFe2 + qttyFe, "Tf", x, y, z);
             macro.incIronPool(2 * qttyFe2 + qttyFe);
-            if (macro.createBooleanNetwork().getBooleanNetwork()[Macrophage.FPN] == 1 && !macro.hasPhenotype(Macrophage.M1)) {
+            if (macro.getBooleanNetwork().getBooleanNetwork()[FMacrophageBooleanNetwork.FPN] == 1 && !macro.hasPhenotype(Macrophage.M1)) {
                 double qtty = macro.getIronPool() * 
                 		this.get("Tf", x, y, z) * Constants.MA_IRON_EXPORT_RATE * Constants.STD_UNIT_T;
                 qtty = qtty <= 2*this.get("Tf", x, y, z) ? qtty : 2*this.get("Tf", x, y, z);

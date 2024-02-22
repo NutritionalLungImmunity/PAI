@@ -1,8 +1,7 @@
 package edu.uf.interactable;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;

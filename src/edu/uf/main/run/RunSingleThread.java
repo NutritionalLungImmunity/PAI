@@ -1,27 +1,14 @@
 package edu.uf.main.run;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import edu.uf.compartments.Quadrant;
 import edu.uf.compartments.Recruiter;
-import edu.uf.compartments.Voxel;
 import edu.uf.control.Exec;
 import edu.uf.control.MultiThreadExec;
-import edu.uf.interactable.Afumigatus;
-import edu.uf.interactable.Cell;
-import edu.uf.interactable.Heme;
-import edu.uf.interactable.Hemopexin;
-import edu.uf.interactable.Macrophage;
-import edu.uf.interactable.Pneumocyte;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.main.print.PrintStat;
-import edu.uf.utils.Constants;
-import edu.uf.utils.Rand;
 
 public class RunSingleThread implements Run{
 
@@ -31,8 +18,6 @@ public class RunSingleThread implements Run{
 			int xbin, 
 			int ybin, 
 			int zbin, 
-			Voxel[][][] grid, 
-			List<Quadrant> quadrants,
 			Recruiter[] recruiters, 
 			boolean printLattice, 
 			File outputFile, 
@@ -48,9 +33,9 @@ public class RunSingleThread implements Run{
             for (int ii : L) {
 
                 if (ii == 0) 
-                    Exec.next(grid, xbin, ybin, zbin);
+                    Exec.next(xbin, ybin, zbin);
                 else if (ii == 1)
-                	Exec.recruit(recruiters, grid, quadrants);
+                	Exec.recruit(recruiters);
                 else if (ii == 2) 
                 	Exec.diffusion();
             }

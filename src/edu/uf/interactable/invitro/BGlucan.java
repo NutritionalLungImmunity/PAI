@@ -3,13 +3,13 @@ package edu.uf.interactable.invitro;
 import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.interactable.Afumigatus;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
-import edu.uf.interactable.covid.DAMP;
-import edu.uf.interactable.covid.Neutrophil;
-import edu.uf.interactable.covid.Pneumocyte;
+//import edu.uf.interactable.covid.DAMP;
+import edu.uf.interactable.Neutrophil;  //WARNING!! It uses to be .covid.Neutrophil
+import edu.uf.interactable.PneumocyteII;  //WARNING!! It uses to be .covid.Pneumocyte
+import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -50,8 +50,8 @@ public class BGlucan extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if(interactable instanceof Pneumocyte) {
-        	Pneumocyte cell = (Pneumocyte) interactable;
+        if(interactable instanceof PneumocyteII) {
+        	PneumocyteII cell = (PneumocyteII) interactable;
         	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_BGLUCAN));
 	        return true;
         }

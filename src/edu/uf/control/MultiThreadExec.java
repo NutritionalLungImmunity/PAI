@@ -1,8 +1,6 @@
 package edu.uf.control;
 
-import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.Voxel;
-import edu.uf.interactable.Molecule;
 
 public class MultiThreadExec extends Exec implements Runnable{
 	
@@ -86,9 +84,7 @@ public class MultiThreadExec extends Exec implements Runnable{
 		for(int x = 0; x < xbin; x++)
     		for(int y = 0; y < ybin; y++)
     			for(int z = 0; z < zbin; z++) {
-                    grid3d[x][y][z].next(xbin, ybin, zbin, grid3d);
-                    if(grid3d[x][y][z].getQuadrant() != null)
-                    	grid3d[x][y][z].getQuadrant().updateChemokines(Voxel.getMolecules(), grid3d[x][y][z].getX(), grid3d[x][y][z].getY(), grid3d[x][y][z].getZ());
+                    grid3d[x][y][z].next(x, y, z, xbin, ybin, zbin);
     			}
 	}
 	

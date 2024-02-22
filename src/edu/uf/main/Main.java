@@ -1,48 +1,18 @@
 package edu.uf.main;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.Diffusion.FADIPeriodic;
-import edu.uf.compartments.CovidNeutrophilReplenisher;
-import edu.uf.compartments.MacrophageMCP1Recruiter;
+import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.MacrophageRecruiter;
-import edu.uf.compartments.MacrophageReplenisher;
-import edu.uf.compartments.NKRecruiter;
 import edu.uf.compartments.NeutrophilRecruiter;
-import edu.uf.compartments.NeutrophilReplenisher;
-import edu.uf.compartments.Quadrant;
-import edu.uf.compartments.RecruitDC;
 import edu.uf.compartments.Recruiter;
-import edu.uf.compartments.Voxel;
-import edu.uf.control.Exec;
-import edu.uf.interactable.Afumigatus;
-import edu.uf.interactable.Macrophage;
-import edu.uf.interactable.Molecule;
-import edu.uf.interactable.covid.Neutrophil;
-import edu.uf.interactable.covid.SarsCoV2;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.main.initialize.Initialize;
-import edu.uf.main.initialize.InitializeBaseInvitroModel;
 import edu.uf.main.initialize.InitializeBaseModel;
-import edu.uf.main.initialize.InitializeCoinjury;
-import edu.uf.main.initialize.InitializeCovidModel;
-import edu.uf.main.initialize.InitializeCytotoxicity;
-//import edu.uf.main.initialize.InitializeHemeInVitroModel;
-import edu.uf.main.initialize.InitializeHemorrhageModel;
-import edu.uf.main.initialize.InitializeInvitromacrophages;
-import edu.uf.main.print.PrintBaseInVitro;
-import edu.uf.main.print.PrintBaseModel;
-import edu.uf.main.print.PrintCitotoxicity;
-import edu.uf.main.print.PrintCoinjury;
-import edu.uf.main.print.PrintCovid;
-//import edu.uf.main.print.PrintHemeInVitroModel;
-import edu.uf.main.print.PrintHemorrhageModel;
-import edu.uf.main.print.PrintLearnTCID50;
-import edu.uf.main.print.PrintStat;
-import edu.uf.main.print.BayesianLearning.PrintNull;
+import edu.uf.main.initialize.InitializeTranexamicModel;
+import edu.uf.main.print.PrintHemeModel;
 import edu.uf.main.run.Run;
 import edu.uf.main.run.RunSingleThread;
 import edu.uf.utils.Constants;
@@ -50,7 +20,281 @@ import edu.uf.utils.Constants;
 public class Main {
 	
 	private static void baseModel(String[] args) throws InterruptedException {
+
+		
+		Constants.PR_NET_KILL_EPI *= 0.25;//Double.parseDouble(args[0]);//(0.1*Double.parseDouble(args[0]));
+		Constants.NET_COUNTER_INHIBITION = 0.0;//Double.parseDouble(args[0]);
+		Constants.HEME_QTTY *= 10;//Double.parseDouble(args[0]);
+		Constants.HEME_UP  *= 1.0;//0.75;//Double.parseDouble(args[1]);
+		
+		int i = Integer.parseInt(args[0]);
+		
+		String filename = "HemeNET025_";// + args[0] + "_";
+
+		filename += i + ".tsv";
+			
 		Initialize initialize = new InitializeBaseModel();
+		Run run = new RunSingleThread();
+		PrintHemeModel stat = new PrintHemeModel();
+		
+		
+		int xbin = 10;
+		int ybin = 10;
+		int zbin = 10;
+        
+        //int pne = (int) (xbin * ybin * zbin  * 0.64);
+        
+        String[] input = new String[]{"0", "1920", "15", "640"};
+        
+        //Constants.Kd_Granule = 1e12;
+        
+        /*Constants.ITER_TO_GROW = 328/2;//Integer.parseInt(args[0]);  //REF 328
+        Constants.PR_N_HYPHAE = 0;//Double.parseDouble(args[1]) * Constants.PR_N_HYPHAE ;
+        Constants.PR_MA_HYPHAE = Constants.PR_MA_HYPHAE/4;//Double.parseDouble(args[1]) * Constants.PR_MA_HYPHAE;
+        Constants.GRANULE_QTTY = 1;//Double.parseDouble(args[2]);
+        Constants.Kd_Granule = 0.1 * 1e12;//10 * 1e12; 3.98 //REF:10
+        //Constants.Kd_Granule = Double.parseDouble(args[0]) * 1e12;
+        Constants.Granule_HALF_LIFE = -1+Math.log(0.5)/20;//1+Math.log(0.5)/20.0;// //harmonic avg of the best //REF:20
+        Constants.MAX_MA = 660;//Integer.parseInt(args[3]);
+        Constants.MAX_N = 660;//Integer.parseInt(args[4]);
+        
+        Constants.PR_DEPLETION = 0.0;*/
+        
+        //Constants.P_TNF_QTTY = 1*Constants.P_TNF_QTTY;
+        //Constants.MIN_MA = 15;
+        
+        //heme diffusion is off!!!
+        
+        //Constants.PR_ASPERGILLUS_CHANGE = 0.1732868;
+        Constants.MAX_N = 522*1;//0.75;//*0.75;
+        //Constants.MAX_MA = 0;//0.75;//*0.75;
+        Constants.RECRUITMENT_RATE_N *= 1.0;//0.25;//0.125;//0.25;
+        Constants.NEUTROPHIL_HALF_LIFE = 0.05776227;
+        Constants.NET_HALF_LIFE = 0.007701635;
+        Constants.DNAse_KCAT = 0.007701635 * 10.0;
+        
+        Constants.DNAse_HALF_LIFE = 0.999;
+        
+        //Constants.ITER_TO_GROW =  30;
+        
+        Constants.PR_ASP_KILL_EPI *= 1.0;
+        
+        double f = 0.1;
+        double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
+        double dt = 1;
+        Diffuse diffusion = new FADIPeriodic(f, pdeFactor, dt);
+        
+        /*Constants.P_TNF_QTTY = Constants.P_TNF_QTTY/10.0;
+        Constants.P_MIP2_QTTY = Constants.P_MIP2_QTTY/10.0;
+        Constants.P_IL6_QTTY = Constants.P_IL6_QTTY/10.0;
+        Constants.P_MIP1B_QTTY = Constants.P_MIP1B_QTTY/10.0;
+        
+        Constants.MA_TNF_QTTY = Constants.MA_TNF_QTTY/10.0;
+        Constants.MA_MIP2_QTTY = Constants.MA_MIP2_QTTY/10.0;
+        Constants.MA_IL6_QTTY = Constants.MA_IL6_QTTY/10.0;
+        Constants.MA_MIP1B_QTTY = Constants.MA_MIP1B_QTTY/10.0;*/
+        
+        initialize.createPeriodicGrid(xbin, ybin, zbin);
+        initialize.initializeMolecules(diffusion, false);
+        initialize.initializePneumocytes(Integer.parseInt(input[3]));
+        //initialize.initializeLiver(grid, xbin, ybin, zbin);
+        initialize.initializeMacrophage(Integer.parseInt(input[2]));
+        initialize.initializeNeutrophils(0);
+        initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
+        initialize.initializeBlood();
+        initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
+        stat.grid = GridFactory.getGrid();
+
+        Recruiter[] recruiters = new Recruiter[2];
+        recruiters[0] = new MacrophageRecruiter();
+        recruiters[1] = new NeutrophilRecruiter();
+        //recruiters[0] = new MacrophageReplenisher();
+        //recruiters[1] = new NeutrophilReplenisher();
+        
+        run.run(
+        		1366,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		xbin, 
+        		ybin, 
+        		zbin,  
+        		recruiters,
+        		false,
+        		new File(filename),//new File("/Users/henriquedeassis/Documents/Projects/Afumigatus/data/ganlin/" + filename),
+        		-1,
+        		stat
+        );
+        
+        stat.close();
+        //System.out.println((toc - tic));
+	}
+	
+	
+	
+	private static void tranexamicAcidModel(String[] args) throws InterruptedException {
+
+		
+		Constants.PR_NET_KILL_EPI *= 0.25;//Double.parseDouble(args[0]);//(0.1*Double.parseDouble(args[0]));
+		Constants.NET_COUNTER_INHIBITION = 0.0;//Double.parseDouble(args[0]);
+		Constants.HEME_QTTY *= 10;//Double.parseDouble(args[0]);
+		Constants.HEME_UP  *= 1.0;//0.75;//Double.parseDouble(args[1]);
+		
+		int i = 0;//Integer.parseInt(args[0]);
+		
+		String filename = "HemeNET025_";// + args[0] + "_";
+
+		filename += i + ".tsv";
+			
+		Initialize initialize = new InitializeTranexamicModel();
+		Run run = new RunSingleThread();
+		PrintHemeModel stat = new PrintHemeModel();
+		
+		
+		int xbin = 10;
+		int ybin = 10;
+		int zbin = 10;
+        
+        //int pne = (int) (xbin * ybin * zbin  * 0.64);
+        
+        String[] input = new String[]{"0", "1920", "15", "640"};
+        
+        Constants.MAX_N = 522*1;//0.75;//*0.75;
+        //Constants.MAX_MA = 0;//0.75;//*0.75;
+        Constants.RECRUITMENT_RATE_N *= 1.0;//0.25;//0.125;//0.25;
+        Constants.NEUTROPHIL_HALF_LIFE = 0.05776227;
+        Constants.NET_HALF_LIFE = 0.007701635;
+        Constants.DNAse_KCAT = 0.007701635 * 10.0;
+        //Constants.PR_COAGULUM_BREAK = 0;
+        
+        Constants.DNAse_HALF_LIFE = 0.999;
+        
+        Constants.PR_ASP_KILL_EPI *= 1.0;
+        
+        double f = 0.1;
+        double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
+        double dt = 1;
+        Diffuse diffusion = new FADIPeriodic(f, pdeFactor, dt);
+        
+        initialize.createPeriodicGrid(xbin, ybin, zbin);
+        initialize.initializeMolecules(diffusion, false);
+        initialize.initializePneumocytes(Integer.parseInt(input[3]));
+        initialize.initializeMacrophage(Integer.parseInt(input[2]));
+        initialize.initializeNeutrophils(0);
+        initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
+        initialize.initializeBlood();
+        ((InitializeTranexamicModel)initialize).initializeTranexamicAcid(new int[] {360});
+        initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
+        stat.grid = GridFactory.getGrid();
+
+        Recruiter[] recruiters = new Recruiter[2];
+        recruiters[0] = new MacrophageRecruiter();
+        recruiters[1] = new NeutrophilRecruiter();
+        
+        run.run(
+        		2160,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		xbin, 
+        		ybin, 
+        		zbin, 
+        		recruiters,
+        		false,
+        		null, //new File(filename),//new File("/Users/henriquedeassis/Documents/Projects/Afumigatus/data/ganlin/" + filename),
+        		-1,
+        		stat
+        );
+        
+        stat.close();
+        //System.out.println((toc - tic));
+	}
+	
+	
+	
+	
+	
+	/*private static void baseHemorrhage(String[] args) throws InterruptedException {
+		Initialize initialize = new InitializeHemorrhageModel();
+		Run run = new RunSingleThread();
+		PrintHemorrhageModel stat = new PrintHemorrhageModel();
+		
+		
+		int xbin = 10;
+		int ybin = 10;
+		int zbin = 10;
+		int xquadrant = 3;
+        int yquadrant = 3;
+        int zquadrant = 3;
+        
+        //int pne = (int) (xbin * ybin * zbin  * 0.64);
+        
+        String[] input = new String[]{"0", "1920", "15", "640"};
+        
+        //Constants.Kd_Granule = 1e12;
+        
+        /*Constants.ITER_TO_GROW = 328/2;//Integer.parseInt(args[0]);  //REF 328
+        Constants.PR_N_HYPHAE = 0;//Double.parseDouble(args[1]) * Constants.PR_N_HYPHAE ;
+        Constants.PR_MA_HYPHAE = Constants.PR_MA_HYPHAE/4;//Double.parseDouble(args[1]) * Constants.PR_MA_HYPHAE;
+        Constants.GRANULE_QTTY = 1;//Double.parseDouble(args[2]);
+        Constants.Kd_Granule = 0.1 * 1e12;//10 * 1e12; 3.98 //REF:10
+        //Constants.Kd_Granule = Double.parseDouble(args[0]) * 1e12;
+        Constants.Granule_HALF_LIFE = -1+Math.log(0.5)/20;//1+Math.log(0.5)/20.0;// //harmonic avg of the best //REF:20
+        Constants.MAX_MA = 660;//Integer.parseInt(args[3]);
+        Constants.MAX_N = 660;//Integer.parseInt(args[4]);
+        
+        Constants.PR_DEPLETION = 0.0;*/
+        
+        //Constants.P_TNF_QTTY = 1*Constants.P_TNF_QTTY;
+        //Constants.MIN_MA = 15;
+        
+        /*double f = 0.1;
+        double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
+        double dt = 1;
+        Diffuse diffusion = new FADIPeriodic(f, pdeFactor, dt);
+        
+        /*Constants.P_TNF_QTTY = Constants.P_TNF_QTTY/10.0;
+        Constants.P_MIP2_QTTY = Constants.P_MIP2_QTTY/10.0;
+        Constants.P_IL6_QTTY = Constants.P_IL6_QTTY/10.0;
+        Constants.P_MIP1B_QTTY = Constants.P_MIP1B_QTTY/10.0;
+        
+        Constants.MA_TNF_QTTY = Constants.MA_TNF_QTTY/10.0;
+        Constants.MA_MIP2_QTTY = Constants.MA_MIP2_QTTY/10.0;
+        Constants.MA_IL6_QTTY = Constants.MA_IL6_QTTY/10.0;
+        Constants.MA_MIP1B_QTTY = Constants.MA_MIP1B_QTTY/10.0;*/
+        
+        /*Voxel[][][] grid = initialize.createPeriodicGrid(xbin, ybin, zbin);
+        List<Quadrant> quadrants = initialize.createQuadrant(xquadrant, yquadrant, zquadrant);
+        initialize.initializePneumocytes(Integer.parseInt(input[3]));
+        initialize.initializeErytrocytes();
+        initialize.initializeMolecules(diffusion, false);
+        //initialize.initializeLiver(grid, xbin, ybin, zbin);
+        initialize.initializeMacrophage(Integer.parseInt(input[2]));
+        initialize.initializeNeutrophils(0);
+        initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
+        initialize.setQuadrant();
+        stat.grid = grid;
+
+        Recruiter[] recruiters = new Recruiter[2];
+        recruiters[0] = new MacrophageRecruiter();
+        recruiters[1] = new NeutrophilRecruiter();
+        //recruiters[0] = new MacrophageReplenisher();
+        //recruiters[1] = new NeutrophilReplenisher();
+        
+        run.run(
+        		2160,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		xbin, 
+        		ybin, 
+        		zbin,  
+        		quadrants, 
+        		recruiters,
+        		false,
+        		new File("/Users/henriquedeassis/Documents/Projects/COVID19/data/newBaseModel.tsv"),
+        		-1,
+        		stat
+        );
+        
+        stat.close();
+        //System.out.println((toc - tic));
+	}
+	
+	
+	/*private static void baseHemorrhage2(String[] args) throws InterruptedException {
+		Initialize initialize = new InitializeHemorrhageModel();
 		Run run = new RunSingleThread();
 		PrintBaseModel stat = new PrintBaseModel();
 		
@@ -83,7 +327,7 @@ public class Main {
         //Constants.P_TNF_QTTY = 1*Constants.P_TNF_QTTY;
         //Constants.MIN_MA = 15;
         
-        double f = 0.1;
+       /* double f = 0.1;
         double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
         double dt = 1;
         Diffuse diffusion = new FADIPeriodic(f, pdeFactor, dt);
@@ -98,12 +342,13 @@ public class Main {
         Constants.MA_IL6_QTTY = Constants.MA_IL6_QTTY/10.0;
         Constants.MA_MIP1B_QTTY = Constants.MA_MIP1B_QTTY/10.0;*/
         
-        Voxel[][][] grid = initialize.createPeriodicGrid(xbin, ybin, zbin);
+       /* Voxel[][][] grid = initialize.createPeriodicGrid(xbin, ybin, zbin);
         List<Quadrant> quadrants = initialize.createQuadrant(grid, xbin, ybin, zbin, xquadrant, yquadrant, zquadrant);
         initialize.initializeMolecules(grid, xbin, ybin, zbin, diffusion, false);
         initialize.initializePneumocytes(grid, xbin, ybin, zbin, Integer.parseInt(input[3]));
         //initialize.initializeLiver(grid, xbin, ybin, zbin);
         initialize.initializeMacrophage(grid, xbin, ybin, zbin, Integer.parseInt(input[2]));
+        initialize.initializeNeutrophils(grid, xbin, ybin, zbin, 0);
         initialize.infect(Integer.parseInt(input[1]), grid, xbin, ybin, zbin, Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
         initialize.setQuadrant(grid, xbin, ybin, zbin);
         stat.grid = grid;
@@ -131,6 +376,8 @@ public class Main {
         stat.close();
         //System.out.println((toc - tic));
 	}
+	
+	
 	
 	private static void test(String[] args) throws InterruptedException {
 		Initialize initialize = new InitializeBaseModel();
@@ -279,7 +526,7 @@ public class Main {
         	m.die();*/
         
         
-        stat.close();
+    /*    stat.close();
         //System.out.println((toc - tic));
 	}
 	
@@ -313,7 +560,7 @@ public class Main {
         //Constants.HEME_UP = 0;//Constants.HEME_UP*0.8;
         //Constants.Kd_HPX=1; //7.120429e-13
         
-        Voxel[][][] grid = initialize.createPeriodicGrid(xbin, ybin, zbin);
+      /*  Voxel[][][] grid = initialize.createPeriodicGrid(xbin, ybin, zbin);
         List<Quadrant> quadrants = initialize.createQuadrant(grid, xbin, ybin, zbin, xquadrant, yquadrant, zquadrant);
         initialize.initializeMolecules(grid, xbin, ybin, zbin, diffusion, false);
         initialize.initializePneumocytes(grid, xbin, ybin, zbin, Integer.parseInt(input[3]));
@@ -505,7 +752,7 @@ public class Main {
 	
 	
 	
-	private static void runExperiment101221()  throws Exception{
+	/*private static void runExperiment101221()  throws Exception{
 		Initialize initialize = new InitializeBaseModel();
 		Run run = new RunSingleThread();
 		PrintStat stat = new PrintBaseModel();
@@ -515,7 +762,7 @@ public class Main {
 		Run run = new RunSingleThread();
 		PrintStat stat = new PrintHemorrhageModel();*/
 		
-		Constants.Kd_GROW = Constants.Kd_LIP / 10.0;
+		/*Constants.Kd_GROW = Constants.Kd_LIP / 10.0;
 		
 		int xbin = 10;
 		int ybin = 10;
@@ -630,7 +877,7 @@ public class Main {
         //System.out.println((toc - tic));
 	}*/
 	
-	private static void learnReplicationRate(String[] args) throws Exception{
+	/*private static void learnReplicationRate(String[] args) throws Exception{
 		InitializeCovidModel initialize = new InitializeCovidModel();
 		Run run = new RunSingleThread();
 		PrintLearnTCID50 stat = new PrintLearnTCID50();
@@ -734,7 +981,7 @@ public class Main {
         Constants.MA_IFN_QTTY = Double.parseDouble(args[1])*Constants.MA_IFN_QTTY;
         Constants.MA_TGF_QTTY = Double.parseDouble(args[2])*Constants.MA_TGF_QTTY;*/
         //int maNum = (int) (Double.parseDouble(args[0])*110);
-        int nNum = (int) (Double.parseDouble(args[0])*400);
+        /*int nNum = (int) (Double.parseDouble(args[0])*400);
         int nkNum = (int) (Double.parseDouble(args[1])*250);
         Constants.Kd_SarsCoV2 = Double.parseDouble(args[2]) * Constants.Kd_SarsCoV2;
         Constants.LAC_QTTY = 1*Constants.LAC_QTTY;
@@ -842,7 +1089,7 @@ public class Main {
         
      
         
-        Constants.SarsCoV2_REP_RATE = 0.005311*2.0 * Double.parseDouble(args[0]); 
+        /*Constants.SarsCoV2_REP_RATE = 0.005311*2.0 * Double.parseDouble(args[0]); 
         Constants.MAX_VIRAL_LOAD = 2.382849e-21 * Double.parseDouble(args[1]);
         Constants.SarsCoV2_UPTAKE_QTTY = 1.66113e-24;
         Constants.MCP1_HALF_LIFE = 1.0 + Math.log(0.5)/(30.0*Double.parseDouble(args[2]));
@@ -950,7 +1197,7 @@ public class Main {
         //int maNum = (int) (Double.parseDouble(args[0])*110);
         
         
-        String[] input = new String[]{"0", "", "80" + "", "", "100"};
+        /*String[] input = new String[]{"0", "", "80" + "", "", "100"};
         Constants.MIN_MA = 80;
         Constants.MIN_NK = -1;
         
@@ -1041,7 +1288,7 @@ public class Main {
         Constants.MA_IFN_QTTY = Double.parseDouble(args[1])*Constants.MA_IFN_QTTY;
         Constants.MA_TGF_QTTY = Double.parseDouble(args[2])*Constants.MA_TGF_QTTY;*/
         //int maNum = (int) (Double.parseDouble(args[0])*110);
-        int nNum = (int) (Double.parseDouble(args[0])*60);
+        /*int nNum = (int) (Double.parseDouble(args[0])*60);
         int nkNum = (int) (Double.parseDouble(args[1])*12.5);
         Constants.Kd_SarsCoV2 = Double.parseDouble(args[2]) * Constants.Kd_SarsCoV2;
         
@@ -1264,7 +1511,7 @@ public class Main {
         //System.out.println((toc - tic));
 	}
 	
-	
+	*/
 	
 	
 	//THIS EXPERIMEENT IS NOT REPRODUCING OLD RESULT BECAUSE THERE IS NO TURN_OVER_RATE. WHICH TURN OUT TO BE MORE IMPORTANT THAN HALF LIFE
@@ -1283,7 +1530,8 @@ public class Main {
 		//args = new String[] {"1.62489565399917", "3.79496365105168", "0.361375652696199", "0.958874000197507", "1.10247187374883", "0.70986409581613", "3.38225794654421", "1.27171492281", "1.80649492166268", "2.25767252319005", "0.440499686750385", "2.50927171531779", "3.26703388702485", "0.718551707413203", "1.72616948763091", "3.0497288483525", "1.53019227580619", "0.392280692899905", "1.80643602247491"};
 		long tic = System.currentTimeMillis();
 		//Main.baseCoinjury(new String[]{"29",   "1",   "1", "0", "488"});
-		Main.baseModel(args);
+		//Main.baseModel(args);
+		Main.tranexamicAcidModel(args);
 		long toc = System.currentTimeMillis();
 		System.out.println((toc - tic));
 	}

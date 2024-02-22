@@ -4,19 +4,16 @@ import java.util.Map;
 
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Macrophage;
+import edu.uf.intracellularState.MacrophageFactory;
 import edu.uf.utils.Constants;
 
 public class MacrophageReplenisher extends Recruiter {
 	
 	public Cell createCell() { 
-        return new Macrophage(Constants.MA_INTERNAL_IRON);//new Macrophage(Constants.MA_INTERNAL_IRON);
+        return new Macrophage(Constants.MA_INTERNAL_IRON, MacrophageFactory.createBooleanNetwork());//new Macrophage(Constants.MA_INTERNAL_IRON);
     }
     
     public int getQtty() {
-    	return getQtty(0);
-    }
-    
-    public int getQtty(Quadrant q) { 
     	return getQtty(0);
     }
 

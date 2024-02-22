@@ -1,7 +1,5 @@
 package edu.uf.control;
 
-import edu.uf.Diffusion.Diffuse;
-import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Molecule;
 
 public class MultiThreadExecDiffusion extends Exec implements Runnable{

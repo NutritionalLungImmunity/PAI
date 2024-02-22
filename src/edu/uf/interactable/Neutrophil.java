@@ -1,18 +1,16 @@
 package edu.uf.interactable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
+import edu.uf.compartments.GridFactory;
+import edu.uf.compartments.Voxel;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.BooleanNetwork;
+import edu.uf.intracellularState.NeutrophilStateModel;
 import edu.uf.intracellularState.Phenotype;
-import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 
-public class Neutrophil extends Phagocyte{
+public class Neutrophil extends Leukocyte{
     public static final String NAME = "Neutrophils";
 
 
@@ -21,23 +19,32 @@ public class Neutrophil extends Phagocyte{
     private static double totalIron = 0;
     private int maxMoveStep;
     private boolean degranulated = false;
+    private double netHalfLife;
     
     public static final int ACTIVE = Phenotype.createPhenotype();
+    public static final int NETOTIC = Phenotype.createPhenotype();
     public static final int MIX_ACTIVE = Phenotype.createPhenotype();
     
     
     public boolean depleted = false;
+    private boolean control;
     
     private static int interactionId = Id.getMoleculeId();
 
-    public Neutrophil(double ironPool) {
-    	super(ironPool);
+    public Neutrophil(double ironPool, BooleanNetwork network) {
+    	super(ironPool, network);
         Neutrophil.totalCells = Neutrophil.totalCells + 1;
         this.setState(Neutrophil.FREE);
         Neutrophil.totalIron = Neutrophil.totalIron + ironPool;
         this.maxMoveStep = -1;
         this.setEngaged(false);
+        this.control = true;
+        this.netHalfLife = Constants.NET_HALF_LIFE;
     } 
+    
+    public void setNETHalfLife(double halfLife) {
+    	this.netHalfLife = halfLife;
+    }
     
     public int getInteractionId() {
     	return interactionId;
@@ -80,25 +87,48 @@ public class Neutrophil extends Phagocyte{
 	}
 
     public int getMaxMoveSteps(){// ##REVIEW
+    	double r = 1.0;
+    	//if(this.getExternalState() == 1)r = Constants.NET_COUNTER_INHIBITION;
         if(this.maxMoveStep == -1)
-            this.maxMoveStep = Rand.getRand().randpois(Constants.MA_MOVE_RATE_REST);
+            this.maxMoveStep = Rand.getRand().randpois(Constants.MA_MOVE_RATE_REST*r);
         return this.maxMoveStep;
     }
+    
+    /*public boolean isDead() {
+		return false;
+	}*/
 
-    public void updateStatus() {
-    	super.updateStatus();
+    public void updateStatus(int x, int y, int z) {
+    	super.updateStatus(x, y, z);
     	if(!this.getClock().toc())return;
     	this.processBooleanNetwork();
     	
         if(this.getStatus() == Neutrophil.DEAD)
             return;
         
-        if(this.getStatus() == Neutrophil.NECROTIC || this.getStatus() == Neutrophil.APOPTOTIC) {
+        
+        if(this.hasPhenotype(NeutrophilStateModel.APOPTOTIC)) {
             this.die();
             for(InfectiousAgent entry : this.getPhagosome())
                 entry.setState(Afumigatus.RELEASING);
-        }else if(Rand.getRand().randunif() < Constants.NEUTROPHIL_HALF_LIFE)
-            this.setStatus(Neutrophil.APOPTOTIC);
+        }
+        if(this.hasPhenotype(NeutrophilStateModel.NETOTIC)) {
+        	GridFactory.getGrid()[x][y][z].setExternalState(1);
+        	/*if(this.clock.getCount() >= 48) {
+        		this.netHalfLife = Constants.NET_HALF_LIFE*Constants.NET_COUNTER_INHIBITION;
+        		System.out.println(this.netHalfLife + " " + Constants.NET_HALF_LIFE);
+        	}*/
+        	if(Rand.getRand().randunif() < this.netHalfLife) {
+        		this.die();
+        		GridFactory.getGrid()[x][y][z].setExternalState(0);
+        		for(InfectiousAgent entry : this.getPhagosome())
+        			entry.setState(Afumigatus.RELEASING);
+        	}
+        }
+        
+        
+        //else if(Rand.getRand().randunif() < Constants.NEUTROPHIL_HALF_LIFE)
+           // this.setStatus(Neutrophil.APOPTOTIC);
         //this.setMoveStep(0);
         this.maxMoveStep = -1;
         this.setEngaged(false);
@@ -115,30 +145,49 @@ public class Neutrophil extends Phagocyte{
             Afumigatus interac = (Afumigatus) interactable;
         	if(this.isEngaged())
                 return true;
-            if(!this.isDead()) {
+        	//System.out.println(this.hasPhenotype(NeutrophilStateModel.APOPTOTIC) + " " + this.hasPhenotype(NeutrophilStateModel.NETOTIC));
+            if(!this.isDead() && !this.hasPhenotype(NeutrophilStateModel.NETOTIC)) {
                 if(interac.getStatus() == Afumigatus.HYPHAE || interac.getStatus() == Afumigatus.GERM_TUBE) {
                     double pr = Constants.PR_N_HYPHAE;
+                    //if(this.getExternalState() == 1)  pr *= Constants.NET_COUNTER_INHIBITION;
                     //System.out.println(Rand.getRand().randunif());
                     if (Rand.getRand().randunif() < pr) {
-                        Phagocyte.intAspergillus(this, interac);
+                        Afumigatus.intAspergillus(this, interac);
                         interac.setStatus(Afumigatus.DYING);
                         this.bind(interac, 4);
-                    }else
+                        
+                    }else {
                         this.setEngaged(true);
-                }else if (interac.getStatus() == Afumigatus.SWELLING_CONIDIA) {
-                    if (Rand.getRand().randunif() < Constants.PR_N_PHAG) {
-                        Phagocyte.intAspergillus(this, interac);
-                        this.bind(interac, 4);
+                        //interac.setEngaged(true);
+                        
                     }
+                    if (Rand.getRand().randunif() < Constants.PR_N_PHAG) {
+                    	
+                    	//Afumigatus.intAspergillus(this, interac);
+                        //this.bind(interac, 4);
+                        
+                    }
+                }else if (interac.getStatus() == Afumigatus.SWELLING_CONIDIA) {
+                	if (Rand.getRand().randunif() < Constants.PR_N_PHAG) {
+                		Afumigatus.intAspergillus(this, interac);
+                		this.bind(interac, 4);
+                	
+                		//interac.setEngaged(true);
+                	}else {
+                		//interac.setEngaged(true);
+                	}
                 }
-            }
+            }//if(this.hasPhenotype(NeutrophilStateModel.NETOTIC)) {
+            //	interac.setEpithelialInhibition(interac.getEpithelialInhibition());
+            	//interac.setNetGermBust(Constants.NET_COUNTER_INHIBITION);
+            //}
             
             return true;
         }
         if(interactable instanceof Macrophage) {
             Macrophage interact = (Macrophage) interactable;
             //EukaryoteSignalingNetwork.SAMP_e = RECEPTOR_IDX;
-        	if (this.getStatus() == Neutrophil.APOPTOTIC){// and len(interactable.phagosome.agents) == 0:
+        	if (this.hasPhenotype(NeutrophilStateModel.APOPTOTIC)){//(this.getStatus() == Neutrophil.APOPTOTIC){// and len(interactable.phagosome.agents) == 0:
         		interact.incIronPool(this.getIronPool());
                 this.incIronPool(this.getIronPool());
                 this.die();
@@ -146,9 +195,23 @@ public class Neutrophil extends Phagocyte{
         	}
             return true;
         }
+        if(interactable instanceof PneumocyteI) {
+        	if(this.hasPhenotype(NeutrophilStateModel.NETOTIC)) {
+        		PneumocyteI k = (PneumocyteI) interactable;
+        		//k.setInjury(true);
+        		//if(k.isInjury() || (control && Rand.getRand().randunif() < Constants.PR_NET_KILL_EPI)) {
+        		if((control && Rand.getRand().randunif() < Constants.PR_NET_KILL_EPI)) {
+        		//if(false) {
+        			k.die();
+        		}//else {
+        			control = false;
+        		//}
+        	}
+			return true;
+		}
         if (interactable instanceof Iron) {
         	Iron interac = (Iron) interactable;
-            if(this.getStatus() == Neutrophil.NECROTIC){//# or this.status == Neutrophil.APOPTOTIC or this.status == Neutrophil.DEAD:
+            if(this.hasPhenotype(NeutrophilStateModel.NETOTIC)){//# or this.status == Neutrophil.APOPTOTIC or this.status == Neutrophil.DEAD:
             	interac.inc(this.getIronPool(), 0, x, y, z);
                 this.incIronPool(-this.getIronPool());
             }
@@ -175,86 +238,8 @@ public class Neutrophil extends Phagocyte{
 	}
 
 	@Override
-	public int getMaxConidia() {
+	public int getMaxCell() {
 		return Constants.N_MAX_CONIDIA;
 	}
 
-	@Override
-	protected BooleanNetwork createNewBooleanNetwork() {
-		return new BooleanNetwork() {
-
-			public static final int size = 7;
-			//public static final int NUM_RECEPTORS = 4;
-			
-			public static final int IL1R = 0;
-			public static final int IL1B = 1;
-			public static final int NFkB = 2;
-			public static final int ERK = 3;
-			public static final int TNFR = 4;
-			public static final int Dectin = 5;
-			public static final int CXCL2R = 6;
-			
-			{
-				this.inputs = new int[NUM_RECEPTORS];
-				this.booleanNetwork = new int[size];
-			}
-			
-			
-			
-			@Override
-			public void processBooleanNetwork() {
-				int k = 0;
-				List<Integer> array = new ArrayList<>(size);
-				for(int i = 0; i < size; i++)
-					array.add(i);
-				while(true) {
-					if(k++ > Constants.MAX_BN_ITERATIONS)break;
-					Collections.shuffle(array, new Random());
-					for(int i : array) {
-						switch(i) {
-							case 0:
-								this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | input(IL1.getMolecule());
-								break;
-							case 1:
-								this.booleanNetwork[NFkB] = (this.booleanNetwork[IL1R] | this.booleanNetwork[TNFR] | this.booleanNetwork[CXCL2R]) ;
-								break;
-							case 2:
-								this.booleanNetwork[ERK] = this.booleanNetwork[Dectin];
-								break;
-							case 3:
-								this.booleanNetwork[IL1B] = this.booleanNetwork[NFkB];
-								break;
-							case 4:
-								this.booleanNetwork[TNFR] = input(TNFa.getMolecule());
-								break;
-							case 5:
-								this.booleanNetwork[Dectin] = 0;//e(B_GLUC);
-								break;
-							case 6:
-								this.booleanNetwork[CXCL2R] = input(MIP2.getMolecule());
-								break;
-							default:
-								System.err.println("No such interaction " + i + "!");
-								break;
-						}
-					}
-				}
-				
-				for(int i = 0; i < NUM_RECEPTORS; i++)
-					this.inputs[i] = 0;
-				
-				this.clearPhenotype();
-				
-				if(this.booleanNetwork[NFkB] > 0) {
-					this.getPhenotype().put(Neutrophil.this.ACTIVE, this.booleanNetwork[NFkB]);
-				} 
-				if(this.booleanNetwork[ERK] == 1) {
-					this.getPhenotype().put(Neutrophil.this.MIX_ACTIVE, this.booleanNetwork[ERK]);
-				}
-					
-				
-			}
-			
-		};
-	}
 }

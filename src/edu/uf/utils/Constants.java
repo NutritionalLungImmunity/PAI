@@ -20,7 +20,7 @@ public class Constants {
 	
 	public static int ITER_TO_CHANGE_STATE = 60;
 	public static int ITER_TO_REST = 30*6;
-	public static int ITER_TO_GROW = 29 ; //40 um every 58 min
+	public static int ITER_TO_GROW = 15;//30 ; //40 um every 58 min  --  https://doi.org/10.1128/msphere.00076-23
 	
 	public static double VOXEL_VOL = 6.4e-11; // L
 	public static double VOXEL_LEN = 40; //um
@@ -30,12 +30,12 @@ public class Constants {
 	public static double SPACE_VOL = 6.4e-8; // L
 	public static double SERUM_VOL = 3e-3; // L (KIND OF DUMMY) 
 	
-	public static double PR_BRANCH = 0.25; // 25%
+	public static double PR_BRANCH = 0.333; //  https://doi.org/10.1128/msphere.00076-23
 	
 	public static double TURNOVER_RATE = 0.9878452295470697;
-	public static double LAC_QTTY = 1.847e-17 * 15;// single shot! (https://doi.org/10.1038/s41598-019-49419-z) 4.3680e-17 * STD_UNIT_T;
+	public static double LAC_QTTY = 5.357143e-18;//1.847e-17 * 15;// single shot! (https://doi.org/10.1038/s41598-019-49419-z) 4.3680e-17 * STD_UNIT_T;
 	
-	public static double TAFC_UP = (1e-12/VOXEL_VOL) * STD_UNIT_T * 15;
+	public static double TAFC_UP = 0.01245766;// -- from the same paper of Kd_LIP;  (1e-12/VOXEL_VOL) * STD_UNIT_T * 15;
 	
 	public static double TAFC_QTTY = 1.0000e-15 * STD_UNIT_T * 15;
 	public static double HEMOLYSIN_QTTY = 1.386667e-10 * STD_UNIT_T * 15;
@@ -120,8 +120,8 @@ public class Constants {
 	public static double REC_BIAS = 0.9995; // DUMMY VALUE CREATED TO AVOID INFINTY LOOP!
 	
 	
-	public static double MAX_N = 522;
-	public static double MAX_MA = 209;
+	public static double MAX_N = 522*3;
+	public static double MAX_MA = 209*3;
 	public static double MIN_MA = 15;
 
 	public static double PR_MA_PHAG = 0.9054552746554831;
@@ -181,7 +181,8 @@ public class Constants {
 	public static double DEFAULT_TFFE_CONCENTRATION = DEFAULT_TFFE_REL_CONCENTRATION * DEFAULT_TF_CONCENTRATION;
 	public static double DEFAULT_TFFE2_CONCENTRATION = DEFAULT_TFFE2_REL_CONCENTRATION * DEFAULT_TF_CONCENTRATION;
 
-	public static double RECRUITMENT_RATE = 4.882812e+14; //arbitrary unity
+	public static double RECRUITMENT_RATE_N = 4.882812e+14*2;
+	public static double RECRUITMENT_RATE_MA = 4.882812e+14*2; //arbitrary unity
 	
 	
 	
@@ -235,7 +236,7 @@ public class Constants {
     
     public static double K_HB = 2*0.085976/30.0; //step^-1 Borna's data Lung Heme/hemoglobin Figure
     
-    public static double HEME_UP = 0.02*2*8.153e-15/VOXEL_VOL; //10.1099/mic.0.26108-0 (Haemin C. albicans - Calculate based on 40 min delta) per min therefore timse 2
+    public static double HEME_UP = 0.0015625; //https://doi.org/10.1128/ec.00414-07 ---10.1099/mic.0.26108-0 (Haemin C. albicans - Calculate based on 40 min delta) per min therefore timse 2
     
     public static double DEFAULT_HPX_CONCENTRATION = 6.24e-16; //BORNA UNPUBLISHED RESULTS HPX/BAL (ALREADY MUL BY VOXEL VOL)
     public static double DEFAULT_HP_CONCENTRATION = 0.015*6.24e-16;  //(ALREADY MUL BY VOXEL VOL)
@@ -303,6 +304,57 @@ public class Constants {
     public static double H2O2_QTTY = 2.38e-15 * 15; //DOI:10.1016/0014-5793(94)80241-6
     public static double H2O2_HALF_LIFE = 1.0+Math.log(0.5)/7.5; // DOI:10.1159/000276558
     public static double VIRAL_LAC_Kd = 2.980226e-07; //https://doi.org/10.1086/343809
+    
+    //public static double ALBUMIN_MAX_GROWTH = 0.5;
+    //public static double ALBUMIN_Kd = 0.01;
+    public static double Kd_NET_PNEU = 3.2425e10;
+    public static double NET_HALF_LIFE = 0.007701635; //10.1073/pnas.0909927107
+    public static double TRANEXAMIC_ACID_Kd = 0.001;
+    public static double TRANEXAMIC_ACID_HALF_LIFE = 0.9964454; //2-11 hours //https://www.ncbi.nlm.nih.gov/books/NBK532909/#:~:text=The%20half%2Dlife%20of%20TXA,hours%20after%20the%20initial%20dose.
+    //public static double COAGULATION_RATE_RESTING_LEVEL = 0.5;
+    public static double PR_NEUT_APOPT = 0.7;
+    public static double HPX_INIT_QTTY = 6.24e-16; //BORNA UNPUBLISHED RESULTS HPX/BAL (ALREADY MUL BY VOXEL VOL);
+    //public static double PR_COAGULATION = 1; //13 second to start!!!
+    public static double PR_COAGULUM_BREAK = 0.5;
+    public static double GROWTH_RATE_EPI = 120; //~25% (inverse) -- https://doi.org/10.1038/s41598-018-33902-0
+    public static double GROWTH_RATE_FREE = 30; // https://doi.org/10.1128/msphere.00076-23, https://doi.org/10.3389/fmicb.2019.01919
+    public static double GERM_RATE_EPI = 0.05776227;
+    public static double GERM_RATE_FREE = 0.1732868; // https://doi.org/10.1128/jcm.39.2.478-484.2001
+    
+    
+    public static double NITROGEN_THRESHOLD = 1.2e-9; // g * Q^-1 * septae^-1 -- 10.3390/su10093296; 10.17226/1349 (chapter 6)
+    public static double PROTEASE_QTTY = -1;
+    public static double PROTEASE_Kcat_KM = -1;
+    public static double Kd_PROTEASE = -1;
+    
+    public static double GLUTAMINE_PER_MUCIN;
+    public static double GLUTAMINE_PER_ALBUMIN = 20; //HUMAN
+    public static double GLUTAMINE_UP_RATE = -1;
+    public static double GLUTAMIN_INIT_QTTY = 4.16e-14;//10.3390/nu10111564
+    
+    public static double Kd_NET_KLEB = -1;
+    public static double NET_ENTRAPMENT_THRESHOLD = 0.25; //2 half-lives? (no ref.)
+    
+    public static double ALBUMIN_INIT_QTTY = 3.92e-14;
+    public static double MUCIN_INIT_QTTY = 1;
+    
+    public static double INTERNAL_IRON_KM = 4.742739e-05; //0.6 * Kd_LIP -- fit to kd LIP
+    public static double INTERNAL_HEME_KM = 9.790121e-07; //Angelica's paper
+    public static double HEME_INIT_QTTY = 1.034651e-18; //INTERNAL_HEME_KM * HYPHAE_VOL
+    public static double HEME_QTTY = 1.034651e-18*200; //Angelica's paper (Fig 5C)
+    
+    public static double PR_NET_KILL_EPI  = 0.0512749; //10.1371/journal.pone.0032366 (Fig 2B)
+    
+    public static double PR_ASP_KILL_EPI = 0.02508277; //10.1371/journal.pone.0036952 -- 1:1 cell/C. albicans -> 30 cytotox in 24h
+    
+    public static double NET_COUNTER_INHIBITION = 0.5;
+    
+    public static double DNAse_KCAT = 0.007701635; //same as NET_HALF_LIFE
+    public static double DNAse_HALF_LIFE = 0.9451153*0.9768950939813351;;
+    
+    
+    public static double TRANEXAMIC_ACID_THRESHOLD = 6.369427e-07; //~hundred times less than the dose given in this paper https://doi.org/10.1016/j.jss.2017.03.031 (10 mg/kg)
+    public static double TRANEXAMIC_ACID_LIFE_SPAN = 12*30; //2-11 hours //https://www.ncbi.nlm.nih.gov/books/NBK532909/#:~:text=The%20half%2Dlife%20of%20TXA,hours%20after%20the%20initial%20dose.
     
     
     

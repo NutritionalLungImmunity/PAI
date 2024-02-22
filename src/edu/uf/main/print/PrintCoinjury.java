@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Map.Entry;
 
-import edu.uf.interactable.Afumigatus;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Granule;
 import edu.uf.interactable.IL10;
@@ -15,6 +14,7 @@ import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 
 public class PrintCoinjury extends PrintStat{
 	

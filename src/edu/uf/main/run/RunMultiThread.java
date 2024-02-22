@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 
-import edu.uf.compartments.Quadrant;
+import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Recruiter;
 import edu.uf.compartments.Voxel;
 import edu.uf.control.MultiThreadExec;
@@ -19,9 +19,7 @@ public class RunMultiThread implements Run{
 			int iterations, 
 			int xbin, 
 			int ybin, 
-			int zbin, 
-			Voxel[][][] grid, 
-			List<Quadrant> quadrants,
+			int zbin,
 			Recruiter[] recruiters, 
 			boolean printLattice, 
 			File outputFile, 
@@ -29,7 +27,7 @@ public class RunMultiThread implements Run{
 			PrintStat printStat
 	) throws InterruptedException {
     	
-    	
+		Voxel[][][] grid = GridFactory.getGrid();
     	MultiThreadExec.setGrid(grid);
     	Thread[] threads = new Thread[nthreads];
     	
@@ -59,7 +57,7 @@ public class RunMultiThread implements Run{
         				threads[t].join();
         		}
         		if(ii==3) 
-        			MultiThreadExec.recruit(recruiters, grid, quadrants);
+        			MultiThreadExec.recruit(recruiters);
         	}
 
         	printStat.printStatistics(k, outputFile);

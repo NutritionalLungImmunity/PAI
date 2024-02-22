@@ -7,7 +7,7 @@ import edu.uf.interactable.Chemokine;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
-import edu.uf.interactable.Pneumocyte;
+import edu.uf.interactable.PneumocyteII;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -62,8 +62,8 @@ public class IL8 extends Chemokine{
         	}
             return true;
         }
-        if (interactable instanceof Pneumocyte) {
-            if (((Pneumocyte)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
+        if (interactable instanceof PneumocyteII) {
+            if (((PneumocyteII)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
             	this.inc(Constants.N_IL8_QTTY, 0, x, y, z);
             return true; 
         }

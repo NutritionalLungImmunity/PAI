@@ -7,8 +7,8 @@ import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
 import edu.uf.interactable.TLRBinder;
-import edu.uf.interactable.covid.Neutrophil;
-import edu.uf.interactable.covid.Pneumocyte;
+import edu.uf.interactable.Neutrophil; //WARNING!! It uses to be .covid.Neutrophil
+import edu.uf.interactable.PneumocyteII; //WARNING!! It uses to be .covid.Pneumocyte
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -54,8 +54,8 @@ public class LPS extends Molecule {
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	//EukaryoteSignalingNetwork.LPS_e = LPS.MOL_IDX;
-        if(interactable instanceof Pneumocyte) {
-        	Pneumocyte cell = (Pneumocyte) interactable;
+        if(interactable instanceof PneumocyteII) {
+        	PneumocyteII cell = (PneumocyteII) interactable;
         	cell.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_LPS));
 	        return true;
         }

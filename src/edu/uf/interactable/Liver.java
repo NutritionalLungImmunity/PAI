@@ -1,11 +1,8 @@
 package edu.uf.interactable;
 
 import edu.uf.compartments.Voxel;
-import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
-import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
 
 public class Liver extends Cell{
@@ -60,13 +57,9 @@ public class Liver extends Cell{
     private static int interactionId = Id.getMoleculeId();
     
     private  Liver() {
-    	super();
+    	super(null);
         this.id = Id.getId();
         this.logHepcidin = LOG_NULL_VALUE;
-    }
-    
-    public int getInteractionId() {
-    	return interactionId;
     }
     
     public boolean isTime() {
@@ -80,7 +73,7 @@ public class Liver extends Cell{
     	return liver;
     }
     
-    public int[][] getBooleanNetwork(){
+    public int[][] getBooleanNetworkEnsemble(){
     	return this.booleanNetwork;
     }
     
@@ -285,7 +278,7 @@ public class Liver extends Cell{
 
 	int count = 0;
 	@Override
-	public void processBooleanNetwork() {
+	public void processBooleanNetwork(int... args) {
 		if(hasProcessBN)return;
 		hasProcessBN = true;
 		int[] temp = new int[Liver.SPECIES_NUM];
@@ -353,8 +346,8 @@ public class Liver extends Cell{
 	}
 
 	@Override
-	public void updateStatus() {
-		super.updateStatus();
+	public void updateStatus(int x, int y, int z) {
+		super.updateStatus(x, y, z);
 		/*if(!hasUpdated) {
 			serumHep = serumHepAux;// - serumHep * Constants.HEP_HALF_LIFE;
 			System.out.println(this.booleanEnsemble[HEP] + " " + Constants.L_HEP_QTTY + " " + serumHep);
@@ -385,7 +378,7 @@ public class Liver extends Cell{
 	public void incIronPool(double ironPool) {
 		// TODO Auto-generated method stub
 		
-	}
+	} 
 	
 	public void reset() {
 		hasInteractedWithIL6 = false;
@@ -403,8 +396,8 @@ public class Liver extends Cell{
 	}
 
 	@Override
-	protected BooleanNetwork createNewBooleanNetwork() {
+	public int getInteractionId() {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 }

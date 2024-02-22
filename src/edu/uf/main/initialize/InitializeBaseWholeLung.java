@@ -3,16 +3,21 @@ package edu.uf.main.initialize;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
-import edu.uf.interactable.Afumigatus;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.utils.LinAlg;
 import edu.uf.utils.Rand;
 
 public class InitializeBaseWholeLung extends InitializeBaseModel{
 
-	public List<Afumigatus> infect(int numAspergillus, Voxel[][][] grid, int xbin, int ybin, int zbin, int status, double initIron, double sigma, boolean verbose) {
+	public List<Afumigatus> infect(int numAspergillus, int status, double initIron, double sigma, boolean verbose) {
     	if(verbose) System.out.println("infecting ...");
     	
+    	int xbin = GridFactory.getXbin();
+    	int ybin = GridFactory.getYbin();
+    	int zbin = GridFactory.getZbin();
+    	Voxel[][][] grid = GridFactory.getGrid();
     	List<Afumigatus> list = new ArrayList<>();
     	double[][][] w = new double[xbin][ybin][zbin];
     	double sumW = 0;

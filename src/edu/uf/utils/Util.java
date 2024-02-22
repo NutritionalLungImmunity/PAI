@@ -60,13 +60,12 @@ public class Util {
 	
 	public static int activationFunction5(double x, double kd) {
 		double d = activationFunction(x, kd, Constants.VOXEL_VOL, 1.0);
-		if(d <= 0.01)
-			return 0;
-		if(d <= 0.1)
+		if(Rand.getRand().randunif() > d)return 0;
+		if(d <= 0.35)
 			return 1;
-		if(d <= 0.4)
+		if(d <= 0.69)
 			return 2;
-		if(d <= 0.775)
+		if(d <= 0.90)
 			return 3;
 		else
 			return 4;
@@ -87,6 +86,17 @@ public class Util {
 	
 	public static boolean ctActivationFunction(double x, double kd, double dt) {
 		return (1 - Math.exp(-(x*dt/kd))) > Rand.getRand().randunif();
+	}
+	
+	public static double inactivationFunction(double x, double kd, double v, double b, double h) {
+		x = x/v;
+		return h * (1 - b + b * Math.exp(-(x/kd)));
+	}
+
+	public static double tranexamicActivation(double x, double kd, double v, double p0) {
+		x = x/v;
+		double b = (1.0 - p0)/p0;
+		return p0 * (1 + b * ( 1 - Math.exp(-(x/kd))));
 	}
 	
 	public static double turnoverRate(double x, double xSystem) {

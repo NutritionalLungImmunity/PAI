@@ -6,23 +6,16 @@ import java.io.PrintWriter;
 import java.util.Map.Entry;
 
 import edu.uf.compartments.Voxel;
-import edu.uf.interactable.Afumigatus;
-import edu.uf.interactable.Cell;
-import edu.uf.interactable.Erythrocyte;
-import edu.uf.interactable.Hepcidin;
 import edu.uf.interactable.IL10;
 import edu.uf.interactable.IL6;
 import edu.uf.interactable.Interactable;
-import edu.uf.interactable.Lactoferrin;
-import edu.uf.interactable.MIP1B;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
-import edu.uf.interactable.Pneumocyte;
-import edu.uf.interactable.TAFC;
+import edu.uf.interactable.PneumocyteII;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
-import edu.uf.interactable.Transferrin;
+import edu.uf.interactable.Afumigatus.Afumigatus;
 
 public class PrintBaseModel extends PrintStat{
 	
@@ -38,7 +31,7 @@ public class PrintBaseModel extends PrintStat{
 
 	@Override
 	public void printStatistics(int k, File file){
-		//count();
+		count();
 		if(k%15 != 0)return;
 		String str = k + "\t" + 
 	              Afumigatus.getTotalCells() + "\t" +
@@ -47,8 +40,8 @@ public class PrintBaseModel extends PrintStat{
 	              Afumigatus.getTotalGerminatingConidia() + "\t" +
 	              Afumigatus.getTotalHyphae() + "\t" +
 	              //PResting + "\t" +
-	              //PMixActive + "\t" +
-	              //PActive + "\t" +
+	              PMixActive + "\t" +
+	              PActive + "\t" +
 	              /*(TAFC.getMolecule().getTotalMolecule(0) + TAFC.getMolecule().getTotalMolecule(1)) + "\t" +
 	              TAFC.getMolecule().getTotalMolecule(0) + "\t" +
 	              TAFC.getMolecule().getTotalMolecule(1) + "\t" +
@@ -88,7 +81,7 @@ public class PrintBaseModel extends PrintStat{
 		}
 	}
 	
-/*	void count() {
+	void count() {
 		PResting = 0;
 		PMixActive = 0;
 		PActive = 0;
@@ -101,23 +94,22 @@ public class PrintBaseModel extends PrintStat{
 				for(Voxel v : V) {
 					for(Entry<Integer, Interactable> entry : v.getInteractables().entrySet()) {
 						Interactable cell = entry.getValue();
-						if(cell instanceof Pneumocyte) {
-							Pneumocyte p = (Pneumocyte) cell;
-							if(p.getPhenotype() == Phenotypes.RESTING)PResting++;
-							else if(p.getPhenotype() == Phenotypes.MIX_ACTIVE)PMixActive++;
-							else if(p.getPhenotype() == Phenotypes.ACTIVE)PActive++;
-						}else if(cell instanceof Macrophage) {
+						if(cell instanceof PneumocyteII) {
+							PneumocyteII p = (PneumocyteII) cell;
+							if(p.hasPhenotype(PneumocyteII.MIX_ACTIVE))PMixActive++;
+							else if(p.hasPhenotype(PneumocyteII.ACTIVE))PActive++;
+						}/*else if(cell instanceof Macrophage) {
 							Macrophage p = (Macrophage) cell;
 							if(p.getPhenotype() == Phenotypes.RESTING)MAResting++;
 							else if(p.getPhenotype() == Phenotypes.MIX_ACTIVE)MAMixActive++;
 							else if(p.getPhenotype() == Phenotypes.ACTIVE)MAActive++;
 							else if(p.getPhenotype() == Phenotypes.INACTIVE)MAInactive++;
-						}
+						}*/
 					}
 				}
 			}
 		}
-	}*/
+	}
 	
 
 }

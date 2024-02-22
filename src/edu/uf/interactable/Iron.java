@@ -1,9 +1,6 @@
 package edu.uf.interactable;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.utils.Constants;
 
 public class Iron extends Molecule{
 
@@ -32,9 +29,12 @@ public class Iron extends Molecule{
         return 0;
     }
 
-    public void turnOver(int x, int y, int z) {}
+    public void turnOver(int x, int y, int z) {
+    	this.set(100*6.4e-18*0, 0, x, y, z);
+    }
     
     public void degrade() {}
+    
 
     public void computeTotalMolecule(int x, int y, int z) {
     	this.totalMoleculesAux[0] = this.totalMoleculesAux[0] + this.get(0, x, y, z);

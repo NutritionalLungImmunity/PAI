@@ -1,7 +1,5 @@
 package edu.uf.interactable;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
@@ -58,8 +56,8 @@ public class MIP2 extends Chemokine{
         	}
             return true;
         }
-        if (interactable instanceof Pneumocyte) {
-            if (((Pneumocyte)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
+        if (interactable instanceof PneumocyteII) {
+            if (((PneumocyteII)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
             	this.inc(Constants.P_MIP2_QTTY, 0, x, y, z);
             return true; 
         }

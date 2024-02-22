@@ -2,11 +2,8 @@ package edu.uf.intracellularState;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import edu.uf.interactable.Binder;
-import edu.uf.interactable.Interactable;
-import edu.uf.interactable.Molecule;
 
 public abstract class BooleanNetwork {
 
@@ -41,7 +38,7 @@ public abstract class BooleanNetwork {
 		this.inputs[idx] = level;
 	}
 	
-	public abstract void processBooleanNetwork();
+	public abstract void processBooleanNetwork(int... args);
 	
 	public Map<Integer, Integer> getPhenotype(){
 		return this.phenotypes;

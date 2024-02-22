@@ -30,6 +30,10 @@ public class Clock {
 		return clock;
 	}*/
 	
+	public int getSize() {
+		return size;
+	}
+	
 	public void tic() {
 		this.iteration = (this.iteration + 1) % size;
 		if(this.iteration == 0)this.count++;

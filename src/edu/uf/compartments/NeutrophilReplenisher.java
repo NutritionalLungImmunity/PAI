@@ -2,21 +2,18 @@ package edu.uf.compartments;
 
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Neutrophil;
+import edu.uf.intracellularState.NeutrophilFactory;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 
 public class NeutrophilReplenisher extends Recruiter{
 	
 	public Cell createCell() {
-        Neutrophil n = new Neutrophil(0.0);//new Neutrophil(0); 
+        Neutrophil n = new Neutrophil(0.0, NeutrophilFactory.createBooleanNetwork());//new Neutrophil(0); 
         return n;
     }
     
     public int getQtty() {
-    	return getQtty(0);
-    }
-
-    public int getQtty(Quadrant q) { 
     	return getQtty(0);
     }
     

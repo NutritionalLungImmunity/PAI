@@ -1,4 +1,4 @@
-package edu.uf.main;
+/*package edu.uf.main;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +52,7 @@ public class BayesianLearning {
         Constants.MIP2_HALF_LIFE = 1;
         Constants.TNF_HALF_LIFE = 1;
         Constants.TGF_HALF_LIFE = 1;*/
-        Constants.TURNOVER_RATE = 0;
+        /*Constants.TURNOVER_RATE = 0;
         
         double f = 0.1;
         double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
@@ -171,7 +171,7 @@ public class BayesianLearning {
 				Constants.Kd_LPS + " " + //23
 				Constants.Kd_GM_CSF
 				);*/
-	}
+	/*}
 	
 	private static void learningCytokinesSecretion(String[] args) throws InterruptedException {
 		InitializeLearnCytokinesSecretion initialize = new InitializeLearnCytokinesSecretion();
@@ -205,7 +205,7 @@ public class BayesianLearning {
         Constants.MIP2_HALF_LIFE = 1;
         Constants.TNF_HALF_LIFE = 1;
         Constants.TGF_HALF_LIFE = 1;*/
-        Constants.TURNOVER_RATE = 0;
+       /* Constants.TURNOVER_RATE = 0;
         
         double f = 0.1;
         double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
@@ -379,7 +379,7 @@ public class BayesianLearning {
 				Constants.Kd_GM_CSF
 				);*/
 		
-	}
+	/*}
 	
 	
 	private static void learningActivationTime(String[] args) throws InterruptedException {
@@ -414,7 +414,7 @@ public class BayesianLearning {
         Constants.MIP2_HALF_LIFE = 1;
         Constants.TNF_HALF_LIFE = 1;
         Constants.TGF_HALF_LIFE = 1;*/
-        Constants.TURNOVER_RATE = 0;
+        /*Constants.TURNOVER_RATE = 0;
         
         double f = 0.1;
         double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
@@ -612,7 +612,7 @@ public class BayesianLearning {
 				Constants.Kd_GM_CSF
 				);*/
 		
-	}
+	/*}
 
 	public static void main_legacy(String[] args) throws Exception {
 		/*String[] str = new String[] {"4.27225e-18", "2.683149e-21", "7.655258e-18", "3.489064e-21",  "1.054377e-19", "5.374622e-19", "5.474817e-18",
@@ -666,7 +666,7 @@ public class BayesianLearning {
 				"0" //40
 		};*/
 		
-		System.out.println("jISS Bayesian Learning");
+		/*System.out.println("jISS Bayesian Learning");
 		long tic = System.currentTimeMillis();
 		//BayesianLearning.learningCytokinesSecretion(args);
 		BayesianLearning.learningActivationTime(args);
@@ -716,6 +716,6 @@ public class BayesianLearning {
 				"None",	
 				"0"
 		});*/
-	}
+	//}
 	
-}
+//}

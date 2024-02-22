@@ -1,5 +1,7 @@
 package edu.uf.interactable;
 
+import edu.uf.intracellularState.BooleanNetwork;
+
 public abstract class PositionalInfectiousAgent extends InfectiousAgent implements PositionalAgent{
 	
 	
@@ -7,7 +9,8 @@ public abstract class PositionalInfectiousAgent extends InfectiousAgent implemen
     private double y;
     private double z;
     
-    public PositionalInfectiousAgent(double x, double y, double z) {
+    public PositionalInfectiousAgent(double x, double y, double z, BooleanNetwork network) {
+    	super(network);
     	this.x = x;
     	this.y = y;
     	this.z = z;

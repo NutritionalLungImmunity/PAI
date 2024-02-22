@@ -1,10 +1,7 @@
 package edu.uf.interactable;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class IL6 extends Molecule{
     

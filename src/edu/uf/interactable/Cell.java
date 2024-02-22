@@ -28,21 +28,23 @@ public abstract class Cell extends Interactable{
     private boolean engulfed;
     protected Clock clock;
     protected BooleanNetwork booleanNetwork;
+    private int externalState;
     
     
-    public Cell() {
+    public Cell(BooleanNetwork booleanNetwork) {
+    	this.booleanNetwork = booleanNetwork;
     	this.clock = new Clock((int) Constants.INV_UNIT_T);
     	this.id = Id.getId(); 
+    	this.externalState = 0;
     }
     
-    public final BooleanNetwork createBooleanNetwork() {
-    	if(booleanNetwork == null) {
-    		booleanNetwork = createNewBooleanNetwork();
-    	}
-    	return booleanNetwork;
+    public void setExternalState(int state) {
+    	this.externalState = state;
     }
     
-    protected abstract BooleanNetwork createNewBooleanNetwork();
+    public int getExternalState() {
+    	return this.externalState;
+    }
 
 
 	public double getIronPool() {
@@ -73,19 +75,19 @@ public abstract class Cell extends Interactable{
 	}*/
 	
 	public boolean hasPhenotype(int phenotype) {
-		return createBooleanNetwork().getPhenotype().containsKey(phenotype);
+		return this.booleanNetwork.getPhenotype().containsKey(phenotype);
 	}
 	
 	public boolean hasPhenotype(List<Integer> phenotype) {
 		for(Integer p : phenotype)
-			if(createBooleanNetwork().getPhenotype().containsKey(p))
+			if(this.booleanNetwork.getPhenotype().containsKey(p))
 				return true;
 		return false;
 	}
 	
 	public boolean hasPhenotype(int[] phenotype) {
 		for(Integer p : phenotype)
-			if(createBooleanNetwork().getPhenotype().containsKey(p))
+			if(this.booleanNetwork.getPhenotype().containsKey(p))
 				return true;
 		return false;
 	}
@@ -128,8 +130,8 @@ public abstract class Cell extends Interactable{
 		this.id = id;
 	}
 	
-	public void bind(Interactable iter, int level) {
-		createBooleanNetwork().activateReceptor(iter.getInteractionId(), level);
+	public void bind(Binder iter, int level) {
+		this.booleanNetwork.activateReceptor(iter.getInteractionId(), level);
 	}
 	
 	public Clock getClock() {
@@ -137,16 +139,24 @@ public abstract class Cell extends Interactable{
 	}
 
 
-	protected void processBooleanNetwork() {
-		this.createBooleanNetwork().processBooleanNetwork();
+	protected void processBooleanNetwork(int... args) {
+		this.booleanNetwork.processBooleanNetwork(args);
     }
 	
 	public boolean isDead() {
 		return status == DEAD || status == DYING || status == APOPTOTIC || status == NECROTIC;
 	}
 
-    public void updateStatus() {
+    public void updateStatus(int x, int y, int z) {
     	this.clock.tic();
+    }
+    
+    public BooleanNetwork getBooleanNetwork() {
+    	return this.booleanNetwork;
+    }
+    
+    public boolean removeUponDeath() {
+    	return true;
     }
 
 
