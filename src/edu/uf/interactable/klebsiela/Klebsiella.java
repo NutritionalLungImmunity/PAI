@@ -18,7 +18,7 @@ import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 
-public class Klebsiela extends InfectiousAgent implements Internalizable{
+public class Klebsiella extends InfectiousAgent implements Internalizable{
 	
 	public static final int FREE = 0;
 	public static final int INTERNALIZING = 1;
@@ -36,12 +36,12 @@ public class Klebsiela extends InfectiousAgent implements Internalizable{
 	private boolean engulfed;
 	private boolean entraped;
 	
-	public Klebsiela(double ironPool) {
+	public Klebsiella(double ironPool) {
 		super(null);
 		totalCells++;
 		this.growthClock = new Clock((int) Constants.INV_UNIT_T); //PUT GROWTH RATE
 		this.ironPool = ironPool;
-		Klebsiela.totalIron = Klebsiela.totalIron + ironPool;
+		Klebsiella.totalIron = Klebsiella.totalIron + ironPool;
 		this.engulfed = false;
 		this.entraped = false;
 	}
@@ -55,7 +55,7 @@ public class Klebsiela extends InfectiousAgent implements Internalizable{
 	}
 	
 	public boolean isInternalizing() {
-        return this.getState() == Klebsiela.INTERNALIZING;
+        return this.getState() == Klebsiella.INTERNALIZING;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class Klebsiela extends InfectiousAgent implements Internalizable{
 	public void grow(int x, int y, int z, int xbin, int ybin, int zbin, Leukocyte phagocyte) {
 		Voxel[][][] grid = GridFactory.getGrid();
 		if(this.growthClock.toc()) {
-			grid[x][y][z].setCell(new Klebsiela(this.getIronPool()/2.0));
+			grid[x][y][z].setCell(new Klebsiella(this.getIronPool()/2.0));
 			this.setIronPool(this.getIronPool()/2.0);
 		}
 		
@@ -100,16 +100,16 @@ public class Klebsiela extends InfectiousAgent implements Internalizable{
 
 	@Override
 	public void die() {
-		if(this.getStatus() != Klebsiela.DEAD) {
-            this.setStatus(Klebsiela.DEAD);
-            Klebsiela.totalCells--;
+		if(this.getStatus() != Klebsiella.DEAD) {
+            this.setStatus(Klebsiella.DEAD);
+            Klebsiella.totalCells--;
         }
 	}
 
 	@Override
 	public void incIronPool(double qtty) {
 		this.setIronPool(this.getIronPool() + qtty);
-		Klebsiela.totalIron = Klebsiela.totalIron + qtty;
+		Klebsiella.totalIron = Klebsiella.totalIron + qtty;
 	}
 
 	@Override
@@ -146,12 +146,12 @@ public class Klebsiela extends InfectiousAgent implements Internalizable{
 	}
 	
 	
-	public static void intKlebsiela(Leukocyte phagocyte, Klebsiela klebsiela) {
-        if(klebsiela.getState() == Klebsiela.FREE) {
+	public static void intKlebsiela(Leukocyte phagocyte, Klebsiella klebsiela) {
+        if(klebsiela.getState() == Klebsiella.FREE) {
             if (!phagocyte.isDead()) {
             	if(phagocyte.getPhagosome().size() < phagocyte.getMaxCell()) {
                         //phagocyte.phagosome.hasConidia = true;
-            		klebsiela.setState(Klebsiela.INTERNALIZING);
+            		klebsiela.setState(Klebsiella.INTERNALIZING);
             		klebsiela.setEngulfed(true);
                     phagocyte.getPhagosome().add(klebsiela);
                 }

@@ -180,7 +180,7 @@ public class Main {
         initialize.initializeNeutrophils(0);
         initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
         initialize.initializeBlood();
-        ((InitializeTranexamicModel)initialize).initializeTranexamicAcid(new int[] {360});
+        ((InitializeTranexamicModel)initialize).initializeTranexamicAcid(new int[] {});
         initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
         stat.grid = GridFactory.getGrid();
 

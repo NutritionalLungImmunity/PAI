@@ -358,6 +358,16 @@ public class Constants {
     
     
     
+    public static double IL17_QTTY = -1;
+    public static double DC_HALF_LIFE = -1;
+    public static double MA_IFN_I_QTTY = -1;
+    public static double MA_IFN_III_QTTY = -1;
+    public static double MA_IL23_QTTY = -1;
+    public static double Kd_IFN_LBD = -1;
+    public static double Kd_IL17 = -1;
+    
+    
+    
     /*public static double PR_INT_NK_P = 0.05; //DUMMY
     public static double IFN1_QTTY = 4.95e-19; //DUMMY: BASED ON Kd
     public static double IFN1_INHIBITION = 0.8;//DUMMY
