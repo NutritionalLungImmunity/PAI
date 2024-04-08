@@ -28,6 +28,11 @@ public class Albumin extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return -1;
+    }
+    
     public void degrade() {
     	//degrade(Constants.IL10_HALF_LIFE, 0);
     }

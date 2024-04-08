@@ -26,6 +26,11 @@ public class IL10 extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IL10;
+    }
+    
     public void degrade() {
     	degrade(Constants.IL10_HALF_LIFE, 0);
     }
@@ -41,13 +46,9 @@ public class IL10 extends Molecule{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage){//# or type(interactable) is Neutrophil: 
         	Macrophage macro = (Macrophage) interactable;
-        	if (macro.hasPhenotype(this.getPhenotype()))//(macro.getStatus() == Phagocyte.ACTIVE && macro.getState() == Neutrophil.INTERACTING) 
-        		this.inc(Constants.MA_IL10_QTTY, 0, x, y, z);
-        		//macro.secrete(NAME);
+        	Util.secrete(macro, this, Constants.MA_IL10_QTTY, x, y, z, 0);
             if (!macro.isDead()) { 
-            	macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL10));
-                	//macro.setStatus(macro.getStatus() != Phagocyte.INACTIVE ? Phagocyte.INACTIVATING : Phagocyte.INACTIVE);
-                	//macro.interation = 0;
+            	Util.bind(macro, this, x, y, z, 0);
             }
             return true; 
         }

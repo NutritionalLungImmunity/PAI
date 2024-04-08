@@ -27,6 +27,11 @@ public class Adenosine extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_Adenosine;
+    }
+    
     public void degrade() {
     	degrade(Constants.IL10_HALF_LIFE, 0); //CHANGE TO ADENOSINE HALF LIFE
     }
@@ -40,19 +45,15 @@ public class Adenosine extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	if (interactable instanceof PneumocyteII){
-    		PneumocyteII pneum = (PneumocyteII) interactable;
-    		if(pneum.isDead()) {
-    			this.inc(1.0, 0, x, y, z); //CHANGE TO ADO_QTTY
-    		}
-            return true; 
-        }
+    	if (interactable instanceof PneumocyteII)
+    		return Util.secrete((PneumocyteII) interactable, this, 1.0, x, y, z, 0);
+    	
         if (interactable instanceof Macrophage){
         	Macrophage macro = (Macrophage) interactable;
         	if(macro.isDead()) {
     			this.inc(1.0, 0, x, y, z); //CHANGE TO ADO_QTTY
     		}else {
-    			macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TNF)); //CHANGE TO ADO_Kd
+    			Util.bind(macro, this, x, y, z, 0);
     		}
             return true; 
         }
@@ -61,7 +62,7 @@ public class Adenosine extends Molecule{
         	if(neutr.isDead()) {
     			this.inc(1.0, 0, x, y, z); //CHANGE TO ADO_QTTY
     		}else {
-    			neutr.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TNF)); //CHANGE TO ADO_Kd
+    			Util.bind(neutr, this, x, y, z, 0);
     		}
         	return true;
         }

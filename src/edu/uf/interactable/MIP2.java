@@ -27,6 +27,11 @@ public class MIP2 extends Chemokine{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_MIP2;
+    }
+    
     public void turnOver(int x, int y, int z) {
     	this.pdec(1-Constants.MIP2_HALF_LIFE, 0, x, y, z);
     }
@@ -47,28 +52,14 @@ public class MIP2 extends Chemokine{
         if (interactable instanceof Neutrophil) {
             Neutrophil neutro = (Neutrophil) interactable;
             neutro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_MIP2));
-        	if (neutro.hasPhenotype(this.getPhenotype())){//#interactable.status == Phagocyte.ACTIVE and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.N_MIP2_QTTY, 0, x, y, z);
-                if (Util.activationFunction(this.get(0, x, y, z), Constants.Kd_MIP2)){}
-                    //neutro.interaction = 0
-            //#if Util.activation_function(this.values[0], Constants.Kd_MIP2) > random():
-            //#    this.pdec(0.5)
-        	}
-            return true;
+            return Util.secrete((Neutrophil) interactable, this, Constants.N_MIP2_QTTY, x, y, z, 0);
         }
-        if (interactable instanceof PneumocyteII) {
-            if (((PneumocyteII)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
-            	this.inc(Constants.P_MIP2_QTTY, 0, x, y, z);
-            return true; 
-        }
-        //#if type(interactable) is Hepatocytes:
-        //#    return False
-        if (interactable instanceof Macrophage) {
-        	Macrophage macro = (Macrophage) interactable;
-        	if (macro.hasPhenotype(this.getPhenotype())) //#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.MA_MIP2_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof PneumocyteII) 
+        	return Util.secrete((PneumocyteII) interactable, this, Constants.P_MIP2_QTTY, x, y, z, 0); 
+        
+        if (interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z); 
     }
 

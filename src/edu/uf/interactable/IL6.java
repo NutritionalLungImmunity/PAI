@@ -2,6 +2,7 @@ package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
+import edu.uf.utils.Util;
 
 public class IL6 extends Molecule{
     
@@ -26,6 +27,11 @@ public class IL6 extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IL6;
+    }
+    
     public void degrade() {
     	degrade(Constants.IL6_HALF_LIFE, 0);
     }
@@ -39,18 +45,12 @@ public class IL6 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage) {
-            Macrophage macro = (Macrophage) interactable;
-        	if (macro.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.MA_IL6_QTTY, 0, x, y, z);
-            return true; 
-        }
-        if (interactable instanceof Neutrophil) {
-        	Neutrophil neutro = (Neutrophil) interactable; 
-        	if (neutro.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.N_IL6_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.MA_IL6_QTTY, x, y, z, 0); 
+        
+        if (interactable instanceof Neutrophil) 
+        	return Util.secrete((Neutrophil) interactable, this, Constants.MA_IL6_QTTY, x, y, z, 0); 
+        
         return interactable.interact(this, x, y, z);
     }
 

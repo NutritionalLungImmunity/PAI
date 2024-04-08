@@ -26,6 +26,11 @@ public class IL23 extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IL23;
+    }
+    
     public void degrade() {
     	degrade(Constants.TNF_HALF_LIFE, 0);
     }
@@ -39,17 +44,12 @@ public class IL23 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof DeltaGammaT) {
-        	DeltaGammaT gdT = (DeltaGammaT) interactable;
-        	gdT.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL17));
-            return true;
-        }
-        if (interactable instanceof Macrophage) {
-        	Macrophage macro = (Macrophage) interactable;
-        	if(macro.hasPhenotype(this.getPhenotype()))
-        		this.inc(Constants.MA_IL23_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof DeltaGammaT) 
+        	return Util.bind((DeltaGammaT) interactable, this, x, y, z, 0);
+        
+        if (interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.MA_IL23_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z);
     }
 

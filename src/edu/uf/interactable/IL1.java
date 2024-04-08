@@ -28,6 +28,11 @@ public class IL1 extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IL1;
+    }
+    
     public void degrade() {
     	degrade(Constants.IL1_HALF_LIFE, 0);
     }
@@ -41,27 +46,15 @@ public class IL1 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	if (interactable instanceof Macrophage) {
-            Macrophage macro = (Macrophage) interactable;
-            if(macro.hasPhenotype(this.getPhenotype())) 
-                this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
-            macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
-            return true;
-        }
-    	if (interactable instanceof PneumocyteII) {
-    		PneumocyteII pneumo = (PneumocyteII) interactable;
-        	if(pneumo.hasPhenotype(this.getPhenotype()))
-                this.inc(Constants.MA_IL1_QTTY, 0, x, y, z);
-        	pneumo.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
-            return true;
-        }
-        if (interactable instanceof Neutrophil) {
-            Neutrophil neutro = (Neutrophil) interactable;
-        	if(neutro.hasPhenotype(this.getPhenotype()))
-                this.inc(Constants.N_IL1_QTTY, 0, x, y, z);
-        	neutro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL1));
-            return true;
-        }
+    	if (interactable instanceof Macrophage) 
+    		return Util.secrete((Macrophage) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+        
+    	if (interactable instanceof PneumocyteII) 
+    		return Util.secrete((PneumocyteII) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+        
+        if (interactable instanceof Neutrophil) 
+        	return Util.secrete((Neutrophil) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+        
         if(interactable instanceof Liver) { //TO DO!!!
         	if(hasInteractWithLiver)return true;
         	Liver liver = (Liver) interactable; 

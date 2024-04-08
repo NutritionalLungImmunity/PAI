@@ -220,6 +220,8 @@ public abstract class Molecule extends Interactable {
     
     public abstract int getNumState();
     
+    public abstract double getKd();
+    
     public void resetCount() {
     	for(int i = 0; i < this.totalMolecules.length; i++) {
     		this.totalMolecules[i] =  this.totalMoleculesAux[i];

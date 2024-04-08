@@ -26,6 +26,11 @@ public class MIP1B extends Chemokine{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_MIP1B;
+    }
+    
     public void degrade() {
     	degrade(Constants.MIP1B_HALF_LIFE, 0);
     }
@@ -39,16 +44,12 @@ public class MIP1B extends Chemokine{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof PneumocyteII) {
-            if (((PneumocyteII)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
-            	this.inc(Constants.P_MIP1B_QTTY, 0, x, y, z);
-            return true;
-        }
-        if (interactable instanceof Macrophage) {
-            if (((Macrophage)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
-            	this.inc(Constants.MA_MIP1B_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof PneumocyteII) 
+        	return Util.secrete((PneumocyteII) interactable, this, Constants.P_MIP1B_QTTY, x, y, z, 0);
+        
+        if (interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z); 
     }
 

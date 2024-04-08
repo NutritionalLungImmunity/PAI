@@ -29,6 +29,11 @@ public class Granule extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_Granule;
+    }
+    
     public void degrade() {
     	degrade(Constants.Granule_HALF_LIFE, 0);
     }
@@ -42,16 +47,8 @@ public class Granule extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	if (interactable instanceof Neutrophil){//# or type(interactable) is Neutrophil: 
-        	Neutrophil neutrophil = (Neutrophil) interactable;
-        	if(neutrophil.hasPhenotype(this.getPhenotype())) {
-        	//if((neutrophil.getStatus() == Macrophage.ACTIVE)){ // || Rand.getRand().getRand().randunif() < Constants.PR_DEPLETION) && !neutrophil.depleted){
-        		this.inc(Constants.GRANULE_QTTY, 0, x, y, z);
-        		//neutrophil.depleted = true;
-        	}
-            
-            return true; 
-        }
+    	if (interactable instanceof Neutrophil)
+    		return Util.secrete((Neutrophil) interactable, this, Constants.GRANULE_QTTY, x, y, z, 0);
         
         if(interactable instanceof Afumigatus) {
         	Afumigatus af = (Afumigatus) interactable;

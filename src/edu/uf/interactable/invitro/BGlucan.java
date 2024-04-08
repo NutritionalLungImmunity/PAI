@@ -34,6 +34,11 @@ public class BGlucan extends Molecule{
     public static Molecule getMolecule() {
     	return molecule;
     }
+    
+    @Override
+    public double getKd() {
+    	return Constants.Kd_BGLUCAN;
+    }
 
     public void turnOver(int x, int y, int z) { //REVIEW
         //degrade(Constants.DAMP_HALF_LIFE, x, y, z);

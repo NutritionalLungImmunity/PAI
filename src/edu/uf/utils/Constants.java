@@ -361,10 +361,17 @@ public class Constants {
     public static double IL17_QTTY = -1;
     public static double DC_HALF_LIFE = -1;
     public static double MA_IFN_I_QTTY = -1;
+    public static double IFN_II_QTTY = -1;
     public static double MA_IFN_III_QTTY = -1;
     public static double MA_IL23_QTTY = -1;
     public static double Kd_IFN_LBD = -1;
     public static double Kd_IL17 = -1;
+    public static double Kd_IFN_I = -1;
+    public static double Kd_IFNg = -1;
+    public static double Kd_IL23 = -1;
+    
+    
+    public static double Kd_Adenosine = -1;
     
     
     

@@ -69,18 +69,12 @@ public class PneumocyteII extends Cell {
         }
         
         if (interactable instanceof IL6) { 
-        	if(this.hasPhenotype(((IL6)interactable).getPhenotype())) 
-            	((Molecule)interactable).inc(Constants.P_IL6_QTTY, 0, x, y, z);
-            return true;
+        	return Util.secrete(this, (IL6) interactable, Constants.MA_IL6_QTTY, x, y, z, 0); 
         }
         
         if (interactable instanceof TNFa) {
-            Molecule interact = (Molecule) interactable;
-            //System.out.println(interact.get(0, x, y, z) + " " + Util.activationFunction5(interact.get(0, x, y, z), Constants.Kd_TNF));
-            this.bind(interactable, Util.activationFunction5(interact.get(0, x, y, z), Constants.Kd_TNF));
-        	if(this.hasPhenotype(interact.getPhenotype())) 
-            	interact.inc(Constants.P_TNF_QTTY, 0, x, y, z);
-            return true;
+        	Util.bind(this, (TNFa) interactable, x, y, z, 0);
+            return Util.secrete(this, (TNFa) interactable, Constants.MA_TNF_QTTY, x, y, z, 0); 
         }
         
         /*if (interactable instanceof IL10) {

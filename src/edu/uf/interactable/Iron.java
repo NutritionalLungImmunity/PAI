@@ -1,6 +1,7 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.utils.Constants;
 
 public class Iron extends Molecule{
 
@@ -22,6 +23,11 @@ public class Iron extends Molecule{
     
     public static Iron getMolecule() {
     	return molecule;
+    }
+    
+    @Override
+    public double getKd() {
+    	return -1;
     }
     
 

@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.uf.interactable.Blood;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Setter;
+import edu.uf.utils.Constants;
 
 public class TranexamicAcid extends Setter{
 	
@@ -26,6 +27,11 @@ public class TranexamicAcid extends Setter{
     		molecule = new TranexamicAcid(iterations);
     	}
     	return molecule;
+    }
+    
+    @Override
+    public double getKd() {
+    	return -1;
     }
     
     public static TranexamicAcid getMolecule() {

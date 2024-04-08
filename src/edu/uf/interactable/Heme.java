@@ -33,6 +33,11 @@ public class Heme extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_Heme;
+    }
+    
     public void degrade() {}//REVIEW
     
     public int getIndex(String str) {
@@ -102,16 +107,12 @@ public class Heme extends Molecule{
         	this.dec(qtty, 0, x, y, z);
         	return true;*/
         }
-        if(interactable instanceof Macrophage) {
-        	Macrophage macrophage = (Macrophage) interactable;
-        	macrophage.bind(heme, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_Heme));
-        	return true;
-        }
-        if(interactable instanceof Neutrophil) {
-        	Neutrophil neutrophil = (Neutrophil) interactable;
-        	neutrophil.bind(heme, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_Heme));
-        	return true;
-        }
+        if(interactable instanceof Macrophage) 
+        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        
+        if(interactable instanceof Neutrophil) 
+        	return Util.bind((Neutrophil) interactable, this, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z);
     }
 

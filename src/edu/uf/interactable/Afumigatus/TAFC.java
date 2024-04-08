@@ -43,6 +43,11 @@ public class TAFC extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return -1;
+    }
+    
     public void degrade() {} //REVIEW
 
     public int getIndex(String str) {

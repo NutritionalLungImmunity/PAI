@@ -27,6 +27,11 @@ public class TGFb extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_TGF;
+    }
+    
     public void degrade() {
     	degrade(Constants.TGF_HALF_LIFE, 0);
     }

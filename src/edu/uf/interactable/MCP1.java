@@ -27,6 +27,11 @@ public class MCP1 extends Chemokine{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_MCP1;
+    }
+    
     public void turnOver(int x, int y, int z) {
     	this.pdec(1-Constants.MCP1_HALF_LIFE, 0, x, y, z);
     }
@@ -46,19 +51,12 @@ public class MCP1 extends Chemokine{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof PneumocyteII) {
-            if (((PneumocyteII)interactable).hasPhenotype(this.getPhenotype()))//#interactable.status == Phagocyte.ACTIVE:
-            	this.inc(Constants.P_MCP1_QTTY, 0, x, y, z);
-            return true;
-        }
-        //#if type(interactable) is Hepatocytes:
-        //#    return False
-        if (interactable instanceof Macrophage) {
-        	Macrophage macro = (Macrophage) interactable;
-            if (macro.hasPhenotype(this.getPhenotype())) //#interactable.status == Phagocyte.ACTIVE:# and interactable.state == Neutrophil.INTERACTING:
-            	this.inc(Constants.MA_MCP1_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof PneumocyteII) 
+        	return Util.secrete((PneumocyteII) interactable, this, Constants.P_MCP1_QTTY, x, y, z, 0);
+        
+        if (interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.MA_MCP1_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z); 
     }
 

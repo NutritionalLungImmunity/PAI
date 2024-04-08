@@ -4,6 +4,7 @@ import edu.uf.compartments.Voxel;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
+import edu.uf.utils.Util;
 
 public class NK extends Cell{
 
@@ -72,7 +73,9 @@ public class NK extends Cell{
 
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-		
+		if (interactable instanceof IFN_I) 
+			return Util.bind(this, (IFN_I) interactable, x, y, z, 0);
+        
 		return interactable.interact(this, x, y, z);
 	}
 

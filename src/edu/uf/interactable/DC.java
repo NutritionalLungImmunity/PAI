@@ -6,6 +6,7 @@ import edu.uf.intracellularState.Phenotype;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
+import edu.uf.utils.Util;
 
 public class DC extends Leukocyte{
 
@@ -87,25 +88,14 @@ public class DC extends Leukocyte{
     		Klebsiella.intKlebsiela(this, (Klebsiella) interactable);
     		return true;
     	}
-    	if(interactable instanceof IFN_I) {
-    		IFN_I mol = (IFN_I) interactable;
-    		if (this.hasPhenotype(mol.getPhenotype()))
-    			mol.inc(Constants.MA_IFN_I_QTTY, 0, x, y, z);
-    		return true;
-    	}
-    	if(interactable instanceof IFN_III) {
-    		IFN_III mol = (IFN_III) interactable;
-    		if (this.hasPhenotype(mol.getPhenotype()))
-    			mol.inc(Constants.MA_IFN_III_QTTY, 0, x, y, z);
-    		return true;
-    	}
-    	if(interactable instanceof IL23) {
-    		IL23 mol = (IL23) interactable;
-    		if (this.hasPhenotype(mol.getPhenotype()))
-    			mol.inc(Constants.MA_IL23_QTTY, 0, x, y, z);
-    		return true;
-    	}
+    	if(interactable instanceof IFN_I) 
+    		return Util.secrete(this, (IFN_I) interactable, Constants.MA_IFN_I_QTTY, x, y, z, 0);
     	
+    	if(interactable instanceof IFN_III) 
+    		return Util.secrete(this, (IFN_III) interactable, Constants.MA_IFN_III_QTTY, x, y, z, 0);
+    	
+    	if(interactable instanceof IL23) 
+    		return Util.secrete(this, (IL23) interactable, Constants.MA_IL23_QTTY, x, y, z, 0);
     	
         return interactable.interact(this, x, y, z);
     }

@@ -26,6 +26,11 @@ public class IFN_III extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IFN_LBD;
+    }
+    
     public void degrade() {
     	degrade(Constants.TNF_HALF_LIFE, 0);
     }
@@ -39,17 +44,12 @@ public class IFN_III extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof PneumocyteII) {
-        	PneumocyteII epi = (PneumocyteII) interactable;
-        	if(epi.hasPhenotype(this.getPhenotype()))
-        		this.inc(Constants.MA_IFN_III_QTTY, 0, x, y, z);
-            return true;
-        }
-        if (interactable instanceof PneumocyteI) {
-        	PneumocyteII epi = (PneumocyteII) interactable;
-        	epi.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IFN_LBD));
-            return true;
-        }
+        if (interactable instanceof PneumocyteII) 
+        	return Util.secrete((PneumocyteII) interactable, this, Constants.MA_IFN_I_QTTY, x, y, z, 0);
+        
+        if (interactable instanceof PneumocyteI) 
+        	return Util.bind((PneumocyteI) interactable, this, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z);
     }
 

@@ -26,6 +26,11 @@ public class ROS extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return -1;
+    }
+    
     public void turnOver(int x, int y, int z) {
     	this.pdec(1-Constants.H2O2_HALF_LIFE, 0, x, y, z);
     }
@@ -51,18 +56,12 @@ public class ROS extends Molecule{
 	        }
 	        return true;
         }
-        if(interactable instanceof Neutrophil) {
-        	Neutrophil cell = (Neutrophil) interactable;
-	        if (cell.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.H2O2_QTTY, 0, x, y, z);
-	        return true;
-        }
-        if(interactable instanceof Macrophage) {
-        	Macrophage cell = (Macrophage) interactable;
-	        if (cell.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.H2O2_QTTY, 0, x, y, z);
-	        return true;
-        }
+        if(interactable instanceof Neutrophil) 
+        	return Util.secrete((Neutrophil) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
+        
+        if(interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z);
     }
 

@@ -25,6 +25,11 @@ public class Hepcidin extends Molecule{
     public static Molecule getMolecule() {
     	return molecule;
     }
+    
+    @Override
+    public double getKd() {
+    	return Constants.Kd_Hep;
+    }
 
     public void turnOver(int x, int y, int z) {}
     public void degrade() {}//REVIEW
@@ -40,11 +45,9 @@ public class Hepcidin extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage) {
-        	Macrophage macro = (Macrophage) interactable;
-        	macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_Hep));
-            return true; 
-        }
+        if (interactable instanceof Macrophage) 
+        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z); 
     }
 

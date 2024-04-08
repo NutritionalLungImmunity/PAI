@@ -41,6 +41,11 @@ public class Transferrin extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_TfR2;
+    }
+    
     public void turnOver(int x, int y, int z) {}
     
     public void degrade() {}

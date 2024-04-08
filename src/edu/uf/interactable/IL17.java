@@ -26,6 +26,11 @@ public class IL17 extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IL17;
+    }
+    
     public void degrade() {
     	degrade(Constants.TNF_HALF_LIFE, 0);
     }
@@ -39,22 +44,15 @@ public class IL17 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage) {
-            Macrophage macro = (Macrophage) interactable;
-            macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL17));
-            return true;
-        }
-        if (interactable instanceof PneumocyteII) {
-        	PneumocyteII epi = (PneumocyteII) interactable;
-        	epi.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_IL17));
-            return true;
-        }
-        if (interactable instanceof DeltaGammaT) {
-        	DeltaGammaT gdT = (DeltaGammaT) interactable;
-        	if(gdT.hasPhenotype(this.getPhenotype()))
-        		this.inc(Constants.IL17_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof Macrophage) 
+        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        
+        if (interactable instanceof PneumocyteII) 
+        	return Util.bind((PneumocyteII) interactable, this, x, y, z, 0);
+        
+        if (interactable instanceof DeltaGammaT) 
+        	return Util.secrete((DeltaGammaT) interactable, this, Constants.IL17_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z);
     }
 

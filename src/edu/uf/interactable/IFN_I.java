@@ -26,6 +26,11 @@ public class IFN_I extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IFN_I;
+    }
+    
     public void degrade() {
     	degrade(Constants.TNF_HALF_LIFE, 0);
     }
@@ -39,12 +44,9 @@ public class IFN_I extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage) {
-        	Macrophage macro = (Macrophage) interactable;
-        	if(macro.hasPhenotype(this.getPhenotype()))
-        		this.inc(Constants.MA_IFN_I_QTTY, 0, x, y, z);
-            return true;
-        }
+        if (interactable instanceof Macrophage) 
+        	return Util.secrete((Macrophage) interactable, this, Constants.MA_IFN_I_QTTY, x, y, z, 0);
+        
         return interactable.interact(this, x, y, z);
     }
 

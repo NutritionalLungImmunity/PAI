@@ -26,6 +26,11 @@ public class TNFa extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_TNF;
+    }
+    
     public void degrade() {
     	degrade(Constants.TNF_HALF_LIFE, 0);
     }
@@ -40,19 +45,12 @@ public class TNFa extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) {
-            Macrophage macro = (Macrophage) interactable;
-            
-        	if (macro.hasPhenotype(this.getPhenotype()))//# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.MA_TNF_QTTY, 0, x, y, z);
-            macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TNF));
-            return true;
+            Util.secrete((Macrophage) interactable, this, Constants.MA_TNF_QTTY, x, y, z, 0);
+            return Util.bind((Macrophage) interactable, this, x, y, z, 0);
         }
         if (interactable instanceof Neutrophil) { 
-            Neutrophil neutro = (Neutrophil) interactable;
-        	if (neutro.hasPhenotype(this.getPhenotype())) //# and interactable.state == Neutrophil.INTERACTING:
-        		this.inc(Constants.N_TNF_QTTY, 0, x, y, z);
-        	neutro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TNF));
-            return true;
+        	Util.secrete((Neutrophil) interactable, this, Constants.N_TNF_QTTY, x, y, z, 0);
+        	return Util.bind((Neutrophil) interactable, this, x, y, z, 0);
         }
         return interactable.interact(this, x, y, z);
     }

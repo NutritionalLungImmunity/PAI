@@ -33,6 +33,11 @@ public class GM_CSF extends Molecule{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_GM_CSF;
+    }
+    
     public void turnOver(int x, int y, int z) {
         //degrade(Constants.TNF_HALF_LIFE, x, y, z); //Using TNF half-life, its ok!!!
         //degrade(Util.turnoverRate(1, 0, Constants.TURNOVER_RATE, Constants.REL_CYT_BIND_UNIT_T, 1), x, y, z);

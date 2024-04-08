@@ -35,6 +35,11 @@ public class IL8 extends Chemokine{
     	return molecule;
     }
     
+    @Override
+    public double getKd() {
+    	return Constants.Kd_IL8;
+    }
+    
     public void degrade() {
     	degrade(Constants.IL8_HALF_LIFE, 0);
     }
