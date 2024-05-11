@@ -15,14 +15,18 @@ import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.PneumocyteII;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TNFa;
+import edu.uf.interactable.Transferrin;
 import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.interactable.Afumigatus.TAFC;
+import edu.uf.intracellularState.AspergillusIntracellularModel;
+import edu.uf.intracellularState.PneumocyteStateModel;
 
 public class PrintBaseModel extends PrintStat{
 	
-	int PResting;
-	int PMixActive;
-	int PActive;
-	int MAResting;
+	int resting;
+	int swelling;
+	int germ;
+	int hyphae;
 	int MAMixActive;
 	int MAActive;
 	int MAInactive;
@@ -31,31 +35,31 @@ public class PrintBaseModel extends PrintStat{
 
 	@Override
 	public void printStatistics(int k, File file){
-		count();
+		//if(k%30 == 0)count();
 		if(k%15 != 0)return;
 		String str = k + "\t" + 
-	              Afumigatus.getTotalCells() + "\t" +
+	              Afumigatus.getTotalCells0() + "\t" +
 	              Afumigatus.getTotalRestingConidia() + "\t" +
 	              Afumigatus.getTotalSwellingConidia() + "\t" +
 	              Afumigatus.getTotalGerminatingConidia() + "\t" +
 	              Afumigatus.getTotalHyphae() + "\t" +
 	              //PResting + "\t" +
-	              PMixActive + "\t" +
-	              PActive + "\t" +
-	              /*(TAFC.getMolecule().getTotalMolecule(0) + TAFC.getMolecule().getTotalMolecule(1)) + "\t" +
+	              //PMixActive + "\t" +
+	              //PActive + "\t" +
+	              (TAFC.getMolecule().getTotalMolecule(0) + TAFC.getMolecule().getTotalMolecule(1)) + "\t" +
 	              TAFC.getMolecule().getTotalMolecule(0) + "\t" +
 	              TAFC.getMolecule().getTotalMolecule(1) + "\t" +
-	              Lactoferrin.getMolecule().getTotalMolecule(0) + "\t" +
+	              /*Lactoferrin.getMolecule().getTotalMolecule(0) + "\t" +
 	              Lactoferrin.getMolecule().getTotalMolecule(1) + "\t" +
-	              Lactoferrin.getMolecule().getTotalMolecule(2) + "\t" +
+	              Lactoferrin.getMolecule().getTotalMolecule(2) + "\t" +*/
 	              (Transferrin.getMolecule().getTotalMolecule(0) + Transferrin.getMolecule().getTotalMolecule(1) + Transferrin.getMolecule().getTotalMolecule(2)) + "\t" +
 	              Transferrin.getMolecule().getTotalMolecule(0) + "\t" +
 	              Transferrin.getMolecule().getTotalMolecule(1) + "\t" +
 	              Transferrin.getMolecule().getTotalMolecule(2) + "\t" +
-	              Hepcidin.getMolecule().getTotalMolecule(0) + "\t" +*/
-	              TGFb.getMolecule().getTotalMolecule(0) + "\t" +
-	              IL6.getMolecule().getTotalMolecule(0) + "\t" +
-	              IL10.getMolecule().getTotalMolecule(0) + "\t" +
+	              //Hepcidin.getMolecule().getTotalMolecule(0) + "\t" +
+	              //TGFb.getMolecule().getTotalMolecule(0) + "\t" +
+	              //IL6.getMolecule().getTotalMolecule(0) + "\t" +
+	              //IL10.getMolecule().getTotalMolecule(0) + "\t" +
 	              TNFa.getMolecule().getTotalMolecule(0) + "\t" +
 	              //MIP1B.getMolecule().getTotalMolecule(0) + "\t" +
 	              MIP2.getMolecule().getTotalMolecule(0) + "\t" +
@@ -82,10 +86,10 @@ public class PrintBaseModel extends PrintStat{
 	}
 	
 	void count() {
-		PResting = 0;
-		PMixActive = 0;
-		PActive = 0;
-		MAResting = 0;
+		resting = 0;
+		swelling = 0;
+		germ = 0;
+		hyphae = 0;
 		MAMixActive = 0;
 		MAActive = 0;
 		MAInactive = 0;
@@ -94,10 +98,15 @@ public class PrintBaseModel extends PrintStat{
 				for(Voxel v : V) {
 					for(Entry<Integer, Interactable> entry : v.getInteractables().entrySet()) {
 						Interactable cell = entry.getValue();
-						if(cell instanceof PneumocyteII) {
-							PneumocyteII p = (PneumocyteII) cell;
-							if(p.hasPhenotype(PneumocyteII.MIX_ACTIVE))PMixActive++;
-							else if(p.hasPhenotype(PneumocyteII.ACTIVE))PActive++;
+						if(cell instanceof Afumigatus) {
+							Afumigatus p = (Afumigatus) cell;
+							/*if(p.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.RESTING_CONIDIA))resting++;
+							if(p.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.SWELLING_CONIDIA))swelling++;
+							if(p.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.GERM_TUBE))germ++;
+							if(p.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.HYPHAE))hyphae++;*/
+							
+							//if(p.getBooleanNetwork().hasPhenotype(PneumocyteStateModel.MIX_ACTIVE))PMixActive++;
+							//else if(p.getBooleanNetwork().hasPhenotype(PneumocyteStateModel.ACTIVE))PActive++;
 						}/*else if(cell instanceof Macrophage) {
 							Macrophage p = (Macrophage) cell;
 							if(p.getPhenotype() == Phenotypes.RESTING)MAResting++;
@@ -109,6 +118,7 @@ public class PrintBaseModel extends PrintStat{
 				}
 			}
 		}
+		System.out.println(">>> " + resting  + " " + swelling + " " + germ + " " + hyphae);
 	}
 	
 

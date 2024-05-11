@@ -2,9 +2,10 @@ package edu.uf.interactable;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Afumigatus.Afumigatus;
-import edu.uf.utils.Constants;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Id;
-import edu.uf.utils.Rand;
 
 public class PneumocyteI extends Cell{
 	
@@ -12,10 +13,12 @@ public class PneumocyteI extends Cell{
 	private static int totalCells = 0;
 	private static int interactionId = Id.getMoleculeId();
 	
+	public static final int OPEN = Phenotype.createPhenotype();
+	
 	private boolean injury;
 
-	public PneumocyteI() {
-		super(null);
+	public PneumocyteI(IntracellularModel model) {
+		super(model);
 		totalCells++;
 		injury = false;
 	}
@@ -33,11 +36,11 @@ public class PneumocyteI extends Cell{
 
 	@Override
 	public void die() {
-		if(this.getStatus() != Leukocyte.DEAD) {
-            this.setStatus(Neutrophil.DEAD);  //##CAUTION!!!
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
             PneumocyteI.totalCells--;
         }
-	}
+    }
 	
 	public boolean isInjury() {
 		return injury;
@@ -70,32 +73,20 @@ public class PneumocyteI extends Cell{
 		return false;
 	}
 	
-	public void updateStatus(int x, int y, int z) {
+	/*public void updateStatus(int x, int y, int z) {
     	super.updateStatus(x, y, z);
     	injury = false;
-    }
+    	if(this.getStatus() != null)this.getStatus().updateStatus(this, x, y, z);
+    }*/
 
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if(interactable instanceof Afumigatus) {
-			if(this.isDead())return true;
-			Afumigatus a = (Afumigatus) interactable;
-			if(this.isDead())a.setEpithelialInhibition(1);
-			if(a.getStatus() == Afumigatus.HYPHAE) {
-					//if(injury || (a.getAspEpiInt() && Rand.getRand().randunif() < Constants.PR_ASP_KILL_EPI)) //*0.5
-					if((a.getAspEpiInt() && Rand.getRand().randunif() < Constants.PR_ASP_KILL_EPI)) //*0.5
-						this.die();
-					else
-						injury = true;
-				a.setAspEpiInt(false);
-				
-			}
-			
-			//a.set
-			//if(a.getStatus() == Afumigatus.HYPHAE)this.die();
+			injury = Interactions.typeIPneumocyteAspergillus(this, (Afumigatus) interactable, injury);
 			return true;
 		}
-		return interactable.interact(this, x, y, z); //CHANGED
+		
+		return interactable.interact(this, x, y, z);
 	}
 
 }

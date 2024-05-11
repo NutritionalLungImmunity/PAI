@@ -1,6 +1,8 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -11,19 +13,20 @@ public class Hepcidin extends Molecule{
 	
 	private static Hepcidin molecule = null;    
     
-    private Hepcidin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Hepcidin(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Hepcidin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Hepcidin getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Hepcidin(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Hepcidin(values, diffuse); 
     	}
     	return molecule;
     }
     
-    public static Molecule getMolecule() {
-    	return molecule;
+    public static Hepcidin getMolecule() {
+    	return getMolecule(null);
     }
     
     @Override
@@ -46,7 +49,7 @@ public class Hepcidin extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) 
-        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

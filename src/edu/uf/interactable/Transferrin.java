@@ -3,7 +3,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.AspergillusMacrophage;
 import edu.uf.intracellularState.FMacrophageBooleanNetwork;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -26,19 +29,20 @@ public class Transferrin extends Molecule{
     	INDEXES.put("TfFe2", 2);
     }
     
-    private Transferrin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Transferrin(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Transferrin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Transferrin getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Transferrin(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Transferrin(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Transferrin getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -61,46 +65,12 @@ public class Transferrin extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-
-        if (interactable instanceof Macrophage) {
-        	Macrophage macro = (Macrophage) interactable;
-        	double qttyFe2 = this.get("TfFe2", x, y, z) * Constants.MA_IRON_IMPORT_RATE * Constants.STD_UNIT_T;
-            double qttyFe  = this.get("TfFe", x, y, z)  * Constants.MA_IRON_IMPORT_RATE * Constants.STD_UNIT_T;
-
-            qttyFe2 = qttyFe2 < this.get("TfFe2", x, y, z) ? qttyFe2 : this.get("TfFe2", x, y, z);
-            qttyFe = qttyFe < this.get("TfFe", x, y, z) ? qttyFe : this.get("TfFe", x, y, z);
-
-            this.dec(qttyFe2, "TfFe2", x, y, z);
-            this.dec(qttyFe, "TfFe", x, y, z);
-            this.inc(qttyFe2 + qttyFe, "Tf", x, y, z);
-            macro.incIronPool(2 * qttyFe2 + qttyFe);
-            if (macro.getBooleanNetwork().getBooleanNetwork()[FMacrophageBooleanNetwork.FPN] == 1 && !macro.hasPhenotype(Macrophage.M1)) {
-                double qtty = macro.getIronPool() * 
-                		this.get("Tf", x, y, z) * Constants.MA_IRON_EXPORT_RATE * Constants.STD_UNIT_T;
-                qtty = qtty <= 2*this.get("Tf", x, y, z) ? qtty : 2*this.get("Tf", x, y, z);
-                double relTfFe = Util.ironTfReaction(qtty, this.get("Tf", x, y, z), this.get("TfFe", x, y, z));
-                double tffeQtty  = relTfFe*qtty;
-                double tffe2Qtty = (qtty - tffeQtty)/2;
-                this.dec(tffeQtty + tffe2Qtty, "Tf", x, y, z);
-                this.inc(tffeQtty, "TfFe", x, y, z);
-                this.inc(tffe2Qtty, "TfFe2", x, y, z);
-                macro.incIronPool(-qtty);
-            }
-            return true;
-        }else if(interactable instanceof Iron) {
-        	Iron iron = (Iron) interactable;
-        	double qtty = iron.get("Iron", x, y, z);
-        	qtty = qtty <= 2 * this.get("Tf", x, y, z) + this.get("TfFe", x, y, z) ? qtty : 2 * this.get("Tf", x, y, z) + this.get("TfFe", x, y, z);
-            double relTfFe = Util.ironTfReaction(qtty, this.get("Tf", x, y, z), this.get("TfFe", x, y, z));
-            double tffeQtty = relTfFe * qtty;
-            double tffe2Qtty = (qtty - tffeQtty) / 2.0;
-            this.dec(tffeQtty + tffe2Qtty, "Tf", x, y, z);
-            this.inc(tffeQtty, "TfFe", x, y, z);
-            this.inc(tffe2Qtty, "TfFe2", x, y, z);
-            iron.dec(qtty, "Iron", x, y, z);
-
-            return true;
-        }
+        if (interactable instanceof Macrophage)
+        	return Interactions.transferrinMacrophage((Cell) interactable, this, AspergillusMacrophage._FPN, AspergillusMacrophage.M1, x, y, z);
+        	
+        if(interactable instanceof Iron)
+        	return Interactions.transferrinIronChelation(this, (Molecule) interactable, x, y, z);
+        
         return interactable.interact(this, x, y, z);
     }
 

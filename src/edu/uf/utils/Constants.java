@@ -20,7 +20,7 @@ public class Constants {
 	
 	public static int ITER_TO_CHANGE_STATE = 60;
 	public static int ITER_TO_REST = 30*6;
-	public static int ITER_TO_GROW = 15;//30 ; //40 um every 58 min  --  https://doi.org/10.1128/msphere.00076-23
+	public static int ITER_TO_GROW = 30 ; //40 um every 58 min  --  https://doi.org/10.1128/msphere.00076-23
 	
 	public static double VOXEL_VOL = 6.4e-11; // L
 	public static double VOXEL_LEN = 40; //um
@@ -37,7 +37,7 @@ public class Constants {
 	
 	public static double TAFC_UP = 0.01245766;// -- from the same paper of Kd_LIP;  (1e-12/VOXEL_VOL) * STD_UNIT_T * 15;
 	
-	public static double TAFC_QTTY = 1.0000e-15 * STD_UNIT_T * 15;
+	public static double TAFC_QTTY = 1.0000e-15 * STD_UNIT_T;
 	public static double HEMOLYSIN_QTTY = 1.386667e-10 * STD_UNIT_T * 15;
 	public static double MA_IL6_QTTY = 1.4615e-20 * STD_UNIT_T * 15;
 	public static double MA_IL8_QTTY = 5.072776e-19 * STD_UNIT_T * 15;
@@ -120,8 +120,8 @@ public class Constants {
 	public static double REC_BIAS = 0.9995; // DUMMY VALUE CREATED TO AVOID INFINTY LOOP!
 	
 	
-	public static double MAX_N = 522*3;
-	public static double MAX_MA = 209*3;
+	public static double MAX_N = 522;//*3;
+	public static double MAX_MA = 209;//*3;
 	public static double MIN_MA = 15;
 
 	public static double PR_MA_PHAG = 0.9054552746554831;
@@ -181,8 +181,8 @@ public class Constants {
 	public static double DEFAULT_TFFE_CONCENTRATION = DEFAULT_TFFE_REL_CONCENTRATION * DEFAULT_TF_CONCENTRATION;
 	public static double DEFAULT_TFFE2_CONCENTRATION = DEFAULT_TFFE2_REL_CONCENTRATION * DEFAULT_TF_CONCENTRATION;
 
-	public static double RECRUITMENT_RATE_N = 4.882812e+14*2;
-	public static double RECRUITMENT_RATE_MA = 4.882812e+14*2; //arbitrary unity
+	public static double RECRUITMENT_RATE_N = 4.882812e+14;//*2;
+	public static double RECRUITMENT_RATE_MA = 4.882812e+14;//*2; //arbitrary unity
 	
 	
 	
@@ -369,9 +369,26 @@ public class Constants {
     public static double Kd_IFN_I = -1;
     public static double Kd_IFNg = -1;
     public static double Kd_IL23 = -1;
+    public static double LPC2_QTTY = -1;
     
     
     public static double Kd_Adenosine = -1;
+    public static double b_DEFENSIN_QTTY = -1;
+    public static double Kd_b_DEFENSIN = -1;
+    public static double K_M_TF_YER = -1;
+    public static double YER_QTTY = -1;
+    public static double YER_UP_RATE = -1;
+    public static double K_M_TF_AERO = -1;
+    public static double AERO_QTTY = -1;
+    public static double AERO_UP_RATE = -1;
+    public static double K_M_TF_SAL = -1;
+    public static double SAL_QTTY = -1;
+    public static double SAL_UP_RATE = -1;
+    public static double K_M_TF_ENT = -1;
+    public static double ENT_QTTY = -1;
+    public static double ENT_UP_RATE = -1;
+    public static double K_M_LPC2_ENT = -1;
+    
     
     
     

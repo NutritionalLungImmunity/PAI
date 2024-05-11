@@ -2,11 +2,10 @@ package edu.uf.interactable;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Afumigatus.Afumigatus;
-import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.Phenotype;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
-import edu.uf.utils.Util;
 
 public class PneumocyteII extends Cell {
     public static final String NAME = "Pneumocyte";
@@ -15,13 +14,13 @@ public class PneumocyteII extends Cell {
     
     private int iteration;
     
-    public static final int ACTIVE = Phenotype.createPhenotype();
-    public static final int MIX_ACTIVE = Phenotype.createPhenotype();
+    /*public static final int ACTIVE = Phenotype.createPhenotype();
+    public static final int MIX_ACTIVE = Phenotype.createPhenotype();*/
     
     
     private static int interactionId = Id.getMoleculeId();
 
-    public PneumocyteII(BooleanNetwork network) {
+    public PneumocyteII(IntracellularModel network) {
         super(network);
         this.iteration = 0;
         PneumocyteII.totalCells = PneumocyteII.totalCells + 1;
@@ -48,63 +47,39 @@ public class PneumocyteII extends Cell {
 	}
 
     
-    public void die() {
-        if(this.getStatus() != Leukocyte.DEAD) {
-            this.setStatus(Neutrophil.DEAD);  //##CAUTION!!!
+	public void die() {
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
             PneumocyteII.totalCells--;
         }
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Afumigatus) {
-            Afumigatus interac = (Afumigatus) interactable;
-            //interac.setEpithelialInhibition(1*Constants.ITER_TO_GROW);
-        	if(!this.isDead()) 
-                if(interac.getStatus() != Afumigatus.RESTING_CONIDIA) 
-                    //if(!this.hasPhenotype(Macrophage.M1))  //REVIEW
-                    	this.bind(interac, 4);
-                        //if(Rand.getRand().randunif() < Constants.PR_P_INT) 
-                        //	this.bind(Afumigatus.RECEPTOR_IDX);
-            return true;
-        }
+        if (interactable instanceof Afumigatus) 
+            return Interactions.typeIIPneumocyteAspergillus(this, (Afumigatus) interactable);
         
-        if (interactable instanceof IL6) { 
-        	return Util.secrete(this, (IL6) interactable, Constants.MA_IL6_QTTY, x, y, z, 0); 
-        }
+        if (interactable instanceof IL6) 
+        	return Interactions.secrete(this, (IL6) interactable, Constants.MA_IL6_QTTY, x, y, z, 0); 
         
         if (interactable instanceof TNFa) {
-        	Util.bind(this, (TNFa) interactable, x, y, z, 0);
-            return Util.secrete(this, (TNFa) interactable, Constants.MA_TNF_QTTY, x, y, z, 0); 
+        	Interactions.bind(this, (TNFa) interactable, x, y, z, 0);
+            return Interactions.secrete(this, (TNFa) interactable, Constants.MA_TNF_QTTY, x, y, z, 0); 
         }
-        
-        /*if (interactable instanceof IL10) {
-            Molecule interact = (Molecule) interactable;
-            EukaryoteSignalingNetwork.IL10_e = IL10.MOL_IDX;
-        	if (Util.activationFunction(interact.values[0][x][y][z], Constants.Kd_IL10, this.getClock())) 
-        		this.bind(IL10.MOL_IDX);
-            return true;
-        }*/
-        
-        /*if (interactable instanceof TGFb) {
-            Molecule interact = (Molecule) interactable;
-            EukaryoteSignalingNetwork.TGFb_e = TGFb.MOL_IDX;
-        	if (Util.activationFunction(interact.values[0][x][y][z], Constants.Kd_TGF, this.getClock())) 
-        		this.bind(TGFb.MOL_IDX);
-            return true;
-        }*/
 		
         return interactable.interact(this, x, y, z);
     }
 
     public void incIronPool(double qtty) {}
 
-    public void updateStatus(int x, int y, int z) {
+    /*public void updateStatus(int x, int y, int z) {
     	super.updateStatus(x, y, z);
     	if(!this.getClock().toc())return;
     	this.processBooleanNetwork();
-    	if(this.hasPhenotype(new int[] {Leukocyte.APOPTOTIC})) //I DON'T KNOW IF THIS CODE WORKS
-			this.die();
-    }
+    	if(this.getBooleanNetwork().hasPhenotype(IntracellularModel.APOPTOTIC))//I STILL DON'T KNOW IF THIS CODE WORKS
+    		this.die();
+    	//if(this.hasPhenotype(new int[] {Leukocyte.APOPTOTIC})) //I DON'T KNOW IF THIS CODE WORKS
+			
+    }*/
             
     public void move(Voxel oldVoxel, int steps) {}
 

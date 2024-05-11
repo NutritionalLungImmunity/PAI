@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -11,19 +14,20 @@ public class ROS extends Molecule{
 	
 	private static ROS molecule = null;
     
-    protected ROS(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    protected ROS(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static ROS getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static ROS getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new ROS(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new ROS(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static ROS getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -48,19 +52,14 @@ public class ROS extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if(interactable instanceof PneumocyteII) {
-        	PneumocyteII cell = (PneumocyteII) interactable;
-	        if (Util.activationFunction(this.get(0, x, y, z)*this.get(0, x, y, z), Constants.Kd_H2O2*Constants.Kd_H2O2, Constants.VOXEL_VOL*Constants.VOXEL_VOL)) {
-	        	//System.out.println(this.get(0, x, y, z)/Constants.VOXEL_VOL + " " + Constants.Kd_H2O2);
-	        	cell.getBooleanNetwork().getPhenotype().put(PneumocyteII.APOPTOTIC, 4);
-	        }
-	        return true;
-        }
+        if(interactable instanceof PneumocyteII) 
+        	return Interactions.rosActivation((PneumocyteII) interactable, this, Cell.APOPTOTIC, x, y, z);
+
         if(interactable instanceof Neutrophil) 
-        	return Util.secrete((Neutrophil) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Neutrophil) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
         
         if(interactable instanceof Macrophage) 
-        	return Util.secrete((Macrophage) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Macrophage) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

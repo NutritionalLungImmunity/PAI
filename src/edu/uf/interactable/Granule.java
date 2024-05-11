@@ -1,7 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
@@ -14,19 +16,20 @@ public class Granule extends Molecule{
 	
 	private static Granule molecule = null;    
     
-    private Granule(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Granule(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Granule getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Granule getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Granule(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Granule(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Granule getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -48,16 +51,11 @@ public class Granule extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Neutrophil)
-    		return Util.secrete((Neutrophil) interactable, this, Constants.GRANULE_QTTY, x, y, z, 0);
+    		return Interactions.secrete((Neutrophil) interactable, this, Constants.GRANULE_QTTY, x, y, z, 0);
         
-        if(interactable instanceof Afumigatus) {
-        	Afumigatus af = (Afumigatus) interactable;
-        	if(Util.activationFunction(this.get(0, x, y, z), Constants.Kd_Granule, 1, 1) > Rand.getRand().randunif()) {
-        		af.die();
-        	}
-        	return true;
-        }
-        //System.out.println(interactable);
+        if(interactable instanceof Afumigatus) 
+        	return Interactions.kill((Afumigatus) interactable, this, x, y, z);
+        
         return interactable.interact(this, x, y, z);
     }
 

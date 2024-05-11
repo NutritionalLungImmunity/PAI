@@ -1,9 +1,12 @@
 package edu.uf.interactable.klebsiela;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
+import edu.uf.interactable.Cell;
 import edu.uf.interactable.InfectiousAgent;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Internalizable;
@@ -11,11 +14,12 @@ import edu.uf.interactable.Leukocyte;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.PneumocyteII;
+import edu.uf.interactable.Siderophore;
 import edu.uf.interactable.TLRBinder;
-import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.primitives.Interactions;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
 
 public class Klebsiella extends InfectiousAgent implements Internalizable{
@@ -30,20 +34,42 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	
 	private static int totalCells = 0;
 	
+	private IntracellularModel model;
+	
 	private Clock growthClock;
 	private static double totalIron;
 	private double ironPool;
 	private boolean engulfed;
 	private boolean entraped;
 	
-	public Klebsiella(double ironPool) {
-		super(null);
+	private Set<Siderophore> hasSiderophore;
+	
+	private boolean aerobactin;
+	private boolean enterobactin;
+	private boolean salmochelin;
+	private boolean yersiniabactin;
+	private boolean cps;
+	
+	public Klebsiella(IntracellularModel model, double ironPool, boolean cps, boolean aerobactin, boolean enterobactin, boolean salmochelin, boolean yersiniabactin) {
+		super(model);
+		this.model = model;
 		totalCells++;
 		this.growthClock = new Clock((int) Constants.INV_UNIT_T); //PUT GROWTH RATE
 		this.ironPool = ironPool;
 		Klebsiella.totalIron = Klebsiella.totalIron + ironPool;
 		this.engulfed = false;
 		this.entraped = false;
+		
+		this.hasSiderophore  = new HashSet<>();
+		if(yersiniabactin) this.hasSiderophore.add(Yersiniabactin.getMolecule());
+		if(aerobactin) this.hasSiderophore.add(Aerobactin.getMolecule());
+		if(enterobactin) this.hasSiderophore.add(Enterobactin.getMolecule());
+		if(salmochelin) this.hasSiderophore.add(Salmochelin.getMolecule());
+		
+		this.aerobactin = aerobactin;
+		this.enterobactin = enterobactin;
+		this.salmochelin = salmochelin;
+		this.yersiniabactin = yersiniabactin;
 	}
 	
 	public static int getTotalCells() {
@@ -55,7 +81,7 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	}
 	
 	public boolean isInternalizing() {
-        return this.getState() == Klebsiella.INTERNALIZING;
+        return this.getBooleanNetwork().hasPhenotype(Klebsiella.INTERNALIZING);
 	}
 
 	@Override
@@ -67,24 +93,40 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	public void setEntraped(boolean entraped) {
 		this.entraped = entraped;
 	}
+	
+	public boolean isEncapsulated() {
+		return this.cps;
+	}
+	
+	public boolean hasSiderophore(Siderophore siderophore) {
+		return this.hasSiderophore.contains(siderophore);
+	}
 
 	@Override
 	public void grow(int x, int y, int z, int xbin, int ybin, int zbin, Leukocyte phagocyte) {
 		Voxel[][][] grid = GridFactory.getGrid();
 		if(this.growthClock.toc()) {
-			grid[x][y][z].setCell(new Klebsiella(this.getIronPool()/2.0));
+			grid[x][y][z].setCell(new Klebsiella(
+					this.model,
+					this.getIronPool()/2.0, 
+					this.isEncapsulated(),
+					this.aerobactin, 
+					this.enterobactin,
+					this.salmochelin, 
+					this.yersiniabactin
+				));
 			this.setIronPool(this.getIronPool()/2.0);
 		}
 		
 	}
 	
-	@Override
+	/*@Override
 	public void updateStatus(int x, int y, int z) {
 		super.updateStatus(x, y, z);
 		this.growthClock.tic();
 		if(this.getState() == Afumigatus.INTERNALIZING)
             this.setState(Afumigatus.FREE);
-	}
+	}*/
 
 	@Override
 	public void move(Voxel oldVoxel, int steps) {
@@ -100,11 +142,11 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 
 	@Override
 	public void die() {
-		if(this.getStatus() != Klebsiella.DEAD) {
-            this.setStatus(Klebsiella.DEAD);
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
             Klebsiella.totalCells--;
         }
-	}
+    }
 
 	@Override
 	public void incIronPool(double qtty) {
@@ -130,11 +172,15 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if(interactable instanceof Macrophage) {
-			intKlebsiela((Macrophage)interactable, this);
+			Interactions.intKlebsiela((Macrophage)interactable, this);
 			return true;
 		}
 		if(interactable instanceof Neutrophil) {
-			intKlebsiela((Neutrophil)interactable, this);
+			if(this.isEncapsulated()) {
+				((Neutrophil)interactable).bind(LPS, 4);
+				return true;
+			}
+			Interactions.intKlebsiela((Neutrophil)interactable, this);
 			return true;
 		}
 		if(interactable instanceof PneumocyteII) {
@@ -145,22 +191,17 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 		return interactable.interact(this, x, y, z);
 	}
 	
-	
-	public static void intKlebsiela(Leukocyte phagocyte, Klebsiella klebsiela) {
-        if(klebsiela.getState() == Klebsiella.FREE) {
-            if (!phagocyte.isDead()) {
-            	if(phagocyte.getPhagosome().size() < phagocyte.getMaxCell()) {
-                        //phagocyte.phagosome.hasConidia = true;
-            		klebsiela.setState(Klebsiella.INTERNALIZING);
-            		klebsiela.setEngulfed(true);
-                    phagocyte.getPhagosome().add(klebsiela);
-                }
-            }
-            phagocyte.setState(Leukocyte.INTERACTING);
-            if(phagocyte instanceof Macrophage) {
-            	phagocyte.bind(LPS, 4);
-            }
-        }
-    }
+
+	@Override
+	public boolean isSecretingSiderophore(Siderophore mol) {
+		return true;
+	}
+
+	@Override
+	public boolean isUptakingSiderophore(Siderophore mol) {
+		if(!this.isDead() && mol.hasSiderophore()) 
+    		return true;
+    	return false;
+	}
 
 }

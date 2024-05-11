@@ -22,7 +22,7 @@ public class PrintCoinjury extends PrintStat{
 	@Override
 	public void printStatistics(int k, File file){
 		String str = k + "\t" + 
-	              Afumigatus.getTotalCells() + "\t" +
+	              Afumigatus.getTotalCells0() + "\t" +
 	              /*Afumigatus.getTotalRestingConidia() + "\t" +
 	              Afumigatus.getTotalSwellingConidia() + "\t" +
 	              Afumigatus.getTotalGerminatingConidia() + "\t" +

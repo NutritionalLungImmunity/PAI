@@ -1,8 +1,8 @@
 package edu.uf.interactable;
 
 import edu.uf.interactable.klebsiela.Klebsiella;
-import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.Phenotype;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
@@ -17,22 +17,20 @@ public class DC extends Leukocyte{
     private static int totalCells = 0;
     private static double totalIron = 0; 
     
-    public static final int M1  = Phenotype.createPhenotype();
-	public static final int M2A = Phenotype.createPhenotype();
-	public static final int M2B = Phenotype.createPhenotype();
-	public static final int M2C = Phenotype.createPhenotype();
-    
     private int maxMoveStep;
     private boolean engaged;
     private static int interactionId = Id.getMoleculeId();
     
     
-	public DC(BooleanNetwork network) {
+	public DC(IntracellularModel network) {
     	super(0.0, network);
     	DC.totalCells = DC.totalCells + 1;
-        this.setState(Macrophage.FREE);
         this.maxMoveStep = -1; 
     }
+	
+	public void setMaxMoveStep(int moveStep) {
+		this.maxMoveStep = moveStep;
+	}
 	
 	public int getInteractionId() {
 		return interactionId;
@@ -84,51 +82,27 @@ public class DC extends Leukocyte{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	if(interactable instanceof Klebsiella) {
-    		Klebsiella.intKlebsiela(this, (Klebsiella) interactable);
-    		return true;
-    	}
+    	if(interactable instanceof Klebsiella) 
+    		return Interactions.intKlebsiella(this, (Klebsiella) interactable);
+    	
     	if(interactable instanceof IFN_I) 
-    		return Util.secrete(this, (IFN_I) interactable, Constants.MA_IFN_I_QTTY, x, y, z, 0);
+    		return Interactions.secrete(this, (IFN_I) interactable, Constants.MA_IFN_I_QTTY, x, y, z, 0);
     	
     	if(interactable instanceof IFN_III) 
-    		return Util.secrete(this, (IFN_III) interactable, Constants.MA_IFN_III_QTTY, x, y, z, 0);
+    		return Interactions.secrete(this, (IFN_III) interactable, Constants.MA_IFN_III_QTTY, x, y, z, 0);
     	
     	if(interactable instanceof IL23) 
-    		return Util.secrete(this, (IL23) interactable, Constants.MA_IL23_QTTY, x, y, z, 0);
+    		return Interactions.secrete(this, (IL23) interactable, Constants.MA_IL23_QTTY, x, y, z, 0);
     	
         return interactable.interact(this, x, y, z);
-    }
-
-
-    public void updateStatus(int x, int y, int z) {
-    	super.updateStatus(x, y, z);
-    	if(!this.getClock().toc())return;
-    	
-    	this.processBooleanNetwork();
-    	
-        if(this.getStatus() == DC.DEAD)
-            return;
-        if(this.getStatus() == DC.NECROTIC) {
-            this.die();
-            //for(InfectiousAgent entry : this.getPhagosome()) //WARNING-COMMENT
-            //	entry.setState(Afumigatus.RELEASING);
-        }else if(this.getPhagosome().size() > Constants.MA_MAX_CONIDIA)
-            this.setStatus(Leukocyte.NECROTIC);
-        
-        if(Rand.getRand().randunif() < Constants.DC_HALF_LIFE && this.getPhagosome().size() == 0 &&
-        		DC.totalCells > Constants.MIN_MA) 
-            this.die();
-        //this.setMoveStep(0);
-        this.maxMoveStep = -1;
     }
         
 
     public void incIronPool(double qtty) {}
 
     public void die() {
-        if(this.getStatus() != DC.DEAD) {
-            this.setStatus(DC.DEAD);
+    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
             DC.totalCells = DC.totalCells - 1;
         }
     }

@@ -1,8 +1,10 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.interactable.invitro.Invitro;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -18,19 +20,20 @@ public class Heme extends Molecule{
 	private static Heme molecule = null; 
   
     
-    private Heme(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Heme(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Heme getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Heme getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Heme(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Heme(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Heme getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -53,65 +56,17 @@ public class Heme extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	//if(interactable instanceof Invitro)return interactable.interact(this, x, y, z);
-    	/*if(interactable instanceof Liver) {
-    		Liver.getLiver().setHeme(Liver.getLiver().getHeme() + this.values[0][x][y][z]/2.0); //BASED ON IL6 ...
-            return true;
-    	}*/
-    	/*if(interactable instanceof Heme) {
-    		if(this.get(1, x, y, z) > 0) {
-    			double qtty = Constants.HEME_TURNOVER_RATE * (Constants.HEME_SYSTEM_CONCENTRATION - this.get(0, x, y, z));
-    			this.inc(qtty, 1, x, y, z);
-    		}
-    		return true;
-    	}*/
-        /*if(interactable instanceof Hemoglobin) {
-        	Hemoglobin hb = (Hemoglobin) interactable;
-        	double qtty = Constants.K_HB * hb.get(0, x, y, z);
-        	this.inc(qtty, 0, x, y, z);
-        	hb.dec(qtty, 0, x, y, z);
-        	return true; 
-        }*/
-    	//if(!(interactable instanceof Molecule))System.out.println(interactable);
-    	/*if(interactable instanceof Erythrocyte) {
-    		Erythrocyte erythrocyte = (Erythrocyte) interactable;
-        	double qtty = erythrocyte.getBurst() * Constants.ERYTROCYTE_HEMOGLOBIN_CONCENTRATION;
-        	//System.out.println("> " + qtty);
-        	this.inc(qtty, 0, x, y, z);
-        	erythrocyte.setBurst(0);
-        	return true;
-    	}*/
-    	if(interactable instanceof Blood) {
-    		if(Blood.getBlood().hasBlood(x, y, z)) {
-    			this.set(Constants.HEME_QTTY, 0, x, y, z);
-    		}
-    		return true;
-    	}
-        if(interactable instanceof Afumigatus) {
-        	if(((Afumigatus) interactable).getStatus() == Afumigatus.HYPHAE) {
-        		Afumigatus afumigatus = (Afumigatus) interactable;
-            	double qtty = Constants.HEME_UP * this.get(0, x, y, z);
-            	//System.out.println(qtty);
-            	afumigatus.incHeme(qtty);
-            	afumigatus.incIronPool(qtty);
-            	this.dec(qtty, 0, x, y, z);
-        	}
-        	
-        	return true;
-        	/*if(((Afumigatus) interactable).getStatus() == Afumigatus.HYPHAE) 
-        		this.set(1.0, 1, x, y, z);
-        		
-        	Afumigatus afumigatus = (Afumigatus) interactable;
-        	double qtty = Constants.HEME_UP * this.get(0, x, y, z);
-        	afumigatus.incIronPool(qtty);
-        	this.dec(qtty, 0, x, y, z);
-        	return true;*/
-        }
+    	if(interactable instanceof Blood) 
+    		return Interactions.set(this, Constants.HEME_QTTY, x, y, z, 0);
+    	
+        if(interactable instanceof Afumigatus) 
+        	return Interactions.aspergillusHemeUptake((Afumigatus) interactable, this, x, y, z);
+        
         if(interactable instanceof Macrophage) 
-        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
         
         if(interactable instanceof Neutrophil) 
-        	return Util.bind((Neutrophil) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Neutrophil) interactable, this, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

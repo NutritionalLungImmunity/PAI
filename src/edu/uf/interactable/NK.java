@@ -1,10 +1,11 @@
 package edu.uf.interactable;
 
 import edu.uf.compartments.Voxel;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
-import edu.uf.utils.Util;
 
 public class NK extends Cell{
 
@@ -12,8 +13,8 @@ public class NK extends Cell{
 	private static int totalCells = 0;
 	private static int interactionId = Id.getMoleculeId();
 
-	public NK() {
-		super(null);
+	public NK(IntracellularModel model) {
+		super(model);
 		totalCells++;
 	}
 	
@@ -30,11 +31,11 @@ public class NK extends Cell{
 
 	@Override
 	public void die() {
-		if(this.getStatus() != Leukocyte.DEAD) {
-            this.setStatus(Neutrophil.DEAD);  //##CAUTION!!!
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
             NK.totalCells--;
         }
-	}
+    }
 	
 	public boolean isInjury() {
 		return false;
@@ -64,17 +65,11 @@ public class NK extends Cell{
 	public boolean removeUponDeath() {
 		return true;
 	}
-	
-	public void updateStatus(int x, int y, int z) {
-    	super.updateStatus(x, y, z);
-    	if(!this.getClock().toc())return;
-    	this.processBooleanNetwork();
-    }
 
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if (interactable instanceof IFN_I) 
-			return Util.bind(this, (IFN_I) interactable, x, y, z, 0);
+			return Interactions.bind(this, (IFN_I) interactable, x, y, z, 0);
         
 		return interactable.interact(this, x, y, z);
 	}

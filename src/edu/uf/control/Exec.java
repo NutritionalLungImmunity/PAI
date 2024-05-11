@@ -12,6 +12,7 @@ import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.Setter;
 import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.NeutrophilStateModel;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.InfectiousAgent;
@@ -88,7 +89,8 @@ public class Exec {
         	if(entry.getValue() instanceof Cell) {
         		Cell v = (Cell) entry.getValue();
         		//if isinstance(v, Cell):
-        		if (v.getStatus() == Cell.DEAD && v.removeUponDeath()) {
+        		if(v instanceof Liver)continue;//Dirty hack!
+        		if (v.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD && v.removeUponDeath()) {
         			//if(v instanceof Neutrophil)System.out.println(v.hasPhenotype(NeutrophilStateModel.NETOTIC));
         			if (v instanceof Leukocyte) {
         				List<InfectiousAgent> phagosome = ((Leukocyte)v).getPhagosome();
@@ -104,7 +106,7 @@ public class Exec {
 
     private static void releasePhagosome(List<InfectiousAgent> phagosome, Voxel voxel) {
         for(InfectiousAgent entry : phagosome)
-        	if (entry.getStatus() != Cell.DEAD)
+        	if (entry.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD)
         		voxel.setCell(entry);
     }
 }

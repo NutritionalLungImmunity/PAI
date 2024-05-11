@@ -1,6 +1,8 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Util;
@@ -12,19 +14,20 @@ public class Adenosine extends Molecule{
 	
 	private static Adenosine molecule = null;    
     
-    private Adenosine(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Adenosine(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Adenosine getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Adenosine getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Adenosine(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Adenosine(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Adenosine getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -46,26 +49,13 @@ public class Adenosine extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof PneumocyteII)
-    		return Util.secrete((PneumocyteII) interactable, this, 1.0, x, y, z, 0);
+    		return Interactions.secrete((PneumocyteII) interactable, this, 1.0, x, y, z, 0);
     	
-        if (interactable instanceof Macrophage){
-        	Macrophage macro = (Macrophage) interactable;
-        	if(macro.isDead()) {
-    			this.inc(1.0, 0, x, y, z); //CHANGE TO ADO_QTTY
-    		}else {
-    			Util.bind(macro, this, x, y, z, 0);
-    		}
-            return true; 
-        }
-        if (interactable instanceof Neutrophil) {
-        	Neutrophil neutr = (Neutrophil) interactable;
-        	if(neutr.isDead()) {
-    			this.inc(1.0, 0, x, y, z); //CHANGE TO ADO_QTTY
-    		}else {
-    			Util.bind(neutr, this, x, y, z, 0);
-    		}
-        	return true;
-        }
+        if (interactable instanceof Macrophage)
+        	return Interactions.leukocuteDumpInteraction((Macrophage) interactable, this, x, y, z, 1.0);
+        	
+        if (interactable instanceof Neutrophil) 
+        	return Interactions.leukocuteDumpInteraction((Neutrophil) interactable, this, x, y, z, 1.0);
         
         return interactable.interact(this, x, y, z);
     }

@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -8,22 +11,24 @@ public class MIP1B extends Chemokine{
     public static final String NAME = "MIP1B";
     public static final int NUM_STATES = 1;
     
-    private static MIP1B molecule = null;    
+    private static MIP1B molecule = null; 
 
-    private MIP1B(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-        super(qttys, diffuse, phenotypes);
+    private MIP1B(double[][][][] qttys, Diffuse diffuse) {
+        super(qttys, diffuse);
         Macrophage.setChemokine(MIP1B.NAME);
+        this.setPhenotye(Phenotype.createPhenotype());
     }
     
-    public static MIP1B getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static MIP1B getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new MIP1B(values, diffuse, phenotypes); 
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new MIP1B(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static MIP1B getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -45,10 +50,10 @@ public class MIP1B extends Chemokine{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof PneumocyteII) 
-        	return Util.secrete((PneumocyteII) interactable, this, Constants.P_MIP1B_QTTY, x, y, z, 0);
+        	return Interactions.secrete((PneumocyteII) interactable, this, Constants.P_MIP1B_QTTY, x, y, z, 0);
         
         if (interactable instanceof Macrophage) 
-        	return Util.secrete((Macrophage) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Macrophage) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

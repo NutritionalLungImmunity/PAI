@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -9,21 +12,23 @@ public class IL10 extends Molecule{
 	public static final String NAME = "IL10";
 	public static final int NUM_STATES = 1;
 	
-	private static IL10 molecule = null;    
+	private static IL10 molecule = null;   
     
-    private IL10(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private IL10(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
+		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static IL10 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static IL10 getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new IL10(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new IL10(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static IL10 getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -44,15 +49,14 @@ public class IL10 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage){//# or type(interactable) is Neutrophil: 
-        	Macrophage macro = (Macrophage) interactable;
-        	Util.secrete(macro, this, Constants.MA_IL10_QTTY, x, y, z, 0);
-            if (!macro.isDead()) { 
-            	Util.bind(macro, this, x, y, z, 0);
+        if (interactable instanceof Macrophage) {
+        	Cell cell = (Cell) interactable;
+        	if (!cell.isDead()) { 
+        		Interactions.secrete(cell, this, Constants.MA_IL10_QTTY, x, y, z, 0);
+        		Interactions.bind(cell, this, x, y, z, 0);
             }
-            return true; 
+        	return true;
         }
-        //System.out.println(interactable);
         return interactable.interact(this, x, y, z);
     }
 

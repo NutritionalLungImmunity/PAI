@@ -3,9 +3,12 @@ package edu.uf.interactable.Afumigatus;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Blood;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Setter;
+import edu.uf.interactable.klebsiela.Yersiniabactin;
 import edu.uf.utils.Constants;
 
 public class TranexamicAcid extends Setter{
@@ -29,13 +32,13 @@ public class TranexamicAcid extends Setter{
     	return molecule;
     }
     
+    public static TranexamicAcid getMolecule() {
+    	return getMolecule(null);
+    }
+    
     @Override
     public double getKd() {
     	return -1;
-    }
-    
-    public static TranexamicAcid getMolecule() {
-    	return molecule;
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {

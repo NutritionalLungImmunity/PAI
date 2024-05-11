@@ -5,13 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import edu.uf.interactable.Cell;
 import edu.uf.interactable.IL1;
+import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.TNFa;
 import edu.uf.utils.Constants;
 
-public class NeutrophilNetwork extends BooleanNetwork{
+public class NeutrophilNetwork extends IntracellularModel{
+	
+	public static final String name = "NeutrophilNetwork";
 
 	public static final int size = 7;
 	//public static final int NUM_RECEPTORS = 4;
@@ -23,6 +27,12 @@ public class NeutrophilNetwork extends BooleanNetwork{
 	public static final int TNFR = 4;
 	public static final int Dectin = 5;
 	public static final int CXCL2R = 6;
+	
+	
+	public static final int ACTIVE = Phenotype.createPhenotype();
+    public static final int NETOTIC = Phenotype.createPhenotype();
+    public static final int MIX_ACTIVE = Phenotype.createPhenotype();
+    public static final int PYROPTOTIC = Phenotype.createPhenotype();
 	
 	{
 		this.inputs = new int[NUM_RECEPTORS];
@@ -73,16 +83,24 @@ public class NeutrophilNetwork extends BooleanNetwork{
 			this.inputs[i] = 0;
 		
 		this.clearPhenotype();
+		this.computePhenotype();
 		
+	}
+	
+	protected void computePhenotype() {
 		if(this.booleanNetwork[NFkB] > 0) {
-			this.getPhenotype().put(Neutrophil.ACTIVE, this.booleanNetwork[NFkB]);
+			this.getPhenotype().put(ACTIVE, this.booleanNetwork[NFkB]);
+			this.getPhenotype().put(Lactoferrin.getMolecule().getPhenotype(), this.booleanNetwork[NFkB]);
 		} 
 		if(this.booleanNetwork[ERK] == 1) {
-			this.getPhenotype().put(Neutrophil.MIX_ACTIVE, this.booleanNetwork[ERK]);
+			this.getPhenotype().put(MIX_ACTIVE, this.booleanNetwork[ERK]);
+			this.getPhenotype().put(Lactoferrin.getMolecule().getPhenotype(), this.booleanNetwork[NFkB]);
 		}
-			
-		
-	
+	}
+
+	@Override
+	public void updateStatus(Cell cell, int x, int y, int z) {
+		// TODO Auto-generated method stub
 		
 	}
 

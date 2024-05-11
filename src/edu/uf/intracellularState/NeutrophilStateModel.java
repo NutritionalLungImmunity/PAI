@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import edu.uf.compartments.GridFactory;
+import edu.uf.interactable.Cell;
+import edu.uf.interactable.InfectiousAgent;
+import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.TLRBinder;
@@ -12,7 +16,9 @@ import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 
-public class NeutrophilStateModel extends BooleanNetwork{
+public class NeutrophilStateModel extends IntracellularModel{
+	
+	public static final String name = "NeutrophilStateModel";
 
 	public static final int size = 4;
 	//public static final int NUM_RECEPTORS = 4;
@@ -77,8 +83,14 @@ public class NeutrophilStateModel extends BooleanNetwork{
 		
 		this.clearPhenotype();
 		
+		this.computePhenotype();
+		
+	}
+	
+	protected void computePhenotype() {
 		if(this.booleanNetwork[ACTIVE] > 0) {
 			this.getPhenotype().put(NeutrophilStateModel.ACTIVE, this.booleanNetwork[ACTIVE]);
+			this.getPhenotype().put(Lactoferrin.getMolecule().getPhenotype(), this.booleanNetwork[ACTIVE]);
 		} 
 		if(this.booleanNetwork[APOPTOTIC] == 1) {
 			this.getPhenotype().put(NeutrophilStateModel.APOPTOTIC, this.booleanNetwork[APOPTOTIC]);
@@ -86,8 +98,40 @@ public class NeutrophilStateModel extends BooleanNetwork{
 		if(this.booleanNetwork[NETOTIC] == 1) {
 			this.getPhenotype().put(NeutrophilStateModel.NETOTIC, this.booleanNetwork[NETOTIC]);
 		}
-			
-	
+	}
+
+	@Override
+	public void updateStatus(Cell cell, int x, int y, int z) {
+		Neutrophil net = (Neutrophil) cell;
+		if(this.getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD)
+            return;
+        
+        
+        if(net.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.APOPTOTIC)) {
+        	net.die();
+            for(InfectiousAgent entry : net.getPhagosome())
+            	entry.getBooleanNetwork().setState(AspergillusIntracellularModel.LOCATION, Afumigatus.RELEASING);
+        }
+        if(net.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC)) {
+        	GridFactory.getGrid()[x][y][z].setExternalState(1);
+        	/*if(this.clock.getCount() >= 48) {
+        		this.netHalfLife = Constants.NET_HALF_LIFE*Constants.NET_COUNTER_INHIBITION;
+        		System.out.println(this.netHalfLife + " " + Constants.NET_HALF_LIFE);
+        	}*/
+        	if(Rand.getRand().randunif() < net.getNetHalfLife()) {
+        		net.die();
+        		GridFactory.getGrid()[x][y][z].setExternalState(0);
+        		for(InfectiousAgent entry : net.getPhagosome())
+        			entry.getBooleanNetwork().setState(AspergillusIntracellularModel.LOCATION, Afumigatus.RELEASING);
+        	}
+        }
+        
+        
+        //else if(Rand.getRand().randunif() < Constants.NEUTROPHIL_HALF_LIFE)
+           // this.setStatus(Neutrophil.APOPTOTIC);
+        //this.setMoveStep(0);
+        net.setMaxMoveStep(-1);
+        net.setEngaged(false);
 		
 	}
 	

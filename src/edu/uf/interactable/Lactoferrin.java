@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -25,19 +28,21 @@ public class Lactoferrin extends Molecule{
     	INDEXES.put("LactoferrinFe2", 2);
     }
     
-    private Lactoferrin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Lactoferrin(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
+		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static Lactoferrin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Lactoferrin getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Lactoferrin(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Lactoferrin(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Lactoferrin getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -58,91 +63,18 @@ public class Lactoferrin extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage) { //#ADD UPTAKE
-            Macrophage macro = (Macrophage) interactable;
-        	double qttyFe2 = this.get("LactoferrinFe2", x, y, z) * Constants.MA_IRON_IMPORT_RATE * 
-        			Constants.STD_UNIT_T;
-            double qttyFe = this.get("LactoferrinFe", x, y, z) * Constants.MA_IRON_IMPORT_RATE * 
-            		Constants.STD_UNIT_T;
-            
-            qttyFe2 = qttyFe2 < this.get("LactoferrinFe2", x, y, z) ? qttyFe2 : this.get("LactoferrinFe2", x, y, z);
-            qttyFe = qttyFe < this.get("LactoferrinFe", x, y, z) ? qttyFe : this.get("LactoferrinFe", x, y, z);
-
-            this.dec(qttyFe2, "LactoferrinFe2", x, y, z);
-            this.dec(qttyFe, "LactoferrinFe", x, y, z);
-            macro.incIronPool(2 * qttyFe2 + qttyFe);
-            return true;
-        }
-        if (interactable instanceof Neutrophil) {
-            Neutrophil neutro = (Neutrophil) interactable;
-            //System.out.println((neutro.status == Neutrophil.ACTIVE) + " "  + (neutro.state == Neutrophil.INTERACTING));
-        	if (neutro.hasPhenotype(this.getPhenotype()) && !neutro.hasDegranulated()){//(neutro.getStatus() == Neutrophil.ACTIVE && neutro.getState() == Neutrophil.INTERACTING) 
-        		this.inc(Constants.LAC_QTTY, "Lactoferrin", x, y, z);
-        		neutro.degranulate();
-        	}
+        if (interactable instanceof Macrophage)
+        	return Interactions.lactoferrinMacrophageUpatake((Macrophage) interactable, this, x, y, z);
         	
-            return true;
-        }
-        if (interactable instanceof Transferrin) {
-            Molecule tf = (Molecule) interactable;
-        	double dfe2dt = Util.michaelianKinetics(
-        			tf.get("TfFe2", x, y, z), this.get("Lactoferrin", x, y, z), Constants.K_M_TF_LAC, Constants.STD_UNIT_T
-        	);
-            double dfedt  = Util.michaelianKinetics(
-            		tf.get("TfFe", x, y, z), this.get("Lactoferrin", x, y, z), Constants.K_M_TF_LAC, Constants.STD_UNIT_T
-            );
-
-            double dfe2dtFe = Util.michaelianKinetics(
-            		tf.get("TfFe2", x, y, z), this.get("LactoferrinFe", x, y, z), Constants.K_M_TF_LAC, Constants.STD_UNIT_T
-            );
-            double dfedtFe = Util.michaelianKinetics(
-            		tf.get("TfFe", x, y, z), this.get("LactoferrinFe", x, y, z), Constants.K_M_TF_LAC, Constants.STD_UNIT_T
-            );
-
-            if (dfe2dt + dfedt > this.get("Lactoferrin", x, y, z)) {
-                double rel = this.get("Lactoferrin", x, y, z) / (dfe2dt + dfedt);
-                dfe2dt = dfe2dt * rel;
-                dfedt = dfedt * rel;
-            }
-
-            if (dfe2dtFe + dfedtFe > this.get("LactoferrinFe", x, y, z)) {
-                double rel = this.get("LactoferrinFe", x, y, z) / (dfe2dtFe + dfedtFe);
-                dfe2dtFe = dfe2dtFe * rel;
-                dfedtFe = dfedtFe * rel;
-            }
-
-            tf.dec(dfe2dt + dfe2dtFe, "TfFe2", x, y, z);
-            tf.inc(dfe2dt + dfe2dtFe, "TfFe", x, y, z);
-
-            tf.dec(dfedt + dfedtFe, "TfFe", x, y, z);
-            tf.inc(dfedt + dfedtFe, "Tf", x, y, z);
-
-            this.dec(dfe2dt + dfedt, "Lactoferrin", x, y, z);
-            this.inc(dfe2dt + dfedt, "LactoferrinFe", x, y, z);
-
-            this.dec(dfe2dtFe + dfedtFe, "LactoferrinFe", x, y, z);
-            this.inc(dfe2dtFe + dfedtFe, "LactoferrinFe2", x, y, z);
-
-            return true;
-        }
-        if (interactable instanceof Iron) {
-            Molecule iron = (Molecule) interactable;
-        	double qtty = iron.get("Iron", x, y, z);
-            qtty  = qtty <= 2 * this.get("Lactoferrin", x, y, z) + this.get("LactoferrinFe", x, y, z) ?
-            		qtty : 2 * this.get("Lactoferrin", x, y, z) + this.get("LactoferrinFe", x, y, z);
-            double relTfFe = Util.ironTfReaction(qtty, this.get("Lactoferrin", x, y, z), this.get("LactoferrinFe", x, y, z));
-            double tffeQtty = relTfFe * qtty;
-            double tffe2Qtty = (qtty - tffeQtty) / 2;
-            this.dec(tffeQtty + tffe2Qtty, "Lactoferrin", x, y, z);
-            this.inc(tffeQtty, "LactoferrinFe", x, y, z);
-            this.inc(tffe2Qtty, "LactoferrinFe2", x, y, z);
-            iron.dec(qtty, "Iron", x, y, z);
-            return true; 
-        }
+        if (interactable instanceof Neutrophil) 
+        	return Interactions.lactoferrinDegranulation((Neutrophil) interactable, this, x, y, z);
         
-
-        //if itype is ROS:
-        //    return False
+        if (interactable instanceof Transferrin) 
+           return Interactions.lactoferrinTransferrinChelation((Molecule) interactable, this, x, y, z);
+        
+        if (interactable instanceof Iron) 
+        	return Interactions.transferrinIronChelation(this, (Molecule) interactable, x, y, z); //this method can be used for both lactoferrin and transferrin.
+        
         return interactable.interact(this, x, y, z);
     }
 

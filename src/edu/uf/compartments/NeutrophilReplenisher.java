@@ -2,14 +2,14 @@ package edu.uf.compartments;
 
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Neutrophil;
-import edu.uf.intracellularState.NeutrophilFactory;
+import edu.uf.intracellularState.IntracellularModelFactory;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 
 public class NeutrophilReplenisher extends Recruiter{
 	
 	public Cell createCell() {
-        Neutrophil n = new Neutrophil(0.0, NeutrophilFactory.createBooleanNetwork());//new Neutrophil(0); 
+        Neutrophil n = new Neutrophil(0.0, IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.NEUTROPHIL_STATE_MODEL));//new Neutrophil(0); 
         return n;
     }
     

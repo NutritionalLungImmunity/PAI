@@ -6,10 +6,10 @@ public abstract class Setter extends Molecule{
 	private int iteration;
     
     protected Setter() {
-		super(new double[][][][] {}, null, new int[] {});
+		super(new double[][][][] {}, null);
 	}
 	
-	private void incTotalMolecule(int index, double inc) {}
+	public void incTotalMolecule(int index, double inc) {}
 	
 	public double inc(double qtty, String index, int x, int y, int z) {
 		return 0;

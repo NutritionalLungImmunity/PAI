@@ -7,7 +7,9 @@ import edu.uf.interactable.Cell;
 import edu.uf.interactable.InfectiousAgent;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Leukocyte;
+import edu.uf.interactable.Liver;
 import edu.uf.interactable.Molecule;
+import edu.uf.interactable.Transferrin;
 import edu.uf.utils.Rand;
 
 import java.util.HashMap;
@@ -297,8 +299,11 @@ public class Voxel {
             case 2:
             	for(int i : cellsIndices) {
             		if(!cells.get(i).isTime())continue;
-            		for(int j = 0; j < molSize; j++) 
+            		for(int j = 0; j < molSize; j++) {
+            			//if(mols.get(j) instanceof Transferrin)System.out.println(cells.get(i) + " "  + mols.get(j));
+            			//if(cells.get(i) instanceof Liver && mols.get(j) instanceof Transferrin)System.out.println("BLE");
             			cells.get(i).interact(mols.get(j), this.x, this.y, this.z);
+            		}
             	}
             	break;
             case 3:

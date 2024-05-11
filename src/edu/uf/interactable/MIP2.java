@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -11,20 +14,22 @@ public class MIP2 extends Chemokine{
     private static MIP2 molecule = null;
     
 
-    private MIP2(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-    	super(qttys, diffuse, phenotypes);
+    private MIP2(double[][][][] qttys, Diffuse diffuse) {
+    	super(qttys, diffuse);
         Neutrophil.setChemokine(MIP2.NAME);
+        this.setPhenotye(Phenotype.createPhenotype());
     }
 
-    public static MIP2 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static MIP2 getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new MIP2(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new MIP2(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static MIP2 getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -50,15 +55,19 @@ public class MIP2 extends Chemokine{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Neutrophil) {
-            Neutrophil neutro = (Neutrophil) interactable;
-            neutro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_MIP2));
-            return Util.secrete((Neutrophil) interactable, this, Constants.N_MIP2_QTTY, x, y, z, 0);
+        	Cell cell = (Cell) interactable;
+        	if (!cell.isDead()) { 
+        		Interactions.secrete(cell, this, Constants.N_MIP2_QTTY, x, y, z, 0);
+        		Interactions.bind(cell, this, x, y, z, 0);
+            }
+        	return true;
         }
+        
         if (interactable instanceof PneumocyteII) 
-        	return Util.secrete((PneumocyteII) interactable, this, Constants.P_MIP2_QTTY, x, y, z, 0); 
+        	return Interactions.secrete((PneumocyteII) interactable, this, Constants.P_MIP2_QTTY, x, y, z, 0); 
         
         if (interactable instanceof Macrophage) 
-        	return Util.secrete((Macrophage) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Macrophage) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

@@ -2,6 +2,7 @@ package edu.uf.interactable;
 
 import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
@@ -61,23 +62,14 @@ public class Blood extends Cell{
 		return status[x][y][z] == HEMORRHAGIC || status[x][y][z] == FILLED;
 	}
 	
+	public void setStatus(int status, int x, int y, int z) {
+		this.status[x][y][z] = status;
+	}
+	
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-		if (interactable instanceof PneumocyteI){
-    		PneumocyteI cell = (PneumocyteI) interactable;
-    		if(cell.isDead())
-    			//if(status[x][y][z] == RESTING)
-    				status[x][y][z] = HEMORRHAGIC;
-    		return true;
-    	}
-		/*if (interactable instanceof TranexamicAcid){
-			TranexamicAcid mol = (TranexamicAcid) interactable;
-			this.txaQtty = mol.get(0, x, y, z);
-			//if(status[x][y][z]  == HEMORRHAGIC)
-			//	if(Util.activationFunction(mol.get(0, x, y, z), Constants.TRANEXAMIC_ACID_Kd))
-    		//		status[x][y][z] = TREATED;
-    		return true;
-    	}*/
+		if (interactable instanceof PneumocyteI)
+    		return Interactions.sethemorrhage(this, (PneumocyteI) interactable, HEMORRHAGIC, x, y, z);
 		
 		return interactable.interact(this, x, y, z);
 	}

@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -10,21 +13,22 @@ public class TGFb extends Molecule{
 	public static final int NUM_STATES = 1;
 	
 	private static TGFb molecule = null;
-    
 
-    private TGFb(double[][][][] qtty, Diffuse diffuse, int[] phenotypes) {
-		super(qtty, diffuse, phenotypes);
+    private TGFb(double[][][][] qtty, Diffuse diffuse) {
+		super(qtty, diffuse);
+		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static TGFb getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static TGFb getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new TGFb(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new TGFb(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static TGFb getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -47,13 +51,14 @@ public class TGFb extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) {
-            Macrophage macro = (Macrophage) interactable; //EukaryoteSignalingNetwork
-        	if (macro.hasPhenotype(this.getPhenotype())) 
-        		this.inc(Constants.MA_TGF_QTTY, 0, x, y, z);
-        	else if (!macro.isDead()) 
-        		macro.bind(this, Util.activationFunction5(this.get(0, x, y, z), Constants.Kd_TGF));
-            return true;
+        	Cell cell = (Cell) interactable;
+        	if (!cell.isDead()) { 
+        		Interactions.secrete(cell, this, Constants.MA_TGF_QTTY, x, y, z, 0);
+        		Interactions.bind(cell, this, x, y, z, 0);
+            }
+        	return true;
         }
+        
         return interactable.interact(this, x, y, z); 
     }
 

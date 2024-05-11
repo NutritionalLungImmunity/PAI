@@ -8,11 +8,7 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
 import edu.uf.control.MultiThreadExec;
 import edu.uf.interactable.Blood;
-import edu.uf.interactable.Cell;
-import edu.uf.interactable.Granule;
-import edu.uf.interactable.Heme;
 import edu.uf.interactable.Hepcidin;
-import edu.uf.interactable.IL1;
 import edu.uf.interactable.IL10;
 import edu.uf.interactable.IL6;
 import edu.uf.interactable.Iron;
@@ -29,9 +25,7 @@ import edu.uf.interactable.TNFa;
 import edu.uf.interactable.Transferrin;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.interactable.Afumigatus.TAFC;
-import edu.uf.intracellularState.MacrophageFactory;
-import edu.uf.intracellularState.NeutrophilFactory;
-import edu.uf.intracellularState.PneumocyteFactory;
+import edu.uf.intracellularState.IntracellularModelFactory;
 import edu.uf.utils.Constants;
 
 public class InitializeBaseModel extends Initialize{
@@ -44,20 +38,19 @@ public class InitializeBaseModel extends Initialize{
     	int xbin = GridFactory.getXbin();
     	int ybin = GridFactory.getYbin();
     	int zbin = GridFactory.getZbin();
-    	Voxel[][][] grid = GridFactory.getGrid();
     	
-    	Iron iron = Iron.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
-    	TAFC tafc = TAFC.getMolecule(new double[2][xbin][ybin][zbin], diffuse, new int[] {});
-    	Lactoferrin lactoferrin = Lactoferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {Neutrophil.ACTIVE});
-    	Transferrin transferrin = Transferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {});
-    	Hepcidin hepcidin = Hepcidin.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {}); //REVIEW
-    	IL6 il6 = IL6.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B, PneumocyteII.ACTIVE, PneumocyteII.MIX_ACTIVE});
-    	TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B, PneumocyteII.ACTIVE, PneumocyteII.MIX_ACTIVE});
-    	IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2A, Macrophage.M2B, Macrophage.M2C});
-    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M2C});
-    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, PneumocyteII.ACTIVE});
-    	MIP1B mip1b = MIP1B.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, PneumocyteII.ACTIVE});
-    	Heme heme = Heme.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
+    	Iron iron = Iron.getMolecule(null);
+    	TAFC tafc = TAFC.getMolecule(diffuse);
+    	Lactoferrin lactoferrin = Lactoferrin.getMolecule(diffuse);
+    	Transferrin transferrin = Transferrin.getMolecule( diffuse);
+    	//Hepcidin hepcidin = Hepcidin.getMolecule(null); //REVIEW
+    	IL6 il6 = IL6.getMolecule(diffuse);
+    	TNFa tnfa = TNFa.getMolecule(diffuse);
+    	IL10 il10 = IL10.getMolecule(diffuse);
+    	TGFb tgfb = TGFb.getMolecule(diffuse);
+    	MIP2 mip2 = MIP2.getMolecule(diffuse);
+    	MIP1B mip1b = MIP1B.getMolecule(diffuse);
+    	//Heme heme = Heme.getMolecule(new double[1][xbin][ybin][zbin], null);
     	//DNAse dnase = DNAse.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
     	//Granule gran = Granule.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
     	
@@ -66,14 +59,14 @@ public class InitializeBaseModel extends Initialize{
     	MultiThreadExec.setMolecule(tafc);
     	MultiThreadExec.setMolecule(lactoferrin);
     	MultiThreadExec.setMolecule(transferrin);
-    	MultiThreadExec.setMolecule(hepcidin);
+    	//MultiThreadExec.setMolecule(hepcidin);
     	MultiThreadExec.setMolecule(il6);
     	MultiThreadExec.setMolecule(tnfa);
     	MultiThreadExec.setMolecule(il10);
     	MultiThreadExec.setMolecule(tgfb);
     	MultiThreadExec.setMolecule(mip2);
     	MultiThreadExec.setMolecule(mip1b);
-    	MultiThreadExec.setMolecule(heme);
+    	//MultiThreadExec.setMolecule(heme);
     	//MultiThreadExec.setMolecule(dnase);
     	//MultiThreadExec.setMolecule(gran);
     	
@@ -84,23 +77,23 @@ public class InitializeBaseModel extends Initialize{
     	for(int x = 0; x < xbin; x++) 
         	for(int y = 0; y < ybin; y++)
         		for(int z = 0; z < zbin; z++) {
-        			transferrin.set(Constants.DEFAULT_APOTF_CONCENTRATION, 0, x, y, x);
-        			transferrin.set(Constants.DEFAULT_TFFE_CONCENTRATION, 1, x, y, x);
-        			transferrin.set(Constants.DEFAULT_TFFE2_CONCENTRATION, 2, x, y, x);
+        			transferrin.set(Constants.DEFAULT_APOTF_CONCENTRATION, 0, x, y, z);
+        			transferrin.set(Constants.DEFAULT_TFFE_CONCENTRATION, 1, x, y, z);
+        			transferrin.set(Constants.DEFAULT_TFFE2_CONCENTRATION, 2, x, y, z);
         			
         			//tafc.set(1e-4*6.4e-11, 1, x, y, z);
         			//iron.set(6.4e-18, 0, x, y, z);
-        			hepcidin.set(Constants.THRESHOLD_HEP * Constants.VOXEL_VOL, 0, x, y, x);
+        			//hepcidin.set(Constants.THRESHOLD_HEP * Constants.VOXEL_VOL, 0, x, y, x);
         		}
     	Voxel.setMolecule(Transferrin.NAME, transferrin, false, true);
-    	Voxel.setMolecule(Hepcidin.NAME, hepcidin);
+    	//Voxel.setMolecule(Hepcidin.NAME, hepcidin);
     	Voxel.setMolecule(IL6.NAME, il6);
     	Voxel.setMolecule(TNFa.NAME, tnfa);
     	Voxel.setMolecule(IL10.NAME, il10);
     	Voxel.setMolecule(TGFb.NAME, tgfb);
     	Voxel.setMolecule(MIP2.NAME, mip2);
     	Voxel.setMolecule(MIP1B.NAME, mip1b);
-    	Voxel.setMolecule(Heme.NAME, heme, true, false);
+    	//Voxel.setMolecule(Heme.NAME, heme, true, false);
     	//Voxel.setMolecule(DNAse.NAME, dnase, false, true);
     	//Voxel.setMolecule(Granule.NAME, gran, true);
     	
@@ -162,13 +155,12 @@ public class InitializeBaseModel extends Initialize{
     	Voxel[][][] grid = GridFactory.getGrid();
         int k = 0;
         List<PneumocyteII> list = new ArrayList<>();
-        PneumocyteFactory.setModel(PneumocyteFactory.STATE_MODEL);
         while (k < numCells) {
             int x = randint(0, xbin); // -1?
             int y = randint(0, ybin); // -1?
             int z = randint(0, zbin); // -1?
             if (grid[x][y][z].getCells().isEmpty()) {
-            	PneumocyteII p = new PneumocyteII(PneumocyteFactory.createBooleanNetwork());
+            	PneumocyteII p = new PneumocyteII(IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.PNEUMOCYTE_STATE_MODEL));
                 grid[x][y][z].setCell(p);
                 list.add(p);
                 k = k + 1;
@@ -189,13 +181,13 @@ public class InitializeBaseModel extends Initialize{
     	
     	double p  = numCells/((double) xbin*ybin*zbin);
     	Voxel[][][] grid = GridFactory.getGrid();
-    	PneumocyteI cell = new PneumocyteI();
+    	PneumocyteI cell = new PneumocyteI(IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.PNEUMOCYTE_I_KLEBSIELLA_MODEL));
     	
     	for(int x = 0; x < xbin; x++)
     		for(int y = 0; y < ybin; y++)
     			for(int z = 0; z < zbin; z++) {
     				if(rand.nextDouble() < p || !grid[x][y][z].getNeighbors().contains(grid[x0][y0][z0]))
-    					cell = new PneumocyteI();
+    					cell = new PneumocyteI(IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.PNEUMOCYTE_I_KLEBSIELLA_MODEL));
                     grid[x][y][z].setCell(cell);
                     x0 = x;
                     y0 = y;
@@ -209,12 +201,11 @@ public class InitializeBaseModel extends Initialize{
     	int zbin = GridFactory.getZbin();
     	Voxel[][][] grid = GridFactory.getGrid();
     	List<Macrophage> list = new ArrayList<>();
-    	MacrophageFactory.setModel(MacrophageFactory.FM_NETWORK);
         for (int i = 0; i < numMacrophages; i++) {
             int x = randint(0, xbin-1);
             int y = randint(0, ybin-1);
             int z = randint(0, zbin-1);
-            Macrophage m = new Macrophage(Constants.MA_INTERNAL_IRON, MacrophageFactory.createBooleanNetwork());
+            Macrophage m = new Macrophage(Constants.MA_INTERNAL_IRON, IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.ASPERGILLUS_MACROPHAGE));
             list.add(m);
             grid[x][y][z].setCell(m);
         }
@@ -227,12 +218,11 @@ public class InitializeBaseModel extends Initialize{
     	int zbin = GridFactory.getZbin();
     	Voxel[][][] grid = GridFactory.getGrid();
     	List<Neutrophil> list = new ArrayList<>();
-    	NeutrophilFactory.setModel(NeutrophilFactory.STATE_MODEL);
     	for (int i = 0; i < numNeut; i++) {
             int x = randint(0, xbin-1);
             int y = randint(0, ybin-1);
             int z = randint(0, zbin-1);
-            Neutrophil n = new Neutrophil(0.0, NeutrophilFactory.createBooleanNetwork());
+            Neutrophil n = new Neutrophil(0.0, IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.NEUTROPHIL_STATE_MODEL));
             list.add(n);
             grid[x][y][z].setCell(n);
     	}
@@ -252,7 +242,7 @@ public class InitializeBaseModel extends Initialize{
             int z = randint(0, zbin-1);
             Afumigatus a = new Afumigatus(
             		x, y, z, x, y, z, random(), random(), random(), 
-            		0, initIron, status, 0, true
+            		0, initIron, status, true
             );
             list.add(a);
             grid[x][y][z].setCell(a);

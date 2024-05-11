@@ -1,7 +1,6 @@
 package edu.uf.interactable;
 
-import edu.uf.intracellularState.BooleanNetwork;
-import edu.uf.intracellularState.Phenotype;
+import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
@@ -16,23 +15,22 @@ public class Macrophage extends Leukocyte{
     private static int totalCells = 0;
     private static double totalIron = 0; 
     
-    public static final int M1  = Phenotype.createPhenotype();
-	public static final int M2A = Phenotype.createPhenotype();
-	public static final int M2B = Phenotype.createPhenotype();
-	public static final int M2C = Phenotype.createPhenotype();
-    
     private int maxMoveStep;
     private boolean engaged;
     private static int interactionId = Id.getMoleculeId();
     
     
-	public Macrophage(double ironPool, BooleanNetwork network) {
+    
+	public Macrophage(double ironPool, IntracellularModel network) {
     	super(ironPool, network);
     	Macrophage.totalCells = Macrophage.totalCells + 1;
-        this.setState(Macrophage.FREE);
         this.maxMoveStep = -1; 
         Macrophage.totalIron = Macrophage.totalIron + ironPool;
     }
+	
+	public void setMaxMoveStep(int moveStep) {
+		this.maxMoveStep = moveStep;
+	}
 	
 	public int getInteractionId() {
 		return interactionId;
@@ -47,7 +45,8 @@ public class Macrophage extends Leukocyte{
 	}
 
 	public static void setChemokine(String chemokine) {
-		Macrophage.chemokine = chemokine;
+		if(chemokine == null)
+			Macrophage.chemokine = chemokine;
 	}
 
 	public static int getTotalCells() {
@@ -88,39 +87,15 @@ public class Macrophage extends Leukocyte{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         return interactable.interact(this, x, y, z);
     }
-
-
-    public void updateStatus(int x, int y, int z) {
-    	super.updateStatus(x, y, z);
-    	if(!this.getClock().toc())return;
-    	
-    	this.processBooleanNetwork();
-    	
-        if(this.getStatus() == Macrophage.DEAD)
-            return;
-        if(this.getStatus() == Macrophage.NECROTIC) {
-            this.die();
-            //for(InfectiousAgent entry : this.getPhagosome()) //WARNING-COMMENT
-            //	entry.setState(Afumigatus.RELEASING);
-        }else if(this.getPhagosome().size() > Constants.MA_MAX_CONIDIA)
-            this.setStatus(Leukocyte.NECROTIC);
         
-        if(Rand.getRand().randunif() < Constants.MA_HALF_LIFE && this.getPhagosome().size() == 0 &&
-        		Macrophage.totalCells > Constants.MIN_MA) 
-            this.die();
-        //this.setMoveStep(0);
-        this.maxMoveStep = -1;
-    }
-        
-
     public void incIronPool(double qtty) {
         this.setIronPool(this.getIronPool() + qtty);
         Macrophage.totalIron = Macrophage.totalIron + qtty;
     }
 
     public void die() {
-        if(this.getStatus() != Macrophage.DEAD) {
-            this.setStatus(Macrophage.DEAD);
+    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
             Macrophage.totalCells = Macrophage.totalCells - 1;
         }
     }

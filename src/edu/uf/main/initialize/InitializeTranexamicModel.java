@@ -31,16 +31,16 @@ public class InitializeTranexamicModel extends InitializeBaseModel{
     	int ybin = GridFactory.getYbin();
     	int zbin = GridFactory.getZbin();
     	
-    	Iron iron = Iron.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
-    	TAFC tafc = TAFC.getMolecule(new double[2][xbin][ybin][zbin], diffuse, new int[] {});
-    	Lactoferrin lactoferrin = Lactoferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {Neutrophil.ACTIVE});
-    	Transferrin transferrin = Transferrin.getMolecule(new double[3][xbin][ybin][zbin], diffuse, new int[] {});
-    	TNFa tnfa = TNFa.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2B, PneumocyteII.ACTIVE, PneumocyteII.MIX_ACTIVE});
-    	IL10 il10 = IL10.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, Macrophage.M2A, Macrophage.M2B, Macrophage.M2C});
-    	TGFb tgfb = TGFb.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M2C});
-    	MIP2 mip2 = MIP2.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, PneumocyteII.ACTIVE});
-    	MIP1B mip1b = MIP1B.getMolecule(new double[1][xbin][ybin][zbin], diffuse, new int[] {Macrophage.M1, PneumocyteII.ACTIVE});
-    	Heme heme = Heme.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
+    	Iron iron = Iron.getMolecule();
+    	TAFC tafc = TAFC.getMolecule(diffuse);
+    	Lactoferrin lactoferrin = Lactoferrin.getMolecule(diffuse);
+    	Transferrin transferrin = Transferrin.getMolecule(diffuse);
+    	TNFa tnfa = TNFa.getMolecule(diffuse);
+    	IL10 il10 = IL10.getMolecule(diffuse);
+    	TGFb tgfb = TGFb.getMolecule( diffuse);
+    	MIP2 mip2 = MIP2.getMolecule(diffuse);
+    	MIP1B mip1b = MIP1B.getMolecule(diffuse);
+    	Heme heme = Heme.getMolecule();
     	
     	
     	

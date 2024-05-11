@@ -12,29 +12,10 @@ public abstract class Interactable implements Binder{
 	private Set<Molecule> interactingMolecules = null;
 	private List<Interactable> removeList = new ArrayList<>();
 	
-	/*public void setInteractingMolecule(Collection<Molecule> interactingMolecules) {
-		if(this.interactingMolecules == null) {
-			this.interactingMolecules = new HashSet<>();
-			for(Molecule mol :  interactingMolecules) 
-				this.interactingMolecules.add(mol);
-		}
-	}
-	
-	public Set<Molecule> getInteractingMolecules(){
-		return this.interactingMolecules;
-	}
-	
-	public void remove() {
-		for(Interactable i : removeList) 
-			this.interactingMolecules.remove(i);
-		this.removeList.clear();
-	}*/
-	
 	public abstract boolean isTime();
 	
 
 	public boolean interact(Interactable interactable, int x, int y, int z) {
-		//if(!interactable.isTime())return false;
         if(this.negativeInteractList.contains(interactable.getName())) {
         	return false; 
         }
@@ -54,8 +35,6 @@ public abstract class Interactable implements Binder{
 	
 	public  abstract String getName();
 	public abstract int getId();
-	
-	//public abstract Set<String> getNegativeInteractionList();
 	protected abstract boolean templateInteract(Interactable interactable, int x, int y, int z);
 	
 	

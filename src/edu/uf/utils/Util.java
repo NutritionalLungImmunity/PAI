@@ -189,17 +189,5 @@ public class Util {
     	System.out.println();
     }
     
-    
-    public static boolean bind(Cell cell, Molecule molecule, int x, int y, int z, int w) {
-    	cell.bind(molecule, Util.activationFunction5(molecule.get(w, x, y, z), molecule.getKd()));
-    	return true;
-    }
-    
-    public static boolean secrete(Cell cell, Molecule molecule, double qtty, int x, int y, int z, int w) {
-    	if (cell.hasPhenotype(molecule.getPhenotype()))
-    		molecule.inc(qtty, w, x, y, z);
-    	return true;
-    }
-    
 	
 }

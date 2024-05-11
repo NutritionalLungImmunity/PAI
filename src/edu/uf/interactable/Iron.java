@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 
 public class Iron extends Molecule{
@@ -10,19 +13,20 @@ public class Iron extends Molecule{
 	
 	private static Iron molecule = null; 
     
-    private Iron(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Iron(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Iron getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Iron getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Iron(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Iron(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Iron getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -47,14 +51,9 @@ public class Iron extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof Macrophage) {
-            Macrophage macro = (Macrophage) interactable;
-        	if (macro.getStatus() == Macrophage.NECROTIC){
-                this.inc(macro.getIronPool(), "Iron", x, y, z);
-                macro.incIronPool(-macro.getIronPool());
-        	}
-            return true;  
-        }
+        if (interactable instanceof Macrophage) 
+        	return Interactions.releaseIron((Macrophage) interactable, this, Cell.NECROTIC, x, y, z);
+        
         return interactable.interact(this, x, y, z);
     }
 

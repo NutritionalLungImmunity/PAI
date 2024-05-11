@@ -2,7 +2,7 @@ package edu.uf.compartments;
 
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Neutrophil;
-import edu.uf.intracellularState.NeutrophilFactory;
+import edu.uf.intracellularState.IntracellularModelFactory;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
@@ -12,7 +12,7 @@ import edu.uf.interactable.Macrophage;
 public class NeutrophilRecruiter extends Recruiter{
 	
     public Cell createCell() {
-        return new Neutrophil(0, NeutrophilFactory.createBooleanNetwork()); 
+        return new Neutrophil(0, IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.NEUTROPHIL_STATE_MODEL)); 
     }
     
     public int getQtty() {

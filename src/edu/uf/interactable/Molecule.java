@@ -20,11 +20,12 @@ public abstract class Molecule extends Interactable {
 	private double[] totalMolecules;
 	protected double[] totalMoleculesAux;
 	private Diffuse diffuse;
-	private List<Integer> phenotypes;
+	private int phenotype;
+	//private List<Integer> phenotypes;
 	
 	//protected List<Integer> secretionPhenotypes = new ArrayList<>();
 	
-	protected Molecule(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
+	protected Molecule(double[][][][] qttys, Diffuse diffuse) {
 		//countReceptors++;
 		this.compartimentValues = new double[qttys.length][NUM_COMPARTMENTS - 1];
         this.id = Id.getId();
@@ -33,9 +34,10 @@ public abstract class Molecule extends Interactable {
         this.totalMoleculesAux = new double[qttys.length];
         this.totalMolecules = new double[qttys.length];
         this.diffuse = diffuse;
-        this.phenotypes = new ArrayList<>();
+        this.phenotype  = -1;
+        /*this.phenotypes = new ArrayList<>();
         for(int i : phenotypes)
-        	this.phenotypes.add(i);
+        	this.phenotypes.add(i);*/
         for(int i = 0; i < qttys.length; i++) {
         	for(double[][] matrix : qttys[i])
         		for(double[] array : matrix)
@@ -48,13 +50,21 @@ public abstract class Molecule extends Interactable {
 		return moleculeId;
 	}
 	
+	public void setPhenotye(int phenotype) {
+		this.phenotype = phenotype;
+	}
+	
+	public int getPhenotype() {
+		return this.phenotype;
+	}
+	
 	/*public void addPhenotype(int phenotype) {
 		this.secretionPhenotypes.add(phenotype);
 	}*/
 	
-	public List<Integer> getPhenotype(){
+	/*public List<Integer> getPhenotype(){
 		return phenotypes;
-	}
+	}*/
 	
 	private void incTotalMolecule(int index, double inc) {
     	this.totalMolecules[index] = this.totalMolecules[index] + inc;
@@ -179,7 +189,7 @@ public abstract class Molecule extends Interactable {
     
     public void turnOver(int x, int y, int z) {
     	for(int i = 0; i < this.values.length; i++) { 
-    		this.pdec(1-Util.turnoverRate(this.get(i, x, y, z), 0), i, x, y, z);
+    		//this.pdec(1-Util.turnoverRate(this.get(i, x, y, z), 0), i, x, y, z);
     		this.pdec(1-Constants.MCP1_HALF_LIFE, i, x, y, z);
     		
     	}
@@ -210,6 +220,18 @@ public abstract class Molecule extends Interactable {
     	for(int i = 0; i < values.length; i++) {
     		diffuse.solver(values, i); 
     	}
+    }
+    
+    public static int[] addSelfPhenotype(int[] phenotypes, final int  phenotype) {
+    	int[] nphenotypes = null;
+    	if(phenotypes == null) {
+    		nphenotypes = new int[phenotypes.length + 1];
+    		for(int i = 0; i < phenotypes.length; i++)
+    			nphenotypes[i] = phenotypes[i];
+    		nphenotypes[phenotypes.length] = phenotype;
+    	}else 
+    		nphenotypes = new int[] {phenotype};
+    	return nphenotypes;
     }
             
     public abstract void computeTotalMolecule(int x, int y, int z);

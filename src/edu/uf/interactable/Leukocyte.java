@@ -5,25 +5,15 @@ import java.util.List;
 
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Afumigatus.Afumigatus;
-import edu.uf.intracellularState.BooleanNetwork;
+import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
 
 public abstract class Leukocyte extends Cell{
 
-    /*public static final int INACTIVE = 0;
-    public static final int INACTIVATING = 1;
-    public static final int RESTING = 2;
-    public static final int ACTIVATING = 3;
-    public static final int ACTIVE = 4;
-    public static final int APOPTOTIC = 5;
-    public static final int NECROTIC = 6;
-    public static final int DEAD = 7;
-    public static final int ANERGIC = 8;*/
-
-    public static final int FREE = 0;
-    public static final int INTERACTING = 1;
+    //public static final int FREE = 0;
+    //public static final int INTERACTING = 1;
 
     
     
@@ -32,30 +22,28 @@ public abstract class Leukocyte extends Cell{
     
     private boolean engaged;
     
-    private int state;
+    //private int state;
 
-	public Leukocyte(BooleanNetwork network) {
+	public Leukocyte(IntracellularModel network) {
     	this(0.0, network);
     }
     
-    public Leukocyte (double ironPool, BooleanNetwork network) {
+    public Leukocyte (double ironPool, IntracellularModel network) {
     	super(network);
         this.setIronPool(ironPool);
         //this.setStatusIteration(0);
         //this.setStateIteration(0);
         //this.phagosome = new Phagosome();
         this.phagosome = new ArrayList<>();
-        
-        this.state = FREE;
     }
 	
-	public int getState() {
+	/*public int getState() {
 		return state;
 	}
 
 	public void setState(int state) {
 		this.state = state;
-	}
+	}*/
 
 	public void setPhagosome(List<InfectiousAgent> phagosome) {
 		this.phagosome = phagosome;
@@ -83,9 +71,11 @@ public abstract class Leukocyte extends Cell{
     public void kill() {
         if(Rand.getRand().randunif() < Constants.PR_KILL) {
         	for(InfectiousAgent a : this.phagosome) {
+        		//System.out.print("BLA\t");
                 this.incIronPool(a.getIronPool());
                 a.incIronPool(-a.getIronPool());
                 a.die();
+                //System.out.println();
         	}
             this.phagosome.clear();
         }

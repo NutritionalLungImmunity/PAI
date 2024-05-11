@@ -1,6 +1,7 @@
 package edu.uf.interactable;
 
 import edu.uf.compartments.Voxel;
+import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
@@ -29,11 +30,11 @@ public class DeltaGammaT extends Cell{
 
 	@Override
 	public void die() {
-		if(this.getStatus() != Leukocyte.DEAD) {
-            this.setStatus(Neutrophil.DEAD);  //##CAUTION!!!
-            DeltaGammaT.totalCells--;
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
+            DeltaGammaT.totalCells = DeltaGammaT.totalCells - 1;
         }
-	}
+    }
 	
 	public boolean isInjury() {
 		return false;
@@ -63,12 +64,6 @@ public class DeltaGammaT extends Cell{
 	public boolean removeUponDeath() {
 		return true;
 	}
-	
-	public void updateStatus(int x, int y, int z) {
-    	super.updateStatus(x, y, z);
-    	if(!this.getClock().toc())return;
-    	this.processBooleanNetwork();
-    }
 
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {

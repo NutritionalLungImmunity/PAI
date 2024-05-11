@@ -17,8 +17,7 @@ import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.interactable.invitro.GM_CSF;
 import edu.uf.utils.Constants;
 
-public class FMacrophageBooleanNetwork extends BooleanNetwork{
-
+public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 	
 	public static final int size = 29;
 	//public static final int NUM_RECEPTORS = 12;
@@ -53,6 +52,12 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 	public static final int PtSR = 27;
 	public static final int FPN = 28;
 	
+	
+	/*public static final int M1  = Phenotype.createPhenotype();
+	public static final int M2A = Phenotype.createPhenotype();
+	public static final int M2B = Phenotype.createPhenotype();
+	public static final int M2C = Phenotype.createPhenotype();*/
+	
 	//public static final int FNP = 28; //IN THE OUTER CLASS!
 	
 	{
@@ -81,7 +86,7 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 						this.booleanNetwork[CSF2Ra] = input(GM_CSF.getMolecule());
 						break;
 					case 2:
-						this.booleanNetwork[IL1R] = or(this.booleanNetwork[IL1B], input(IL1.getMolecule()));
+						this.booleanNetwork[IL1R] = max(this.booleanNetwork[IL1B], input(IL1.getMolecule()));
 						break;
 					case 3:
 						/*this.booleanNetwork[TLR4] = (e(this.inputs, LPS_e) | (e(this.inputs, Heme_e) & 
@@ -89,7 +94,7 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 								(-this.booleanNetwork[FCGR] + N);*/
 						/*this.booleanNetwork[TLR4] = and(and(input(TLRBinder.getBinder()),
 								  not(input(Hemopexin.getMolecule()), N)), not(this.booleanNetwork[FCGR], N));*/
-						this.booleanNetwork[TLR4] = and(input(TLRBinder.getBinder()), not(this.booleanNetwork[FCGR], N));
+						this.booleanNetwork[TLR4] = min(input(TLRBinder.getBinder()), not(this.booleanNetwork[FCGR], N));
 						break;
 					case 4:
 						this.booleanNetwork[FCGR] = 0;//(e(this.inputs, IC_e) & e(this.inputs, LPS_e)) | (e(this.inputs, IC_e) & e(IL1.getMolecule()));
@@ -98,21 +103,21 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 						this.booleanNetwork[IL4Ra] = 0;//e(this.inputs, IL4_e);
 						break;
 					case 6:
-						this.booleanNetwork[IL10R] = or(input(IL10.getMolecule()), this.booleanNetwork[IL10_out]);
+						this.booleanNetwork[IL10R] = max(input(IL10.getMolecule()), this.booleanNetwork[IL10_out]);
 						break;
 					case 7:
-						this.booleanNetwork[STAT1] = and(this.booleanNetwork[IFNGR], not(or(this.booleanNetwork[SOCS1], this.booleanNetwork[STAT3]), N));
+						this.booleanNetwork[STAT1] = min(this.booleanNetwork[IFNGR], not(max(this.booleanNetwork[SOCS1], this.booleanNetwork[STAT3]), N));
 						break;
 					case 8:
-						this.booleanNetwork[STAT5] = and(this.booleanNetwork[CSF2Ra], not(or(this.booleanNetwork[STAT3], this.booleanNetwork[IRF4]), N));
+						this.booleanNetwork[STAT5] = min(this.booleanNetwork[CSF2Ra], not(max(this.booleanNetwork[STAT3], this.booleanNetwork[IRF4]), N));
 						break;
 					case 9:
-						this.booleanNetwork[NFkB] = and(or(new int[] {
+						this.booleanNetwork[NFkB] = min(max(new int[] {
 								this.booleanNetwork[IL1R], 
 								this.booleanNetwork[TLR4], 
 								this.booleanNetwork[Dectin], 
 								this.booleanNetwork[TNFR]
-						}), not(or(new int[] {
+						}), not(max(new int[] {
 								this.booleanNetwork[STAT3], 
 								this.booleanNetwork[FCGR], 
 								this.booleanNetwork[PPARG], 
@@ -128,8 +133,8 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 						this.booleanNetwork[JMJD3] = this.booleanNetwork[IL4Ra];
 						break;
 					case 13:
-						this.booleanNetwork[STAT3] = and(or(this.booleanNetwork[IL10R], this.booleanNetwork[SMAD2]), not(
-								or(this.booleanNetwork[FCGR], this.booleanNetwork[PPARG]), N));
+						this.booleanNetwork[STAT3] = min(max(this.booleanNetwork[IL10R], this.booleanNetwork[SMAD2]), not(
+								max(this.booleanNetwork[FCGR], this.booleanNetwork[PPARG]), N));
 						break;
 					case 14:
 						this.booleanNetwork[IRF3] = this.booleanNetwork[TLR4];
@@ -147,10 +152,10 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 						this.booleanNetwork[IFNB] = this.booleanNetwork[IRF3];
 						break;
 					case 19:
-						this.booleanNetwork[IL12_out] = or(new int[] {this.booleanNetwork[STAT1], this.booleanNetwork[STAT5], this.booleanNetwork[NFkB]});
+						this.booleanNetwork[IL12_out] = max(new int[] {this.booleanNetwork[STAT1], this.booleanNetwork[STAT5], this.booleanNetwork[NFkB]});
 						break;
 					case 20: 
-						this.booleanNetwork[IL10_out] = or(new int[] {
+						this.booleanNetwork[IL10_out] = max(new int[] {
 								this.booleanNetwork[PPARG], 
 								this.booleanNetwork[STAT6], 
 								this.booleanNetwork[JMJD3], 
@@ -194,16 +199,18 @@ public class FMacrophageBooleanNetwork extends BooleanNetwork{
 			this.inputs[i] = 0;
 		
 		this.clearPhenotype();
+		this.computePhenotype();
 		
 		
-		if(this.booleanNetwork[NFkB] > 0 || this.booleanNetwork[STAT1] > 0 || this.booleanNetwork[STAT5] > 0)
-			this.getPhenotype().put(Macrophage.M1, this.or(new int[] {this.booleanNetwork[NFkB], this.booleanNetwork[STAT1], this.booleanNetwork[STAT5]}));
+		/*if(this.booleanNetwork[NFkB] > 0 || this.booleanNetwork[STAT1] > 0 || this.booleanNetwork[STAT5] > 0)
+			this.getPhenotype().put(M1, this.or(new int[] {this.booleanNetwork[NFkB], this.booleanNetwork[STAT1], this.booleanNetwork[STAT5]}));
 		if(this.booleanNetwork[STAT6] > 0)
-			this.getPhenotype().put(Macrophage.M2A, this.booleanNetwork[STAT6]);
+			this.getPhenotype().put(M2A, this.booleanNetwork[STAT6]);
 		if(this.booleanNetwork[ERK] > 0)
-			this.getPhenotype().put(Macrophage.M2B, this.booleanNetwork[ERK]);
+			this.getPhenotype().put(M2B, this.booleanNetwork[ERK]);
 		if(this.booleanNetwork[STAT3] > 0)
-			this.getPhenotype().put(Macrophage.M2C, this.booleanNetwork[STAT3]);
+			this.getPhenotype().put(M2C, this.booleanNetwork[STAT3]);
+		*/
 		//else
 		//	Macrophage.this.addPhenotype(Phenotypes.RESTING);
 			

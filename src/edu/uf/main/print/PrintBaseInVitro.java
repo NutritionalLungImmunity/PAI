@@ -14,7 +14,7 @@ public class PrintBaseInVitro extends PrintStat{
 	public void printStatistics(int k, File file){
     	
 		String str = k + "\t" + 
-	              Afumigatus.getTotalCells() + "\t" +
+	              Afumigatus.getTotalCells0() + "\t" +
 	              Macrophage.getTotalCells() + "\t" +
 	              Neutrophil.getTotalCells();
 		

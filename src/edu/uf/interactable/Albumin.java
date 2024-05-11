@@ -1,8 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class Albumin extends Molecule{
 	
@@ -13,19 +14,20 @@ public class Albumin extends Molecule{
 	
 	//public static final double NON_HEMORHAGE = 0.0;
     
-    private Albumin(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private Albumin(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static Albumin getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static Albumin getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new Albumin(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new Albumin(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static Albumin getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -46,11 +48,9 @@ public class Albumin extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-    	if (interactable instanceof Albumin){
-    		if(Blood.getBlood().hasBlood(x, y, z))
-    			this.set(Constants.ALBUMIN_INIT_QTTY, 0, x, y, z);
-    		return true;
-    	}
+    	if (interactable instanceof Albumin)
+    		return Interactions.set(this, Constants.ALBUMIN_INIT_QTTY, x, y, z, 0);
+    	
         return interactable.interact(this, x, y, z);
     }
 

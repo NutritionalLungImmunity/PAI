@@ -4,7 +4,7 @@ import java.util.Map;
 
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Macrophage;
-import edu.uf.intracellularState.MacrophageFactory;
+import edu.uf.intracellularState.IntracellularModelFactory;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 import edu.uf.utils.Util;
@@ -14,7 +14,7 @@ import edu.uf.interactable.MIP2;
 public class MacrophageRecruiter extends Recruiter{
 
     public Cell createCell() { 
-        return new Macrophage(Constants.MA_INTERNAL_IRON, MacrophageFactory.createBooleanNetwork());
+        return new Macrophage(Constants.MA_INTERNAL_IRON, IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.ASPERGILLUS_MACROPHAGE));
     }
     
     public int getQtty() {

@@ -12,6 +12,7 @@ import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.PneumocyteI;
+import edu.uf.interactable.Transferrin;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.NeutrophilStateModel;
 
@@ -32,16 +33,19 @@ public class PrintHemeModel extends PrintStat{
 		count();
 		if(k%15 != 0)return;
 		String str = k + "\t" + 
-	              Afumigatus.getTotalCells() + "\t" +
+	              Afumigatus.getTotalCells0() + "\t" +
 	              Afumigatus.getTotalRestingConidia() + "\t" +
 	              Afumigatus.getTotalSwellingConidia() + "\t" +
 	              Afumigatus.getTotalGerminatingConidia() + "\t" +
 	              Afumigatus.getTotalHyphae() + "\t" +
 	              MIP2.getMolecule().getTotalMolecule(0) + "\t" +
-	              Heme.getMolecule().getTotalMolecule(0)  + "\t" +
+	              Transferrin.getMolecule().getTotalMolecule(0) + "\t" +
+	              Transferrin.getMolecule().getTotalMolecule(1) + "\t" +
+	              Transferrin.getMolecule().getTotalMolecule(2) + "\t" +
+	              //Heme.getMolecule().getTotalMolecule(0)  + "\t" +
 	              //DNAse.getMolecule().getTotalMolecule(0)  + "\t" +
 	              //Erythrocyte.getTotalCells() + "\t" +
-	              PneumocyteI.getTotalCells() + "\t" +
+	              //PneumocyteI.getTotalCells() + "\t" +
 	              Macrophage.getTotalCells() + "\t" +
 	              Neutrophil.getTotalCells() + "\t" + 
 	              net;
@@ -75,7 +79,7 @@ public class PrintHemeModel extends PrintStat{
 						Interactable cell = entry.getValue();
 						if(cell instanceof Neutrophil) {
 							Neutrophil p = (Neutrophil) cell;
-							if(p.hasPhenotype(NeutrophilStateModel.NETOTIC))net++;
+							if(p.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC))net++;
 							//else if(p.hasPhenotype(Pneumocyte.ACTIVE))PActive++;
 						}/*else if(cell instanceof Macrophage) {
 							Macrophage p = (Macrophage) cell;

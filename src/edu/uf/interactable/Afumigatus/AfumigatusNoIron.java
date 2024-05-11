@@ -3,9 +3,8 @@ package edu.uf.interactable.Afumigatus;
 public class AfumigatusNoIron extends Afumigatus{
 	
 	public AfumigatusNoIron(double xRoot, double yRoot, double zRoot, double xTip, double yTip, double zTip, 
-    		double dx, double dy, double dz, int growthIteration, double ironPool, int status, 
-    		int state, boolean isRoot) {
-		super(xRoot, yRoot, zRoot, xTip, yTip, zTip, dx, dy, dz, growthIteration, ironPool, status, state, isRoot);
+    		double dx, double dy, double dz, int growthIteration, double ironPool, int status, boolean isRoot) {
+		super(xRoot, yRoot, zRoot, xTip, yTip, zTip, dx, dy, dz, growthIteration, ironPool, status, isRoot);
 	}
 
 	protected boolean canGrow() {
@@ -14,12 +13,11 @@ public class AfumigatusNoIron extends Afumigatus{
 	
 	
 	protected Afumigatus createAfumigatus(double xRoot, double yRoot, double zRoot, double xTip, double yTip, double zTip, 
-    		double dx, double dy, double dz, int growthIteration, double ironPool, int status, 
-    		int state, boolean isRoot) {
+    		double dx, double dy, double dz, int growthIteration, double ironPool, int status, boolean isRoot) {
     	return new AfumigatusNoIron(xRoot, yRoot, zRoot,
     			xTip, yTip, zTip,
                 dx, dy, dy, growthIteration,
-                ironPool, status, state, isRoot);
+                ironPool, status, isRoot);
     }
 	
 }

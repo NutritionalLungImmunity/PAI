@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -9,21 +12,25 @@ public class IL17 extends Molecule{
 	public static final String NAME = "IL17";
 	public static final int NUM_STATES = 1;
 	
+	public static final int IL17  = Phenotype.createPhenotype();
+	
 	private static IL17 molecule = null;
     
-    private IL17(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private IL17(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
+		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static IL17 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static IL17 getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new IL17(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new IL17(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static IL17 getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -45,13 +52,13 @@ public class IL17 extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) 
-        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
         
         if (interactable instanceof PneumocyteII) 
-        	return Util.bind((PneumocyteII) interactable, this, x, y, z, 0);
+        	return Interactions.bind((PneumocyteII) interactable, this, x, y, z, 0);
         
         if (interactable instanceof DeltaGammaT) 
-        	return Util.secrete((DeltaGammaT) interactable, this, Constants.IL17_QTTY, x, y, z, 0);
+        	return Interactions.secrete((DeltaGammaT) interactable, this, Constants.IL17_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

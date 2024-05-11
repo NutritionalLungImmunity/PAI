@@ -2,6 +2,9 @@ package edu.uf.interactable;
 
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -13,19 +16,21 @@ public class IL1 extends Molecule{
 	
 	public boolean hasInteractWithLiver = false;
     
-    private IL1(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private IL1(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
+		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static IL1 getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static IL1 getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new IL1(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new IL1(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static IL1 getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -47,13 +52,13 @@ public class IL1 extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Macrophage) 
-    		return Util.secrete((Macrophage) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+    		return Interactions.secrete((Macrophage) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
         
     	if (interactable instanceof PneumocyteII) 
-    		return Util.secrete((PneumocyteII) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+    		return Interactions.secrete((PneumocyteII) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
         
         if (interactable instanceof Neutrophil) 
-        	return Util.secrete((Neutrophil) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Neutrophil) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
         
         if(interactable instanceof Liver) { //TO DO!!!
         	if(hasInteractWithLiver)return true;

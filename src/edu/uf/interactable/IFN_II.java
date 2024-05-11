@@ -1,6 +1,9 @@
 package edu.uf.interactable;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
+import edu.uf.intracellularState.Phenotype;
+import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -11,19 +14,21 @@ public class IFN_II extends Molecule{
 	
 	private static IFN_II molecule = null;
     
-    private IFN_II(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    private IFN_II(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
+		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static IFN_II getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static IFN_II getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new IFN_II(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new IFN_II(values, diffuse); 
     	}
     	return molecule;
     }
     
     public static IFN_II getMolecule() {
-    	return molecule;
+    	return getMolecule(null);
     }
     
     @Override
@@ -45,10 +50,10 @@ public class IFN_II extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof NK) 
-        	return Util.secrete((NK) interactable, this, Constants.IFN_II_QTTY, x, y, z, 0);
+        	return Interactions.secrete((NK) interactable, this, Constants.IFN_II_QTTY, x, y, z, 0);
         
         if (interactable instanceof Macrophage) 
-        	return Util.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

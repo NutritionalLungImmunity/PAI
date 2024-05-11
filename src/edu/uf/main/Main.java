@@ -1,7 +1,5 @@
 package edu.uf.main;
 
-import java.io.File;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.Diffusion.FADIPeriodic;
 import edu.uf.compartments.GridFactory;
@@ -12,6 +10,7 @@ import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.main.initialize.Initialize;
 import edu.uf.main.initialize.InitializeBaseModel;
 import edu.uf.main.initialize.InitializeTranexamicModel;
+import edu.uf.main.print.PrintBaseModel;
 import edu.uf.main.print.PrintHemeModel;
 import edu.uf.main.run.Run;
 import edu.uf.main.run.RunSingleThread;
@@ -25,9 +24,9 @@ public class Main {
 		Constants.PR_NET_KILL_EPI *= 0.25;//Double.parseDouble(args[0]);//(0.1*Double.parseDouble(args[0]));
 		Constants.NET_COUNTER_INHIBITION = 0.0;//Double.parseDouble(args[0]);
 		Constants.HEME_QTTY *= 10;//Double.parseDouble(args[0]);
-		Constants.HEME_UP  *= 1.0;//0.75;//Double.parseDouble(args[1]);
+		Constants.HEME_UP *= 1.0;//0.75;//Double.parseDouble(args[1]);
 		
-		int i = Integer.parseInt(args[0]);
+		int i = 0;//Integer.parseInt(args[0]);
 		
 		String filename = "HemeNET025_";// + args[0] + "_";
 
@@ -35,7 +34,7 @@ public class Main {
 			
 		Initialize initialize = new InitializeBaseModel();
 		Run run = new RunSingleThread();
-		PrintHemeModel stat = new PrintHemeModel();
+		PrintBaseModel stat = new PrintBaseModel();
 		
 		
 		int xbin = 10;
@@ -97,11 +96,11 @@ public class Main {
         initialize.createPeriodicGrid(xbin, ybin, zbin);
         initialize.initializeMolecules(diffusion, false);
         initialize.initializePneumocytes(Integer.parseInt(input[3]));
-        //initialize.initializeLiver(grid, xbin, ybin, zbin);
+        initialize.initializeLiver();
         initialize.initializeMacrophage(Integer.parseInt(input[2]));
         initialize.initializeNeutrophils(0);
-        initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
-        initialize.initializeBlood();
+        //initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
+        //initialize.initializeBlood();
         initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
         stat.grid = GridFactory.getGrid();
 
@@ -112,13 +111,13 @@ public class Main {
         //recruiters[1] = new NeutrophilReplenisher();
         
         run.run(
-        		1366,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		3750,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
         		xbin, 
         		ybin, 
         		zbin,  
         		recruiters,
         		false,
-        		new File(filename),//new File("/Users/henriquedeassis/Documents/Projects/Afumigatus/data/ganlin/" + filename),
+        		null, //new File(filename),//new File("/Users/henriquedeassis/Documents/Projects/Afumigatus/data/ganlin/" + filename),
         		-1,
         		stat
         );
@@ -1530,8 +1529,8 @@ public class Main {
 		//args = new String[] {"1.62489565399917", "3.79496365105168", "0.361375652696199", "0.958874000197507", "1.10247187374883", "0.70986409581613", "3.38225794654421", "1.27171492281", "1.80649492166268", "2.25767252319005", "0.440499686750385", "2.50927171531779", "3.26703388702485", "0.718551707413203", "1.72616948763091", "3.0497288483525", "1.53019227580619", "0.392280692899905", "1.80643602247491"};
 		long tic = System.currentTimeMillis();
 		//Main.baseCoinjury(new String[]{"29",   "1",   "1", "0", "488"});
-		//Main.baseModel(args);
-		Main.tranexamicAcidModel(args);
+		Main.baseModel(args);
+		//Main.tranexamicAcidModel(args);
 		long toc = System.currentTimeMillis();
 		System.out.println((toc - tic));
 	}

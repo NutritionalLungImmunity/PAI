@@ -81,9 +81,9 @@ public class InitializeBaseWholeLung extends InitializeBaseModel{
         				for(int i = 0; i < count; i++) {
         					a = new Afumigatus(
         		            		x, y, z, x, y, z, random(), random(), random(), 
-        		            		0,initIron,0, 0, true
+        		            		0,initIron,status, true
         		            );
-        					a.setStatus(status);
+        					//a.setStatus(status);
         					list.add(a);
         		            grid[x][y][z].setCell(a);
         		            totalInfection++;

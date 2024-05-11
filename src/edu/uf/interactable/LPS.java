@@ -1,8 +1,9 @@
-package edu.uf.interactable.invitro;
+package edu.uf.interactable;
 
 import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
@@ -19,19 +20,20 @@ public class LPS extends Molecule {
 	
 	private static LPS molecule = null;
     
-    protected LPS(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    protected LPS(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static LPS getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static LPS getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new LPS(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new LPS(values, diffuse); 
     	}
     	return molecule;
     }
     
-    public static Molecule getMolecule() {
-    	return molecule;
+    public static LPS getMolecule() {
+    	return getMolecule(null);
     }
     
     @Override

@@ -63,7 +63,7 @@ public class Liver extends Cell{
     }
     
     public boolean isTime() {
-		return this.getClock().toc();
+		return true;//this.getClock().toc();
 	}
 
     public static Liver getLiver() {
@@ -157,10 +157,11 @@ public class Liver extends Cell{
 	
 	
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
+		//System.out.println(interactable);
         if (interactable instanceof Transferrin) {
             Molecule tfr = (Transferrin) interactable;
             
-            if(!hasInteractedWithTf) { 
+           /* if(!hasInteractedWithTf) { 
             	double totalTf = tfr.getTotalMolecule(2);
             	//double p = Util.activationFunction(totalTf, Constants.Kd_TfR2, Constants.STD_UNIT_T,  Constants.SPACE_VOL, 1);   
             	for(int i = 0; i < Liver.ENSEMBLE_SIZE; i++) {
@@ -181,7 +182,9 @@ public class Liver extends Cell{
             else
                 tf = Constants.TF_INTERCEPT + Constants.TF_SLOPE * this.logHepcidin;
             //tf = tf;//#*0.25142602860942986
-
+*/
+            
+            double tf = Constants.TF_INTERCEPT + Constants.TF_SLOPE * Constants.THRESHOLD_LOG_HEP;
             double rateTf = Util.turnoverRate(
             		tfr.get("Tf", x, y, z), tf * Constants.DEFAULT_APOTF_REL_CONCENTRATION * Constants.VOXEL_VOL
             ) - 1;
@@ -195,10 +198,11 @@ public class Liver extends Cell{
             tfr.pinc(rateTf, "Tf", x, y, z);
             tfr.pinc(rateTffe, "TfFe", x, y, z);
             tfr.pinc(rateTffe2, "TfFe2", x, y, z);
+            //System.out.println(rateTffe2);
 
             return true;
         }
-        if (interactable instanceof IL6) {
+        /*if (interactable instanceof IL6) {
         	if(hasInteractedWithIL6) return true;
         	IL6 il6 = (IL6) interactable;
         	this.systemicIl6Concentration = il6.getTotalMolecule(0)/(2*Constants.SPACE_VOL);// #div 2 : serum
@@ -262,7 +266,7 @@ public class Liver extends Cell{
         	
         	
             return true;
-        }
+        }*/
         return interactable.interact(this, x, y, z);
     }
 
@@ -277,7 +281,7 @@ public class Liver extends Cell{
 	}
 
 	int count = 0;
-	@Override
+	
 	public void processBooleanNetwork(int... args) {
 		if(hasProcessBN)return;
 		hasProcessBN = true;
@@ -347,7 +351,8 @@ public class Liver extends Cell{
 
 	@Override
 	public void updateStatus(int x, int y, int z) {
-		super.updateStatus(x, y, z);
+		//this.processBooleanNetwork(null);
+		//super.updateStatus(x, y, z);
 		/*if(!hasUpdated) {
 			serumHep = serumHepAux;// - serumHep * Constants.HEP_HALF_LIFE;
 			System.out.println(this.booleanEnsemble[HEP] + " " + Constants.L_HEP_QTTY + " " + serumHep);

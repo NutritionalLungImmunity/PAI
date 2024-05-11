@@ -3,7 +3,9 @@ package edu.uf.interactable.invitro;
 import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
+import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Interactable;
+import edu.uf.interactable.MCP1;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
 //import edu.uf.interactable.covid.DAMP;
@@ -20,19 +22,20 @@ public class BGlucan extends Molecule{
 	
 	private static BGlucan molecule = null;
     
-    protected BGlucan(double[][][][] qttys, Diffuse diffuse, int[] phenotypes) {
-		super(qttys, diffuse, phenotypes);
+    protected BGlucan(double[][][][] qttys, Diffuse diffuse) {
+		super(qttys, diffuse);
 	}
     
-    public static BGlucan getMolecule(double[][][][] values, Diffuse diffuse, int[] phenotypes) {
+    public static BGlucan getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
-    		molecule = new BGlucan(values, diffuse, phenotypes);
+    		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
+    		molecule = new BGlucan(values, diffuse); 
     	}
     	return molecule;
     }
     
-    public static Molecule getMolecule() {
-    	return molecule;
+    public static BGlucan getMolecule() {
+    	return getMolecule(null);
     }
     
     @Override
