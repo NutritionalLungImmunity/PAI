@@ -105,7 +105,7 @@ public class Neutrophil extends Leukocyte{
         	return Interactions.neutrophilAspergillu(this, (Afumigatus) interactable);
         
         if(interactable instanceof Macrophage) 
-        	return Interactions.macrophagePhagApoptotic(this, (Macrophage) interactable, NeutrophilStateModel.APOPTOTIC);
+        	return Interactions.macrophagePhagApoptoticNeutrophilS(this, (Macrophage) interactable);
 
         if(interactable instanceof PneumocyteI) {
         	control = Interactions.typeIPneumocyteNET(this, (PneumocyteI) interactable, control);

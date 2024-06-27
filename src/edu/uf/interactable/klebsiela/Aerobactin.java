@@ -36,7 +36,7 @@ public class Aerobactin extends Siderophore{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Transferrin) 
-    		return Interactions.siderophoreTransferrinChelation((Molecule) interactable, this, Constants.K_M_TF_AERO, x, y, z);
+    		return Interactions.siderophoreTransferrinChelation((Transferrin) interactable, this, Constants.K_M_TF_AERO, x, y, z);
 
         if (interactable instanceof Klebsiella) {
         	Interactions.secreteSiderophore((Klebsiella) interactable, this, x, y, z);

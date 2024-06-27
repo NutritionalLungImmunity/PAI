@@ -39,7 +39,7 @@ public class Enterobactin extends Siderophore {
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Transferrin) 
-    		return Interactions.siderophoreTransferrinChelation((Molecule) interactable, this, Constants.K_M_TF_ENT, x, y, z);
+    		return Interactions.siderophoreTransferrinChelation((Transferrin) interactable, this, Constants.K_M_TF_ENT, x, y, z);
         if (interactable instanceof Klebsiella) {
         	Interactions.secreteSiderophore((Klebsiella) interactable, this, x, y, z);
         	return Interactions.uptakeSiderophore((Klebsiella) interactable, this, Constants.ENT_UP_RATE, x, y, z);

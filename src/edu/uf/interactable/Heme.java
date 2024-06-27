@@ -57,7 +57,7 @@ public class Heme extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if(interactable instanceof Blood) 
-    		return Interactions.set(this, Constants.HEME_QTTY, x, y, z, 0);
+    		return Interactions.set(this, (Blood) interactable, Constants.HEME_QTTY, x, y, z, 0);
     	
         if(interactable instanceof Afumigatus) 
         	return Interactions.aspergillusHemeUptake((Afumigatus) interactable, this, x, y, z);

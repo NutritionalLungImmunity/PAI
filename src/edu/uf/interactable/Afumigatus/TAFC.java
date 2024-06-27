@@ -52,7 +52,7 @@ public class TAFC extends Siderophore{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Transferrin) {
         	//Interactions.transferrinIronChelation((Molecule) interactable, this, x, y, z);
-            return Interactions.siderophoreTransferrinChelation((Molecule) interactable, this, Constants.K_M_TF_TAFC, x, y, z);
+            return Interactions.siderophoreTransferrinChelation((Transferrin) interactable, this, Constants.K_M_TF_TAFC, x, y, z);
         }
         if (interactable instanceof Afumigatus) {
             Afumigatus af = (Afumigatus) interactable;

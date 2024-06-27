@@ -390,7 +390,13 @@ public class Constants {
     public static double K_M_LPC2_ENT = -1;
     
     
-    
+    /*
+     * CHANGES FROM GANLIN MODEL
+     * TAFC * 15
+     * REC_RATE * 2
+     * MAX_MA * 3
+     * CYT_HALF_LIFE -- ON PAPER
+     */
     
     /*public static double PR_INT_NK_P = 0.05; //DUMMY
     public static double IFN1_QTTY = 4.95e-19; //DUMMY: BASED ON Kd

@@ -69,7 +69,7 @@ public class Blood extends Cell{
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if (interactable instanceof PneumocyteI)
-    		return Interactions.sethemorrhage(this, (PneumocyteI) interactable, HEMORRHAGIC, x, y, z);
+    		return Interactions.setHemorrhage(this, (PneumocyteI) interactable, HEMORRHAGIC, x, y, z);
 		
 		return interactable.interact(this, x, y, z);
 	}

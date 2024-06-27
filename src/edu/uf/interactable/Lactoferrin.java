@@ -70,10 +70,10 @@ public class Lactoferrin extends Molecule{
         	return Interactions.lactoferrinDegranulation((Neutrophil) interactable, this, x, y, z);
         
         if (interactable instanceof Transferrin) 
-           return Interactions.lactoferrinTransferrinChelation((Molecule) interactable, this, x, y, z);
+           return Interactions.lactoferrinTransferrinChelation((Transferrin) interactable, this, x, y, z);
         
         if (interactable instanceof Iron) 
-        	return Interactions.transferrinIronChelation(this, (Molecule) interactable, x, y, z); //this method can be used for both lactoferrin and transferrin.
+        	return Interactions.transferrinIronChelation(this, (Iron) interactable, x, y, z); //this method can be used for both lactoferrin and transferrin.
         
         return interactable.interact(this, x, y, z);
     }

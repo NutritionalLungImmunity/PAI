@@ -1,12 +1,8 @@
 package edu.uf.interactable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
-import edu.uf.utils.Util;
 
 public abstract class Molecule extends Interactable {
 
