@@ -52,10 +52,10 @@ public class Adenosine extends Molecule{
     		return Interactions.secrete((PneumocyteII) interactable, this, 1.0, x, y, z, 0);
     	
         if (interactable instanceof Macrophage)
-        	return Interactions.leukocuteDumpInteraction((Macrophage) interactable, this, x, y, z, 1.0);
+        	return Interactions.leukocuteDampInteraction((Macrophage) interactable, this, x, y, z, 1.0);
         	
         if (interactable instanceof Neutrophil) 
-        	return Interactions.leukocuteDumpInteraction((Neutrophil) interactable, this, x, y, z, 1.0);
+        	return Interactions.leukocuteDampInteraction((Neutrophil) interactable, this, x, y, z, 1.0);
         
         return interactable.interact(this, x, y, z);
     }

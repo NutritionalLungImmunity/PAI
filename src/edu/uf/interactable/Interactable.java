@@ -34,6 +34,9 @@ public abstract class Interactable implements Binder{
 	 * The templateInteract method will provide code to interact the interactable 
 	 * object with the current object. Arguments x, y, and z are auxiliary values 
 	 * for interactions involving molecules or other spacial objects.
+	 * <br/><br/>
+	 * This method is also one of the methods that are called by the Voxel objects 
+	 * (see grow, move, kill, turnOver, and computeTotalMolecule).
 	 * @param interactable
 	 * @param x axis position in the grid
 	 * @param y axis position in the grid

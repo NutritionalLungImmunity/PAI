@@ -94,28 +94,30 @@ public class Interactions {
     }
     
     /**
-     * Method handling the interaction between leukocytes and Dump (e.g., Adenosine). 
-     * Dumps are inflammatory molecules released by necrotic cells. They do not form 
+     * Method handling the interaction between leukocytes and Damps (e.g., Adenosine). 
+     * Damps are inflammatory molecules released by necrotic cells. They do not form 
      * a subclass in the model; therefore, this method signature receives the more general 
-     * molecule type. However, this method should not be used with molecules, not Dumps. 
+     * molecule type. However, this method should not be used with molecules, not Damps. 
      * <br/><br/>
      * Upon calling this method, one of two outcomes happens: (1) if the leukocyte is dead, 
-     * the amount of Dump is incremented; (2) if the leukocyte is alive, it interacts with 
+     * the amount of Damp is incremented; (2) if the leukocyte is alive, it interacts with 
      * Dumb via the "bind" method, and the receptor is activated to a discreet level between 
-     * 0 and 4 based on Dump levels in the voxel at position (x, y, z).  
+     * 0 and 4 based on Damp levels in the voxel at position (x, y, z). 
+     * <br/><br/>
+     * <strong>Adenosine is actually a SAMP. But this method does handle the interaction with Adenosine — bad naming.</strong>
      * @param leukocyte
-     * @param dump
+     * @param Damp
      * @param x axis position in the grid
      * @param y axis position in the grid
      * @param z axis position in the grid
-     * @param qtty quantity of dump released upon cell death.
+     * @param qtty quantity of Damp released upon cell death.
      * @return
      */
-    public static boolean leukocuteDumpInteraction(Leukocyte leukocyte, Molecule dump, int x, int y, int z, double qtty) {
+    public static boolean leukocuteDampInteraction(Leukocyte leukocyte, Molecule damp, int x, int y, int z, double qtty) {
     	if(leukocyte.isDead()) {
-    		dump.inc(qtty, 0, x, y, z); //CHANGE TO ADO_QTTY
+    		damp.inc(qtty, 0, x, y, z); //CHANGE TO ADO_QTTY
 		}else {
-			bind(leukocyte, dump, x, y, z, 0);
+			bind(leukocyte, damp, x, y, z, 0);
 		}
         return true;
     }
