@@ -50,10 +50,10 @@ public class MIP1B extends Chemokine{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof PneumocyteII) 
-        	return Interactions.secrete((PneumocyteII) interactable, this, Constants.P_MIP1B_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Cell) interactable, this, Constants.P_MIP1B_QTTY, x, y, z, 0);
         
         if (interactable instanceof Macrophage) 
-        	return Interactions.secrete((Macrophage) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

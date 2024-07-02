@@ -51,10 +51,10 @@ public class Granule extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Neutrophil)
-    		return Interactions.secrete((Neutrophil) interactable, this, Constants.GRANULE_QTTY, x, y, z, 0);
+    		return Interactions.secrete((Leukocyte) interactable, this, Constants.GRANULE_QTTY, x, y, z, 0);
         
         if(interactable instanceof Afumigatus) 
-        	return Interactions.kill((Afumigatus) interactable, this, x, y, z);
+        	return Interactions.kill((PositionalInfectiousAgent) interactable, this, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

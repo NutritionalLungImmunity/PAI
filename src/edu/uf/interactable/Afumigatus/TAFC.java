@@ -4,6 +4,8 @@ import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Iron;
+import edu.uf.interactable.Molecule;
+import edu.uf.interactable.PositionalInfectiousAgent;
 import edu.uf.interactable.Siderophore;
 import edu.uf.interactable.Transferrin;
 import edu.uf.primitives.Interactions;
@@ -50,15 +52,15 @@ public class TAFC extends Siderophore{
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Transferrin) {
         	//Interactions.transferrinIronChelation((Molecule) interactable, this, x, y, z);
-            return Interactions.siderophoreTransferrinChelation((Transferrin) interactable, this, Constants.K_M_TF_TAFC, x, y, z);
+            return Interactions.siderophoreTransferrinChelation((Molecule) interactable, this, Constants.K_M_TF_TAFC, x, y, z);
         }
         if (interactable instanceof Afumigatus) {
-            Afumigatus af = (Afumigatus) interactable;
+        	PositionalInfectiousAgent af = (PositionalInfectiousAgent) interactable;
         	Interactions.uptakeSiderophore(af, this, Constants.TAFC_UP, x, y, z);
             return Interactions.secreteSiderophore(af, this, x, y, z);
         }
         if (interactable instanceof Iron)
-        	return Interactions.siderophoreIronChelation((Iron) interactable, this, x, y, z);
+        	return Interactions.siderophoreIronChelation((Molecule) interactable, this, x, y, z);
 
         return interactable.interact(this, x, y, z);
     }

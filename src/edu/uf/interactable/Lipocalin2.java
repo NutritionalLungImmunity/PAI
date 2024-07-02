@@ -63,23 +63,7 @@ private static final Map<String, Integer> INDEXES;
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof PneumocyteII) 
-        	return Interactions.secrete((PneumocyteII) interactable, this, Constants.LPC2_QTTY, x, y, z, 0);
-        /*if(interactable instanceof Transferrin) {
-        	Transferrin tf = (Transferrin) interactable;
-        	
-        	double qtty = this.get("LPCBI", x, y, z);
-        	
-        	qtty = qtty <= 2 * tf.get("Tf", x, y, z) + tf.get("TfFe", x, y, z) ? qtty : 2 * tf.get("Tf", x, y, z) + tf.get("TfFe", x, y, z);
-            double relTfFe = Util.ironTfReaction(qtty, tf.get("Tf", x, y, z), tf.get("TfFe", x, y, z));
-            double tffeQtty = relTfFe * qtty;
-            double tffe2Qtty = (qtty - tffeQtty) / 2.0;
-            tf.dec(tffeQtty + tffe2Qtty, "Tf", x, y, z);
-            tf.inc(tffeQtty, "TfFe", x, y, z);
-            tf.inc(tffe2Qtty, "TfFe2", x, y, z);
-            
-            this.dec(qtty, "LPCBI", x, y, z);
-            //this.inc(qtty, "LPC", x, y, z); Lipocalin2 should not be recicled!
-        }*/
+        	return Interactions.secrete((Cell) interactable, this, Constants.LPC2_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

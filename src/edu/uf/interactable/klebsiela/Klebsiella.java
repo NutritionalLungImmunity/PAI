@@ -17,6 +17,7 @@ import edu.uf.interactable.PneumocyteII;
 import edu.uf.interactable.Siderophore;
 import edu.uf.interactable.TLRBinder;
 import edu.uf.intracellularState.IntracellularModel;
+import edu.uf.intracellularState.Klebsiella.KlebsiellaIntracellularModel;
 import edu.uf.primitives.Interactions;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
@@ -24,8 +25,6 @@ import edu.uf.utils.Rand;
 
 public class Klebsiella extends InfectiousAgent implements Internalizable{
 	
-	public static final int FREE = 0;
-	public static final int INTERNALIZING = 1;
 	public static final String NAME = "Klebsiela";
 	
 	public static final TLRBinder LPS = new TLRBinder();
@@ -81,7 +80,7 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	}
 	
 	public boolean isInternalizing() {
-        return this.getBooleanNetwork().hasPhenotype(Klebsiella.INTERNALIZING);
+        return this.getBooleanNetwork().hasPhenotype(KlebsiellaIntracellularModel.INTERNALIZING);
 	}
 
 	@Override
@@ -185,15 +184,15 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if(interactable instanceof Macrophage) {
-			Interactions.intKlebsiela((Macrophage)interactable, this);
+			Interactions.intKlebsiela((Leukocyte)interactable, this);
 			return true;
 		}
 		if(interactable instanceof Neutrophil) {
 			if(this.isEncapsulated()) {
-				((Neutrophil)interactable).bind(LPS, 4);
+				((Neutrophil)interactable).bind(LPS, 4); //NEEDS primitive?
 				return true;
 			}
-			Interactions.intKlebsiela((Neutrophil)interactable, this);
+			Interactions.intKlebsiela((Leukocyte)interactable, this);
 			return true;
 		}
 		if(interactable instanceof PneumocyteII) {

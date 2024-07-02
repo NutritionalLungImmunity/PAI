@@ -50,12 +50,12 @@ public class TNFa extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) {
-        	Interactions.secrete((Macrophage) interactable, this, Constants.MA_TNF_QTTY, x, y, z, 0);
-            return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
+        	Interactions.secrete((Leukocyte) interactable, this, Constants.MA_TNF_QTTY, x, y, z, 0);
+            return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         }
         if (interactable instanceof Neutrophil) { 
-        	Interactions.secrete((Neutrophil) interactable, this, Constants.N_TNF_QTTY, x, y, z, 0);
-        	return Interactions.bind((Neutrophil) interactable, this, x, y, z, 0);
+        	Interactions.secrete((Leukocyte) interactable, this, Constants.N_TNF_QTTY, x, y, z, 0);
+        	return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         }
         return interactable.interact(this, x, y, z);
     }

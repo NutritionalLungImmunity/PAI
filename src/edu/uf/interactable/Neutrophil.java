@@ -102,17 +102,17 @@ public class Neutrophil extends Leukocyte{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if(interactable instanceof Afumigatus) 
-        	return Interactions.neutrophilAspergillu(this, (Afumigatus) interactable);
+        	return Interactions.neutrophilAspergillus(this, (PositionalInfectiousAgent) interactable);
         
         if(interactable instanceof Macrophage) 
-        	return Interactions.macrophagePhagApoptoticNeutrophilS(this, (Macrophage) interactable);
+        	return Interactions.macrophagePhagApoptoticNeutrophilS(this, (Leukocyte) interactable);
 
         if(interactable instanceof PneumocyteI) {
-        	control = Interactions.typeIPneumocyteNET(this, (PneumocyteI) interactable, control);
+        	control = Interactions.typeIPneumocyteNET(this, (Cell) interactable, control);
         	return true;
 		}
         if (interactable instanceof Iron) 
-        	return Interactions.releaseIron(this, (Iron) interactable, NeutrophilStateModel.NETOTIC, x, y, z);
+        	return Interactions.releaseIron(this, (Molecule) interactable, NeutrophilStateModel.NETOTIC, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

@@ -64,10 +64,10 @@ public class MIP2 extends Chemokine{
         }
         
         if (interactable instanceof PneumocyteII) 
-        	return Interactions.secrete((PneumocyteII) interactable, this, Constants.P_MIP2_QTTY, x, y, z, 0); 
+        	return Interactions.secrete((Cell) interactable, this, Constants.P_MIP2_QTTY, x, y, z, 0); 
         
         if (interactable instanceof Macrophage) 
-        	return Interactions.secrete((Macrophage) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

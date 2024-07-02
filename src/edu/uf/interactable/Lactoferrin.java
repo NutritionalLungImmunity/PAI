@@ -67,16 +67,16 @@ public class Lactoferrin extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage)
-        	return Interactions.lactoferrinMacrophageUpatake((Macrophage) interactable, this, x, y, z);
+        	return Interactions.lactoferrinMacrophageUpatake((Leukocyte) interactable, this, x, y, z);
         	
         if (interactable instanceof Neutrophil) 
-        	return Interactions.lactoferrinDegranulation((Neutrophil) interactable, this, x, y, z);
+        	return Interactions.lactoferrinDegranulation((Leukocyte) interactable, this, x, y, z);
         
         if (interactable instanceof Transferrin) 
-           return Interactions.lactoferrinTransferrinChelation((Transferrin) interactable, this, x, y, z);
+           return Interactions.lactoferrinTransferrinChelation((Molecule) interactable, this, x, y, z);
         
         if (interactable instanceof Iron) 
-        	return Interactions.transferrinIronChelation(this, (Iron) interactable, x, y, z); //this method can be used for both lactoferrin and transferrin.
+        	return Interactions.transferrinIronChelation(this, (Molecule) interactable, x, y, z); //this method can be used for both lactoferrin and transferrin.
         
         return interactable.interact(this, x, y, z);
     }

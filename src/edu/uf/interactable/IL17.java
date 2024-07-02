@@ -52,13 +52,13 @@ public class IL17 extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) 
-        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         
         if (interactable instanceof PneumocyteII) 
-        	return Interactions.bind((PneumocyteII) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Cell) interactable, this, x, y, z, 0);
         
         if (interactable instanceof DeltaGammaT) 
-        	return Interactions.secrete((DeltaGammaT) interactable, this, Constants.IL17_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Cell) interactable, this, Constants.IL17_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

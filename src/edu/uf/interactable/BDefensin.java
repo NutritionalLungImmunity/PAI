@@ -51,9 +51,9 @@ public class BDefensin extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof PneumocyteII) 
-        	return Interactions.secrete((PneumocyteII) interactable, this, Constants.b_DEFENSIN_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Cell) interactable, this, Constants.b_DEFENSIN_QTTY, x, y, z, 0);
         if(interactable instanceof Klebsiella) 
-        	return Interactions.kill((Klebsiella) interactable, this, x, y, z);
+        	return Interactions.kill((Cell) interactable, this, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

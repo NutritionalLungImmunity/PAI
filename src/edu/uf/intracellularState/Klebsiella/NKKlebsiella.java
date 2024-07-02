@@ -1,10 +1,8 @@
 package edu.uf.intracellularState.Klebsiella;
 
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.IFN_I;
 import edu.uf.interactable.IFN_II;
 import edu.uf.interactable.klebsiela.Klebsiella;
-import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.IntracellularModel;
 
 public class NKKlebsiella extends IntracellularModel{
@@ -14,7 +12,7 @@ public class NKKlebsiella extends IntracellularModel{
 	
 	public NKKlebsiella() {
 		super();
-		this.setState(IntracellularModel.LOCATION, Klebsiella.FREE);
+		this.setState(IntracellularModel.LOCATION, KlebsiellaIntracellularModel.FREE);
 	}
 
 	@Override

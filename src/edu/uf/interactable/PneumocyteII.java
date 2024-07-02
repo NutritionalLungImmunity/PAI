@@ -56,14 +56,14 @@ public class PneumocyteII extends Cell {
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Afumigatus) 
-            return Interactions.typeIIPneumocyteAspergillus(this, (Afumigatus) interactable);
+            return Interactions.typeIIPneumocyteAspergillus(this, (PositionalInfectiousAgent) interactable);
         
         if (interactable instanceof IL6) 
-        	return Interactions.secrete(this, (IL6) interactable, Constants.MA_IL6_QTTY, x, y, z, 0); 
+        	return Interactions.secrete(this, (Molecule) interactable, Constants.MA_IL6_QTTY, x, y, z, 0); 
         
         if (interactable instanceof TNFa) {
-        	Interactions.bind(this, (TNFa) interactable, x, y, z, 0);
-            return Interactions.secrete(this, (TNFa) interactable, Constants.MA_TNF_QTTY, x, y, z, 0); 
+        	Interactions.bind(this, (Molecule) interactable, x, y, z, 0);
+            return Interactions.secrete(this, (Molecule) interactable, Constants.MA_TNF_QTTY, x, y, z, 0); 
         }
 		
         return interactable.interact(this, x, y, z);

@@ -53,13 +53,13 @@ public class ROS extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if(interactable instanceof PneumocyteII) 
-        	return Interactions.rosActivation((PneumocyteII) interactable, this, IntracellularModel.APOPTOTIC, x, y, z);
+        	return Interactions.rosActivation((Cell) interactable, this, IntracellularModel.APOPTOTIC, x, y, z);
 
         if(interactable instanceof Neutrophil) 
-        	return Interactions.secrete((Neutrophil) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Leukocyte) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
         
         if(interactable instanceof Macrophage) 
-        	return Interactions.secrete((Macrophage) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Leukocyte) interactable, this, Constants.H2O2_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

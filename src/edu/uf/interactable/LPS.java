@@ -62,6 +62,7 @@ public class LPS extends Molecule {
     	this.totalMoleculesAux[0] = this.totalMoleculesAux[0] + this.get(0, x, y, z);
     }
 
+    //NEEDS TO CREATE PRIMITIVES
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	//EukaryoteSignalingNetwork.LPS_e = LPS.MOL_IDX;
         if(interactable instanceof PneumocyteII) {

@@ -55,7 +55,7 @@ public class Iron extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) 
-        	return Interactions.releaseIron((Macrophage) interactable, this, IntracellularModel.NECROTIC, x, y, z);
+        	return Interactions.releaseIron((Leukocyte) interactable, this, IntracellularModel.NECROTIC, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

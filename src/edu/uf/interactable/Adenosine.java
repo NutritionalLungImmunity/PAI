@@ -49,13 +49,13 @@ public class Adenosine extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof PneumocyteII)
-    		return Interactions.secrete((PneumocyteII) interactable, this, 1.0, x, y, z, 0);
+    		return Interactions.secrete((Cell) interactable, this, 1.0, x, y, z, 0);
     	
         if (interactable instanceof Macrophage)
-        	return Interactions.leukocuteDampInteraction((Macrophage) interactable, this, x, y, z, 1.0);
+        	return Interactions.leukocuteDampInteraction((Leukocyte) interactable, this, x, y, z, 1.0);
         	
         if (interactable instanceof Neutrophil) 
-        	return Interactions.leukocuteDampInteraction((Neutrophil) interactable, this, x, y, z, 1.0);
+        	return Interactions.leukocuteDampInteraction((Leukocyte) interactable, this, x, y, z, 1.0);
         
         return interactable.interact(this, x, y, z);
     }

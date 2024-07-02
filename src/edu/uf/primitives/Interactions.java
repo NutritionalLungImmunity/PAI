@@ -1,27 +1,12 @@
 package edu.uf.primitives;
 
-import edu.uf.interactable.Blood;
 import edu.uf.interactable.Cell;
-import edu.uf.interactable.Heme;
 import edu.uf.interactable.InfectiousAgent;
-import edu.uf.interactable.Iron;
-import edu.uf.interactable.LPS;
-import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.Leukocyte;
-import edu.uf.interactable.Lipocalin2;
-import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
-import edu.uf.interactable.Neutrophil;
-import edu.uf.interactable.PneumocyteI;
-import edu.uf.interactable.PneumocyteII;
-import edu.uf.interactable.ROS;
+import edu.uf.interactable.PositionalInfectiousAgent;
 import edu.uf.interactable.Siderophore;
-import edu.uf.interactable.Transferrin;
-import edu.uf.interactable.Afumigatus.Afumigatus;
-import edu.uf.interactable.klebsiela.Enterobactin;
-import edu.uf.interactable.klebsiela.Klebsiella;
 import edu.uf.intracellularState.AspergillusIntracellularModel;
-import edu.uf.intracellularState.AspergillusMacrophage;
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.NeutrophilStateModel;
 import edu.uf.utils.Constants;
@@ -135,10 +120,8 @@ public class Interactions {
      * @param w axis position in the grid. Extra dimension for molecules that have more than one state (e.g. free-siderophore/siderophore-bound-to-iron)
      * @return
      */
-    public static boolean set(Molecule mol, Blood blood, double qtty, int x, int y, int z, int w) {
-    	if(blood.hasBlood(x, y, z))
-    		mol.set(qtty, w, x, y, z);
-    	return true;
+    public static boolean set(Molecule mol, Cell blood, double qtty, int x, int y, int z, int w) {
+    	return CoupledInteractions.set(mol, blood, qtty, x, y, z, w);
     }
     
     /**
@@ -172,10 +155,8 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean setHemorrhage(Blood blood, PneumocyteI pneumocyteI, int status, int x, int y, int  z) {
-    	if(pneumocyteI.isDead())
-    		blood.setStatus(status, x, y, z);
-		return true;
+    public static boolean setHemorrhage(Cell blood, Cell pneumocyteI, int status, int x, int y, int  z) {
+    	return CoupledInteractions.setHemorrhage(blood, pneumocyteI, status, x, y, z);
     }
     
     /**
@@ -189,14 +170,8 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean aspergillusHemeUptake(Afumigatus afumigatus, Heme heme, int x, int y, int z) {
-    	if(afumigatus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE) {
-        	double qtty = Constants.HEME_UP * heme.get(0, x, y, z);
-        	afumigatus.incHeme(qtty);
-        	afumigatus.incIronPool(qtty);
-        	heme.dec(qtty, 0, x, y, z);
-    	}
-    	return true;
+    public static boolean aspergillusHemeUptake(PositionalInfectiousAgent afumigatus, Molecule heme, int x, int y, int z) {
+    	return CoupledInteractions.aspergillusHemeUptake(afumigatus, heme, x, y, z);
     }
     
     /**
@@ -214,7 +189,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean releaseIron(Cell cell, Iron iron, int status, int x, int y, int z) {
+    public static boolean releaseIron(Cell cell, Molecule iron, int status, int x, int y, int z) {
     	if (cell.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == status){
     		iron.inc(cell.getIronPool(), "Iron", x, y, z);
             cell.incIronPool(-cell.getIronPool());
@@ -239,7 +214,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean lactoferrinTransferrinChelation(Transferrin tf, Lactoferrin lac, int x, int y, int z) {
+    public static boolean lactoferrinTransferrinChelation(Molecule tf, Molecule lac, int x, int y, int z) {
     	double dfe2dt = Util.michaelianKinetics(
     			tf.get("TfFe2", x, y, z), lac.get("Lactoferrin", x, y, z), Constants.K_M_TF_LAC, Constants.STD_UNIT_T
     	);
@@ -295,7 +270,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean lactoferrinMacrophageUpatake(Macrophage mac, Lactoferrin lac, int x, int y, int z) {
+    public static boolean lactoferrinMacrophageUpatake(Leukocyte mac, Molecule lac, int x, int y, int z) {
     	double qttyFe2 = lac.get("LactoferrinFe2", x, y, z) * Constants.MA_IRON_IMPORT_RATE * 
     			Constants.STD_UNIT_T;
         double qttyFe = lac.get("LactoferrinFe", x, y, z) * Constants.MA_IRON_IMPORT_RATE * 
@@ -333,7 +308,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean transferrinMacrophage(Macrophage mac, Transferrin tf, int status, int phenotype, int x, int y, int z) {
+    public static boolean transferrinMacrophage(Leukocyte mac, Molecule tf, int status, int phenotype, int x, int y, int z) {
     	double qttyFe2 = tf.get("TfFe2", x, y, z) * Constants.MA_IRON_IMPORT_RATE * Constants.STD_UNIT_T;
         double qttyFe  = tf.get("TfFe", x, y, z)  * Constants.MA_IRON_IMPORT_RATE * Constants.STD_UNIT_T;
 
@@ -376,13 +351,8 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean lactoferrinDegranulation(Neutrophil neutr, Lactoferrin lac, int x, int y, int z) {
-    	if (neutr.getBooleanNetwork().hasPhenotype(lac) && !neutr.hasDegranulated()){ 
-    		lac.inc(Constants.LAC_QTTY, "Lactoferrin", x, y, z);
-    		neutr.degranulate();
-    	}
-    	
-        return true;
+    public static boolean lactoferrinDegranulation(Leukocyte neutr, Molecule lac, int x, int y, int z) {
+    	return CoupledInteractions.lactoferrinDegranulation(neutr, lac, x, y, z);
     }
     
     /**
@@ -397,7 +367,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean transferrinIronChelation(Molecule tf, Iron iron, int x, int y, int z) {
+    public static boolean transferrinIronChelation(Molecule tf, Molecule iron, int x, int y, int z) {
     	double qtty = iron.get("Iron", x, y, z);
         qtty  = qtty <= 2 * tf.get(0, x, y, z) + tf.get(1, x, y, z) ?
         		qtty : 2 * tf.get(0, x, y, z) + tf.get(1, x, y, z);
@@ -426,18 +396,18 @@ public class Interactions {
      * @param aspergillus
      * @return
      */
-    public static boolean neutrophilAspergillu(Neutrophil neutrophil, Afumigatus aspergillus) {
+    public static boolean neutrophilAspergillus(Leukocyte neutrophil, PositionalInfectiousAgent aspergillus) {
     	if(neutrophil.isEngaged())
             return true;
     	//System.out.println(this.hasPhenotype(NeutrophilStateModel.APOPTOTIC) + " " + this.hasPhenotype(NeutrophilStateModel.NETOTIC));
         if(!neutrophil.isDead() && !neutrophil.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC)) {
-            if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE || aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.GERM_TUBE) {
+            if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE || aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.GERM_TUBE) {
                 double pr = Constants.PR_N_HYPHAE;
                 //if(this.getExternalState() == 1)  pr *= Constants.NET_COUNTER_INHIBITION;
                 //System.out.println(Rand.getRand().randunif());
                 if (Rand.getRand().randunif() < pr) {
-                    intAspergillus(neutrophil, aspergillus);
-                    aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, IntracellularModel.DYING));
+                	CoupledInteractions.intAspergillus(neutrophil, aspergillus);
+                    aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, CoupledInteractions.getDeadState(aspergillus, IntracellularModel.DYING));
                     neutrophil.bind(aspergillus, 4);
                     
                 }else {
@@ -451,9 +421,9 @@ public class Interactions {
                     //this.bind(interac, 4);
                     
                 }
-            }else if (aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.SWELLING_CONIDIA) {
+            }else if (aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA) {
             	if (Rand.getRand().randunif() < Constants.PR_N_PHAG) {
-            		intAspergillus(neutrophil, aspergillus);
+            		CoupledInteractions.intAspergillus(neutrophil, aspergillus);
             		neutrophil.bind(aspergillus, 4);
             	
             		//interac.setEngaged(true);
@@ -483,7 +453,7 @@ public class Interactions {
      * @param status
      * @return
      */
-    public static boolean macrophagePhagApoptoticNeutrophilS(Neutrophil cell, Macrophage macrophage) {
+    public static boolean macrophagePhagApoptoticNeutrophilS(Leukocyte cell, Leukocyte macrophage) {
     	if (cell.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.APOPTOTIC)) {
     		macrophage.incIronPool(cell.getIronPool());
     		cell.incIronPool(cell.getIronPool());
@@ -505,7 +475,7 @@ public class Interactions {
      * @param control a boolean flag
      * @return control
      */
-    public static boolean typeIPneumocyteNET(Neutrophil neutrophil, PneumocyteI pneumocyteI, boolean control) {
+    public static boolean typeIPneumocyteNET(Leukocyte neutrophil, Cell pneumocyteI, boolean control) {
     	if(neutrophil.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC)) {
     		//cell.setInjury(true);
     		//if(cell.isInjury() || (control && Rand.getRand().randunif() < Constants.PR_NET_KILL_EPI)) {
@@ -534,22 +504,8 @@ public class Interactions {
      * @param injury - Unused in this implementation
      * @return injury
      */
-    public static boolean typeIPneumocyteAspergillus(PneumocyteI typeI, Afumigatus aspergillus, boolean injury) {
-    	if(typeI.isDead())return true;
-		if(typeI.isDead())aspergillus.setEpithelialInhibition(1);
-		if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE) {
-				//if(injury || (a.getAspEpiInt() && Rand.getRand().randunif() < Constants.PR_ASP_KILL_EPI)) //*0.5
-				if((aspergillus.getAspEpiInt() && Rand.getRand().randunif() < Constants.PR_ASP_KILL_EPI)) //*0.5
-					typeI.die();
-				else
-					injury = true;
-				aspergillus.setAspEpiInt(false);
-			
-		}
-		
-		//a.set
-		//if(a.getStatus() == Afumigatus.HYPHAE)this.die();
-		return injury;
+    public static boolean typeIPneumocyteAspergillus(Cell typeI, PositionalInfectiousAgent aspergillus, boolean injury) {
+    	return CoupledInteractions.typeIPneumocyteAspergillus(typeI, aspergillus, injury);
     }
     
     /**
@@ -562,9 +518,9 @@ public class Interactions {
      * @param aspergillus
      * @return
      */
-    public static boolean typeIIPneumocyteAspergillus(PneumocyteII typeII, Afumigatus aspergillus) {
+    public static boolean typeIIPneumocyteAspergillus(Cell typeII, PositionalInfectiousAgent aspergillus) {
     	if(!typeII.isDead()) 
-            if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != Afumigatus.RESTING_CONIDIA) 
+            if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != AspergillusIntracellularModel.RESTING_CONIDIA) 
             	typeII.bind(aspergillus, 4);
         return true;
     }
@@ -582,7 +538,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean rosActivation(Cell cell, ROS ros, int status, int x, int y, int z) {
+    public static boolean rosActivation(Cell cell, Molecule ros, int status, int x, int y, int z) {
     	if (Util.activationFunction(ros.get(0, x, y, z)*ros.get(0, x, y, z), Constants.Kd_H2O2*Constants.Kd_H2O2, Constants.VOXEL_VOL*Constants.VOXEL_VOL)) {
         	//System.out.println(this.get(0, x, y, z)/Constants.VOXEL_VOL + " " + Constants.Kd_H2O2);
     		cell.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, status);
@@ -605,31 +561,8 @@ public class Interactions {
      * @param aspergillus
      * @return
      */
-    public static boolean macrophageAspergillus(Macrophage mac, Afumigatus aspergillus) {
-    	if(mac.isEngaged())
-            return true;
-        if(!mac.isDead()) {
-            if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != Afumigatus.RESTING_CONIDIA) {
-                double prInteract = aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE ? Constants.PR_MA_HYPHAE : Constants.PR_MA_PHAG;
-                //if(this.getExternalState() == 1)  prInteract *= Constants.NET_COUNTER_INHIBITION;
-                if(Rand.getRand().randunif() < prInteract) {
-                	intAspergillus(mac, aspergillus, aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != Afumigatus.HYPHAE);
-                    if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE && mac.getBooleanNetwork().hasPhenotype(new int[] {AspergillusMacrophage.M1, AspergillusMacrophage.M2B})){ 
-                    	aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, IntracellularModel.DYING));
-                        if(aspergillus.getNextSepta() != null) {
-                        	aspergillus.getNextSepta().setRoot(true);
-                        if(aspergillus.getNextBranch() != null)
-                        	aspergillus.getNextBranch().setRoot(true);
-                        }
-                    }else {
-                        if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE && mac.getBooleanNetwork().hasPhenotype(AspergillusMacrophage.M1)) {
-                        	mac.setEngaged(true);
-                        }
-                    }
-                }
-            }
-        }
-        return true;
+    public static boolean macrophageAspergillus(Leukocyte mac, PositionalInfectiousAgent aspergillus) {
+    	return CoupledInteractions.macrophageAspergillus(mac, aspergillus);
     }
     
     /**
@@ -642,8 +575,8 @@ public class Interactions {
      * @param klebsiella
      * @return
      */
-    public static boolean intKlebsiella(Leukocyte leuk, Klebsiella klebsiella) {
-    	intKlebsiela(leuk, klebsiella);
+    public static boolean intKlebsiella(Leukocyte leuk, InfectiousAgent klebsiella) {
+    	CoupledInteractions.intKlebsiela(leuk, klebsiella);
     	return true;
     }
     
@@ -703,7 +636,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean siderophoreIronChelation(Iron iron, Siderophore mol, int x, int y, int z) {
+    public static boolean siderophoreIronChelation(Molecule iron, Siderophore mol, int x, int y, int z) {
     	double qttyIron = iron.get("Iron", x, y, z);
         double qttyTafc = mol.get(0, x, y, z);
         double qtty = qttyTafc < qttyIron ? qttyTafc : qttyIron;
@@ -729,7 +662,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean siderophoreTransferrinChelation(Transferrin tf, Siderophore mol, double km, int x, int y, int z) {
+    public static boolean siderophoreTransferrinChelation(Molecule tf, Siderophore mol, double km, int x, int y, int z) {
     	double dfe2dt = Util.michaelianKinetics(
     			tf.get(2, x, y, z), mol.get("SID", x, y, z), km, Constants.STD_UNIT_T
     	);
@@ -768,7 +701,7 @@ public class Interactions {
      * @param z axis position in the grid
      * @return
      */
-    public static boolean lipocalin2EnterobactinInteraction(Lipocalin2 lip, Enterobactin ent, int x, int y, int z) {
+    public static boolean lipocalin2EnterobactinInteraction(Molecule lip, Siderophore ent, int x, int y, int z) {
     	for(int i = 0; i < 1; i++) {
     		int j = Rand.getRand().randunif(0, 1);
     		switch(j) {
@@ -795,45 +728,6 @@ public class Interactions {
     }
     
     /**
-     * This method only calls intAspergillus(Leukocyte leukocyte, Afumigatus aspergillus, boolean phagocytize)
-     * @param leukocyte
-     * @param aspergillus
-     */
-    public static void intAspergillus(Leukocyte leukocyte, Afumigatus aspergillus) {
-		intAspergillus(leukocyte, aspergillus, false);
-	}	
-	
-    /**
-     * 
-     * @param leukocyte
-     * @param aspergillus
-     * @param phagocytose
-     */
-	public static void intAspergillus(Leukocyte leukocyte, Afumigatus aspergillus, boolean phagocytose) {
-        if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == Afumigatus.FREE) {
-            if (aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.RESTING_CONIDIA || aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.SWELLING_CONIDIA || aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.STERILE_CONIDIA || phagocytose){
-            	if (!leukocyte.isDead()) {
-            		if(leukocyte.getPhagosome().size() < leukocyte.getMaxCell()) {
-                        //phagocyte.phagosome.hasConidia = true;
-                        aspergillus.getBooleanNetwork().setState(IntracellularModel.LOCATION, Afumigatus.INTERNALIZING);
-                        aspergillus.setEngulfed(true);
-                        leukocyte.getPhagosome().add(aspergillus);
-                    }
-                }
-            }
-            if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != Afumigatus.RESTING_CONIDIA) {
-                //phagocyte.getBooleanNetwork().addPhenotype(LeukocyteIntracellularModel.INTERACTING);
-                if(leukocyte instanceof Macrophage) {
-                	((Macrophage)leukocyte).bind(aspergillus, 4);
-                }
-                    
-                //else
-                    //phagocyte.setStatusIteration(0);
-            }
-        }
-    }
-	
-	/**
 	 * Method handling the mechanics of Klebsiela-leukocyte interaction. If Klebsiella is 
 	 * the free phenotype and the leukocyte phagosome is not full, the leukocyte will 
 	 * phagocytose the bacteria. The "spatial" status of the cells (free/internalizing) 
@@ -843,35 +737,13 @@ public class Interactions {
 	 * @param phagocyte
 	 * @param klebsiela
 	 */
-	public static void intKlebsiela(Leukocyte leukocyte, Klebsiella klebsiela) {
-        if(klebsiela.getBooleanNetwork().hasPhenotype(Klebsiella.FREE)) {
-            if (!leukocyte.isDead()) {
-            	if(leukocyte.getPhagosome().size() < leukocyte.getMaxCell()) {
-                        //phagocyte.phagosome.hasConidia = true;
-            		klebsiela.getBooleanNetwork().setState(IntracellularModel.LOCATION, Klebsiella.INTERNALIZING);
-            		klebsiela.setEngulfed(true);
-            		leukocyte.getPhagosome().add(klebsiela);
-                }
-            }
-            //phagocyte.getBooleanNetwork().addPhenotype(Cell.INTERACTING);
-            if(leukocyte instanceof Macrophage) {
-            	leukocyte.bind(LPS.getMolecule(), 4);
-            }
-        }
-    }
-	
-	/**
-	 * This method returns the state "state" if the cell life status is "DEAD." 
-	 * The state "state" is meant to be one of the dead states, such as "DYING." 
-	 * To use this function to return other states is beyond the the intended 
-	 * scope of this method.
-	 * @param asp Afumigatus
-	 * @param state
-	 * @return
-	 */
-	private static int getDeadState(Afumigatus asp, int state) {
-		if(asp.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)return IntracellularModel.DEAD;
-		return state;
-	}
+	public static void intKlebsiela(Leukocyte leukocyte, InfectiousAgent klebsiela) {
+       CoupledInteractions.intKlebsiela(leukocyte, klebsiela);
+   }
     
 }
+
+
+
+
+//Blood, Macrophage, Neutrophil, Afumigatus, LPS, 

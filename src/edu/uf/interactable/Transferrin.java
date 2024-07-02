@@ -69,10 +69,10 @@ public class Transferrin extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage)
-        	return Interactions.transferrinMacrophage((Macrophage) interactable, this, AspergillusMacrophage._FPN, AspergillusMacrophage.M1, x, y, z);
+        	return Interactions.transferrinMacrophage((Leukocyte) interactable, this, AspergillusMacrophage._FPN, AspergillusMacrophage.M1, x, y, z);
         	
         if(interactable instanceof Iron)
-        	return Interactions.transferrinIronChelation(this, (Iron) interactable, x, y, z);
+        	return Interactions.transferrinIronChelation(this, (Molecule) interactable, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

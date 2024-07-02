@@ -50,10 +50,10 @@ public class IL23 extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof DeltaGammaT) 
-        	return Interactions.bind((DeltaGammaT) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Cell) interactable, this, x, y, z, 0);
         
         if (interactable instanceof Macrophage) 
-        	return Interactions.secrete((Macrophage) interactable, this, Constants.MA_IL23_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_IL23_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

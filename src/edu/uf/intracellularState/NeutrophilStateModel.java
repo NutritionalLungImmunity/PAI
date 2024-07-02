@@ -109,7 +109,7 @@ public class NeutrophilStateModel extends IntracellularModel{
         if(net.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.APOPTOTIC)) {
         	net.die();
             for(InfectiousAgent entry : net.getPhagosome())
-            	entry.getBooleanNetwork().setState(AspergillusIntracellularModel.LOCATION, Afumigatus.RELEASING);
+            	entry.getBooleanNetwork().setState(AspergillusIntracellularModel.LOCATION, AspergillusIntracellularModel.RELEASING);
         }
         if(net.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC)) {
         	GridFactory.getGrid()[x][y][z].setExternalState(1);
@@ -121,7 +121,7 @@ public class NeutrophilStateModel extends IntracellularModel{
         		net.die();
         		GridFactory.getGrid()[x][y][z].setExternalState(0);
         		for(InfectiousAgent entry : net.getPhagosome())
-        			entry.getBooleanNetwork().setState(AspergillusIntracellularModel.LOCATION, Afumigatus.RELEASING);
+        			entry.getBooleanNetwork().setState(AspergillusIntracellularModel.LOCATION, AspergillusIntracellularModel.RELEASING);
         	}
         }
         

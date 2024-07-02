@@ -50,10 +50,10 @@ public class IFN_II extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof NK) 
-        	return Interactions.secrete((NK) interactable, this, Constants.IFN_II_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Cell) interactable, this, Constants.IFN_II_QTTY, x, y, z, 0);
         
         if (interactable instanceof Macrophage) 
-        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

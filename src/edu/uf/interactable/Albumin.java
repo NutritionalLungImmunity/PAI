@@ -49,7 +49,7 @@ public class Albumin extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Albumin)
-    		return Interactions.set(this, (Blood) interactable, Constants.ALBUMIN_INIT_QTTY, x, y, z, 0);
+    		return Interactions.set(this, (Cell) interactable, Constants.ALBUMIN_INIT_QTTY, x, y, z, 0);
     	
         return interactable.interact(this, x, y, z);
     }

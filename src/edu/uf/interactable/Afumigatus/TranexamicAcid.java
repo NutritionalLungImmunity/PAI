@@ -38,6 +38,7 @@ public class TranexamicAcid extends Setter{
     	return -1;
     }
 
+    //NEEDS primitive
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if(interactable instanceof Blood) {
     		if(this.iterations.contains(this.getIteration())) 

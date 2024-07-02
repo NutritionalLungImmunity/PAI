@@ -1,6 +1,5 @@
 package edu.uf.intracellularState.Klebsiella;
 
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.TLRBinder;
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.NeutrophilNetwork;

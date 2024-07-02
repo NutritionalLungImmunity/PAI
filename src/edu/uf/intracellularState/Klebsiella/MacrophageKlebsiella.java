@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.Hepcidin;
 import edu.uf.interactable.IFN_I;
 import edu.uf.interactable.IFN_III;

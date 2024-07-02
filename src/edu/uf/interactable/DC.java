@@ -86,13 +86,13 @@ public class DC extends Leukocyte{
     		return Interactions.intKlebsiella(this, (Klebsiella) interactable);
     	
     	if(interactable instanceof IFN_I) 
-    		return Interactions.secrete(this, (IFN_I) interactable, Constants.MA_IFN_I_QTTY, x, y, z, 0);
+    		return Interactions.secrete(this, (Molecule) interactable, Constants.MA_IFN_I_QTTY, x, y, z, 0);
     	
     	if(interactable instanceof IFN_III) 
-    		return Interactions.secrete(this, (IFN_III) interactable, Constants.MA_IFN_III_QTTY, x, y, z, 0);
+    		return Interactions.secrete(this, (Molecule) interactable, Constants.MA_IFN_III_QTTY, x, y, z, 0);
     	
     	if(interactable instanceof IL23) 
-    		return Interactions.secrete(this, (IL23) interactable, Constants.MA_IL23_QTTY, x, y, z, 0);
+    		return Interactions.secrete(this, (Molecule) interactable, Constants.MA_IL23_QTTY, x, y, z, 0);
     	
         return interactable.interact(this, x, y, z);
     }

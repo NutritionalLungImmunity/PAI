@@ -85,7 +85,7 @@ public class PneumocyteI extends Cell{
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if(interactable instanceof Afumigatus) {
-			injury = Interactions.typeIPneumocyteAspergillus(this, (Afumigatus) interactable, injury);
+			injury = Interactions.typeIPneumocyteAspergillus(this, (PositionalInfectiousAgent) interactable, injury);
 			return true;
 		}
 		

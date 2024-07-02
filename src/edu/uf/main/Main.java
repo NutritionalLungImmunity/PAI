@@ -7,6 +7,7 @@ import edu.uf.compartments.MacrophageRecruiter;
 import edu.uf.compartments.NeutrophilRecruiter;
 import edu.uf.compartments.Recruiter;
 import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.intracellularState.AspergillusIntracellularModel;
 import edu.uf.main.initialize.Initialize;
 import edu.uf.main.initialize.InitializeBaseModel;
 import edu.uf.main.initialize.InitializeTranexamicModel;
@@ -101,7 +102,7 @@ public class Main {
         initialize.initializeNeutrophils(0);
         //initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
         //initialize.initializeBlood();
-        initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
+        initialize.infect(Integer.parseInt(input[1]), AspergillusIntracellularModel.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
         stat.grid = GridFactory.getGrid();
 
         Recruiter[] recruiters = new Recruiter[2];
@@ -180,7 +181,7 @@ public class Main {
         initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
         initialize.initializeBlood();
         ((InitializeTranexamicModel)initialize).initializeTranexamicAcid(new int[] {});
-        initialize.infect(Integer.parseInt(input[1]), Afumigatus.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
+        initialize.infect(Integer.parseInt(input[1]), AspergillusIntracellularModel.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
         stat.grid = GridFactory.getGrid();
 
         Recruiter[] recruiters = new Recruiter[2];

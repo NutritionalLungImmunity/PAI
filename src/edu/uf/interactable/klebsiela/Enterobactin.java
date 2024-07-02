@@ -2,6 +2,7 @@ package edu.uf.interactable.klebsiela;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
+import edu.uf.interactable.InfectiousAgent;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Iron;
 import edu.uf.interactable.Lipocalin2;
@@ -39,16 +40,16 @@ public class Enterobactin extends Siderophore {
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Transferrin) 
-    		return Interactions.siderophoreTransferrinChelation((Transferrin) interactable, this, Constants.K_M_TF_ENT, x, y, z);
+    		return Interactions.siderophoreTransferrinChelation((Molecule) interactable, this, Constants.K_M_TF_ENT, x, y, z);
         if (interactable instanceof Klebsiella) {
-        	Interactions.secreteSiderophore((Klebsiella) interactable, this, x, y, z);
-        	return Interactions.uptakeSiderophore((Klebsiella) interactable, this, Constants.ENT_UP_RATE, x, y, z);
+        	Interactions.secreteSiderophore((InfectiousAgent) interactable, this, x, y, z);
+        	return Interactions.uptakeSiderophore((InfectiousAgent) interactable, this, Constants.ENT_UP_RATE, x, y, z);
         }	
         if (interactable instanceof Iron) 
-        	return Interactions.siderophoreIronChelation((Iron) interactable, this, x, y, z);
+        	return Interactions.siderophoreIronChelation((Molecule) interactable, this, x, y, z);
         
         if(interactable instanceof Lipocalin2) 
-        	return Interactions.lipocalin2EnterobactinInteraction((Lipocalin2) interactable, this, x, y, z);
+        	return Interactions.lipocalin2EnterobactinInteraction((Molecule) interactable, this, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

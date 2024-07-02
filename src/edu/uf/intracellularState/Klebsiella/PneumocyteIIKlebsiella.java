@@ -1,7 +1,6 @@
 package edu.uf.intracellularState.Klebsiella;
 
 import edu.uf.interactable.BDefensin;
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.IFN_III;
 import edu.uf.interactable.IL1;
 import edu.uf.interactable.IL17;

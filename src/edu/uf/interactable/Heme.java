@@ -57,16 +57,16 @@ public class Heme extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if(interactable instanceof Blood) 
-    		return Interactions.set(this, (Blood) interactable, Constants.HEME_QTTY, x, y, z, 0);
+    		return Interactions.set(this, (Cell) interactable, Constants.HEME_QTTY, x, y, z, 0);
     	
         if(interactable instanceof Afumigatus) 
-        	return Interactions.aspergillusHemeUptake((Afumigatus) interactable, this, x, y, z);
+        	return Interactions.aspergillusHemeUptake((PositionalInfectiousAgent) interactable, this, x, y, z);
         
         if(interactable instanceof Macrophage) 
-        	return Interactions.bind((Macrophage) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         
         if(interactable instanceof Neutrophil) 
-        	return Interactions.bind((Neutrophil) interactable, this, x, y, z, 0);
+        	return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         
         return interactable.interact(this, x, y, z);
     }

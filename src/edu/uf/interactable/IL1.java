@@ -52,13 +52,13 @@ public class IL1 extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if (interactable instanceof Macrophage) 
-    		return Interactions.secrete((Macrophage) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+    		return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
         
     	if (interactable instanceof PneumocyteII) 
-    		return Interactions.secrete((PneumocyteII) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+    		return Interactions.secrete((Cell) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
         
         if (interactable instanceof Neutrophil) 
-        	return Interactions.secrete((Neutrophil) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
+        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_IL1_QTTY, x, y, z, 0);
         
         if(interactable instanceof Liver) { //TO DO!!!
         	if(hasInteractWithLiver)return true;

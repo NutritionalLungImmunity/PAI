@@ -78,7 +78,7 @@ public class NK extends Cell{
 	@Override
 	protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
 		if (interactable instanceof IFN_I) 
-			return Interactions.bind(this, (IFN_I) interactable, x, y, z, 0);
+			return Interactions.bind(this, (Molecule) interactable, x, y, z, 0);
         
 		return interactable.interact(this, x, y, z);
 	}

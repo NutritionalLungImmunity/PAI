@@ -1,8 +1,6 @@
 package edu.uf.intracellularState.Klebsiella;
 
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.IL17;
-import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.IntracellularModel;
 
 public class GDTKlebsiella extends IntracellularModel{

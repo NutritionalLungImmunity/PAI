@@ -8,6 +8,18 @@ import edu.uf.utils.Util;
 
 public class AspergillusIntracellularModel extends IntracellularModel{
 	
+	public static final int RESTING_CONIDIA = Phenotype.createPhenotype();
+    public static final int SWELLING_CONIDIA = Phenotype.createPhenotype();
+    public static final int GERM_TUBE = Phenotype.createPhenotype();
+    public static final int HYPHAE = Phenotype.createPhenotype();
+    public static final int STERILE_CONIDIA = Phenotype.createPhenotype(); //PROBABLY NOT BEEN USED
+    
+    
+    public static final int FREE = Phenotype.createPhenotype();
+    public static final int INTERNALIZING = Phenotype.createPhenotype();
+    public static final int RELEASING = Phenotype.createPhenotype();
+    public static final int ENGAGED = Phenotype.createPhenotype();
+	
 	public static final int[] INIT_AFUMIGATUS_BOOLEAN_STATE = new int[] {1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     
     private static final int hapX = 0;
@@ -47,7 +59,7 @@ public class AspergillusIntracellularModel extends IntracellularModel{
     	setBnIteration(0);
     	setBooleanNetwork(INIT_AFUMIGATUS_BOOLEAN_STATE.clone());
     	//System.out.println(LOCATION + " " + STATUS);
-    	super.setState(LOCATION, Afumigatus.FREE);
+    	super.setState(LOCATION, AspergillusIntracellularModel.FREE);
     	super.setState(STATUS, phenotype);
     	//super.addPhenotype(INTERACTION_STATE, phenotype);
     	
@@ -65,15 +77,15 @@ public class AspergillusIntracellularModel extends IntracellularModel{
 		//System.out.println(this.hasPhenotype(RESTING_CONIDIA));
 		//System.out.println(Constants.PR_ASPERGILLUS_CHANGE);
 		//System.out.println(Rand.getRand().randunif());
-		if(this.getState(STATUS) == Afumigatus.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING)j++;
-        if(this.getState(STATUS) == Afumigatus.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING && Rand.getRand().randunif() < Constants.PR_ASPERGILLUS_CHANGE) { 
-            this.setState(STATUS, Afumigatus.SWELLING_CONIDIA);
+		if(this.getState(STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING)j++;
+        if(this.getState(STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING && Rand.getRand().randunif() < Constants.PR_ASPERGILLUS_CHANGE) { 
+            this.setState(STATUS, AspergillusIntracellularModel.SWELLING_CONIDIA);
             Afumigatus.incTotalCells(2);
 			Afumigatus.decTotalCells(1);
 			i++;
 			//System.out.println(i/((double)j));
-        }else if(!asp.isEngaged() && this.getState(STATUS) == Afumigatus.SWELLING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_GERMINATE) {
-            this.setState(STATUS, Afumigatus.GERM_TUBE);
+        }else if(!asp.isEngaged() && this.getState(STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_GERMINATE) {
+            this.setState(STATUS, AspergillusIntracellularModel.GERM_TUBE);
             Afumigatus.incTotalCells(3);
 			Afumigatus.decTotalCells(2);
         }else if(this.getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DYING) {
@@ -83,8 +95,8 @@ public class AspergillusIntracellularModel extends IntracellularModel{
         if(asp.getNextSepta() == null) 
         	asp.setGrowable(true);
 
-        if(this.getState(LOCATION) == Afumigatus.INTERNALIZING || this.getState(LOCATION) == Afumigatus.RELEASING)
-        	this.setState(LOCATION, Afumigatus.FREE); 
+        if(this.getState(LOCATION) == AspergillusIntracellularModel.INTERNALIZING || this.getState(LOCATION) == AspergillusIntracellularModel.RELEASING)
+        	this.setState(LOCATION, AspergillusIntracellularModel.FREE); 
 
         asp.diffuseIron();
         if(asp.getNextBranch() == null)
@@ -94,15 +106,15 @@ public class AspergillusIntracellularModel extends IntracellularModel{
 	}
 	
 	public static int hasLifeStage(int phenotype) {
-		if(phenotype == Afumigatus.RESTING_CONIDIA)
+		if(phenotype == AspergillusIntracellularModel.RESTING_CONIDIA)
 			return 1;
-		if(phenotype == Afumigatus.SWELLING_CONIDIA)
+		if(phenotype == AspergillusIntracellularModel.SWELLING_CONIDIA)
 			return 2;
-		if(phenotype == Afumigatus.GERM_TUBE)
+		if(phenotype == AspergillusIntracellularModel.GERM_TUBE)
 			return 3;
-		if(phenotype == Afumigatus.HYPHAE)
+		if(phenotype == AspergillusIntracellularModel.HYPHAE)
 			return 4;
-		if(phenotype == Afumigatus.STERILE_CONIDIA) //PROBABLY NOT BEEN CONSIDERED
+		if(phenotype == AspergillusIntracellularModel.STERILE_CONIDIA) //PROBABLY NOT BEEN CONSIDERED
 			return 5; //THAT'S TOO MUCH. PROBABLY GOING TO RAISE AN ERROR
 		return -1;
 	}

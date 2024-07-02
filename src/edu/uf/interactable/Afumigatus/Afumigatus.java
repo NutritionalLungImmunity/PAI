@@ -10,6 +10,7 @@ import edu.uf.interactable.Internalizable;
 import edu.uf.interactable.Iron;
 import edu.uf.interactable.Leukocyte;
 import edu.uf.interactable.Macrophage;
+import edu.uf.interactable.Molecule;
 import edu.uf.interactable.PositionalInfectiousAgent;
 import edu.uf.interactable.Siderophore;
 import edu.uf.intracellularState.AspergillusIntracellularModel;
@@ -28,18 +29,6 @@ import java.util.HashSet;
 public class Afumigatus extends PositionalInfectiousAgent implements Internalizable{
 
     public static final String NAME = "Afumigatus";    
-    
-    public static final int RESTING_CONIDIA = Phenotype.createPhenotype();
-    public static final int SWELLING_CONIDIA = Phenotype.createPhenotype();
-    public static final int GERM_TUBE = Phenotype.createPhenotype();
-    public static final int HYPHAE = Phenotype.createPhenotype();
-    public static final int STERILE_CONIDIA = Phenotype.createPhenotype(); //PROBABLY NOT BEEN USED
-    
-    
-    public static final int FREE = Phenotype.createPhenotype();
-    public static final int INTERNALIZING = Phenotype.createPhenotype();
-    public static final int RELEASING = Phenotype.createPhenotype();
-    public static final int ENGAGED = Phenotype.createPhenotype();
 
     private static double totalIron = 0;
     private static int[] totalCells = new int[5];
@@ -77,7 +66,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     
     public Afumigatus() {
     	this(0,0,0, 0,0,0, Rand.getRand().randunif(), Rand.getRand().randunif(), Rand.getRand().randunif(),
-    			0, 0, Afumigatus.RESTING_CONIDIA, true);
+    			0, 0, AspergillusIntracellularModel.RESTING_CONIDIA, true);
     }
 
 
@@ -302,7 +291,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 	}
 	
 	public boolean isInternalizing() {
-        return this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == Afumigatus.INTERNALIZING;
+        return this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == AspergillusIntracellularModel.INTERNALIZING;
 	}
 	
 	public boolean isGrowable() {
@@ -338,7 +327,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
                 }
             }
         }   */        
-        if (this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == Afumigatus.FREE) {
+        if (this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == AspergillusIntracellularModel.FREE) {
             Voxel voxel = Util.findVoxel(this.xTip, this.yTip, this.zTip, xbin, ybin, zbin, grid);
             if (voxel != null && voxel.getTissueType() != voxel.AIR) {
                 Afumigatus nextSepta = this.elongate();
@@ -368,7 +357,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     	Afumigatus septa = null;
         //if(this.growable && this.getBooleanNetwork(Afumigatus.LIP) == 1) {
     	if(this.growable) {// && canGrow()) {
-            if(this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE) {
+            if(this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE) {
                 //if(this.growthIteration >= this.iterationsToGrow) {
             	if(this.growing()) {
                     //this.growthIteration = 0;
@@ -378,16 +367,16 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
                     this.nextSepta = createAfumigatus(this.xTip, this.yTip, this.zTip, 
                                                  this.xTip + this.dx, this.yTip + this.dy, this.zTip + this.dz,
                                                  this.dx, this.dy, this.dz, 0, 
-                                                 0, Afumigatus.HYPHAE, false);
+                                                 0, AspergillusIntracellularModel.HYPHAE, false);
                     this.nextSepta.setIronPool(this.getIronPool());
                     this.nextSepta.setNitrogen((nitrogenPool * this.treeSize) / (this.treeSize + 1.0));
                     septa = this.nextSepta;
                 } //else 
                   //  this.growthIteration = this.growthIteration + 1;
-            }else if(this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.GERM_TUBE) {
+            }else if(this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.GERM_TUBE) {
                 //if(this.growthIteration >= Constants.ITER_TO_GROW){
                 if(this.growing()) {
-                    this.getBooleanNetwork().setState(AspergillusIntracellularModel.STATUS, Afumigatus.HYPHAE);
+                    this.getBooleanNetwork().setState(AspergillusIntracellularModel.STATUS, AspergillusIntracellularModel.HYPHAE);
                     Afumigatus.incTotalCells(4);
         			Afumigatus.decTotalCells(3);
                     this.xTip = this.getX() + this.dx;
@@ -411,7 +400,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     
     private Afumigatus branch(Double phi, double prBranch) {
     	Afumigatus branch = null;
-    	if(this.branchable && this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE) {// && canGrow()) {
+    	if(this.branchable && this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE) {// && canGrow()) {
         //if(this.branchable && this.getStatus() == Afumigatus.HYPHAE && this.getBooleanNetwork(Afumigatus.LIP) == 1) {
             if(Rand.getRand().randunif() < prBranch) {
                 if(phi == null) {
@@ -431,7 +420,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
                                              this.xTip + growthVector[0], this.yTip + growthVector[1], 
                                              this.zTip + growthVector[2],
                                              growthVector[0], growthVector[1], growthVector[2], -1,
-                                              0, Afumigatus.HYPHAE, false);
+                                              0, AspergillusIntracellularModel.HYPHAE, false);
 
                 this.nextBranch.setIronPool(this.getIronPool());
                 branch = this.nextBranch;
@@ -460,18 +449,18 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if(interactable instanceof Iron) {  //UNCOMENT WHEN CREATE IRON
-    		if(Interactions.releaseIron(this, (Iron) interactable, IntracellularModel.DYING, x, y, z)) return true;
-            return Interactions.releaseIron(this, (Iron) interactable, IntracellularModel.DEAD, x, y, z);
+    		if(Interactions.releaseIron(this, (Molecule) interactable, IntracellularModel.DYING, x, y, z)) return true;
+            return Interactions.releaseIron(this, (Molecule) interactable, IntracellularModel.DEAD, x, y, z);
     	}
             
         if(interactable instanceof Macrophage) 
-        	return Interactions.macrophageAspergillus((Macrophage) interactable, this);
+        	return Interactions.macrophageAspergillus((Leukocyte) interactable, this);
             
         return interactable.interact(this, x, y, z);
     }
 
     public boolean isDead() {
-        return super.isDead() || this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.STERILE_CONIDIA;
+        return super.isDead() || this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.STERILE_CONIDIA;
     }
     
     public void diffuseIron() {
@@ -564,13 +553,13 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 
 	@Override
 	public boolean isSecretingSiderophore(Siderophore mol) {
-		if (this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == Afumigatus.FREE && 
+		if (this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == AspergillusIntracellularModel.FREE && 
 				this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DYING && 
 				this.getBooleanNetwork().getState(AspergillusIntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) 
     		if (this.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.SECRETING_TAFC) && 
-                    (this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.SWELLING_CONIDIA || 
-                    		this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE ||
-                    				this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS)  == Afumigatus.GERM_TUBE))
+                    (this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA || 
+                    		this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE ||
+                    				this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS)  == AspergillusIntracellularModel.GERM_TUBE))
     			return true;
 		return false;
 	}
@@ -578,13 +567,13 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 
 	@Override
 	public boolean isUptakingSiderophore(Siderophore mol) {
-		if (this.getBooleanNetwork().getState(IntracellularModel.LOCATION) == Afumigatus.FREE && 
+		if (this.getBooleanNetwork().getState(IntracellularModel.LOCATION) == AspergillusIntracellularModel.FREE && 
 				this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DYING && 
 				this.getBooleanNetwork().getState(AspergillusIntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) 
             if (this.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.UPTAKING_TAFC) && 
-                    (this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.SWELLING_CONIDIA || 
-            		this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE ||
-            				this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS)  == Afumigatus.GERM_TUBE)) 
+                    (this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA || 
+            		this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE ||
+            				this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS)  == AspergillusIntracellularModel.GERM_TUBE)) 
             	return true;
 		return false;
 	}

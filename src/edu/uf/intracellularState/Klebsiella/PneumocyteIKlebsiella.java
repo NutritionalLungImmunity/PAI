@@ -1,9 +1,7 @@
 package edu.uf.intracellularState.Klebsiella;
 
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.IFN_III;
 import edu.uf.interactable.PneumocyteI;
-import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.IntracellularModel;
 
 public class PneumocyteIKlebsiella extends IntracellularModel{
