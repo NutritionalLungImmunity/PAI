@@ -48,7 +48,7 @@ public class Clock {
 	
 	/**
 	 * Returns true if N iterations have passed. N="size" received by the "Clock" constructor. 
-	 * This method does not update the interaction count. The number of iterations is updated 
+	 * This method does not update the iteration count. The number of iterations is updated 
 	 * by the "tic" method.
 	 * @return
 	 */
