@@ -84,7 +84,7 @@ public class MultiThreadExec extends Exec implements Runnable{
 		for(int x = 0; x < xbin; x++)
     		for(int y = 0; y < ybin; y++)
     			for(int z = 0; z < zbin; z++) {
-                    grid3d[x][y][z].next(x, y, z, xbin, ybin, zbin);
+                    grid3d[x][y][z].next(x, y, z);
     			}
 	}
 	

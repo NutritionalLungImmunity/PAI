@@ -34,57 +34,34 @@ public class Clock {
 		return size;
 	}
 	
+	/**
+	 * Updates the iteration counter and resets it if "size" iterations have passed. 
+	 * This method should only be called once every iteration. It also keeps track of 
+	 * the number of times it reset the count. 
+	 * <strong> Notice: right now, this method is being called in cell.updateStatus." 
+	 * This must be reviewed. </strong>
+	 */
 	public void tic() {
 		this.iteration = (this.iteration + 1) % size;
 		if(this.iteration == 0)this.count++;
 	}
 	
+	/**
+	 * Returns true if N iterations have passed. N="size" received by the "Clock" constructor. 
+	 * This method does not update the interaction count. The number of iterations is updated 
+	 * by the "tic" method.
+	 * @return
+	 */
 	public boolean toc() {
 		return iteration % size == 0;
 	}
 	
+	/**
+	 * Returns the number of times the iteration count was reset.
+	 * @return
+	 */
 	public long getCount() {
 		return this.count;
 	}
-	
-	/*public static void updade() {
-		Clock.iteration++;
-		for(Clock clock : listClock)
-			clock.updateClock();
-	}
-	
-	private void updateClock() {
-		this.i++;
-	}
-	
-	public void tic(int idx) {
-		tic(idx, false);
-	}
-	
-	public void tic(int idx, boolean b) {
-		if(!b) {
-			this.j[idx] = i;
-			this.b[idx] = true;
-		}else if (b && this.b[idx]){
-			this.j[idx] = i;
-			this.b[idx] = false;
-		}
-	}
-	
-	public int toc(int idx) {
-		return i - j[idx];
-	}
-	
-	public boolean toc(int idx, int interval) {
-		return (i - j[idx]) % interval == 0;
-	}
-	
-	public int get() {
-		return i;
-	}
-	
-	public static int getIteration() {
-		return Clock.iteration;
-	}*/
 	
 }

@@ -92,7 +92,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
         this.yTip = yTip;
         this.zTip = zTip;
         double[] ds = new double[] {dx, dy, dz};
-        LinAlg.multiply(ds, 1.0/LinAlg.norm(ds));
+        LinAlg.multiply(ds, 1.0/LinAlg.norm2(ds));
         
         this.dx = ds[0];
         this.dy = ds[1];

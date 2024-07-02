@@ -9,7 +9,7 @@ public class LinAlg {
 	
 	
 	/**
-	 * compute the geometric distance in 2d between point(x1, y1) and point(x2, y2) 
+	 * compute the Euclidian distance between point(x1, y1) and point(x2, y2) 
 	 * @param x1
 	 * @param x2
 	 * @param y1
@@ -21,7 +21,12 @@ public class LinAlg {
 		return (Math.sqrt(t1*t1+t2*t2)); 
 	}
 	
-	
+	/**
+	 * compute the Euclidian distance between two vectors.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public static double euclidianDistance(int[] x, int[] y) {
 		if(x.length != y.length) {
 			System.err.println("error non-conformable arguments");
@@ -34,6 +39,12 @@ public class LinAlg {
 		return Math.sqrt(d); 
 	}
 	
+	/**
+	 * compute the Euclidian distance between two vectors.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public static double euclidianDistance(double[] x, double[] y) {
 		if(x.length != y.length) {
 			System.err.println("error non-conformable arguments");
@@ -47,7 +58,7 @@ public class LinAlg {
 	}
 	
 	/**
-	 * compute the geometric distance in 3d between point(x1, y1, z1) and point(x2, y2, z2) 
+	 * compute the Euclidian distance between point(x1, y1, z1) and point(x2, y2, z2) 
 	 * @param x1
 	 * @param y1
 	 * @param z1
@@ -62,6 +73,17 @@ public class LinAlg {
 	  return (Math.sqrt(t1*t1+t2*t2+t3*t3));
 	}
 	
+	/**
+	 * creates the rotation matrix:
+	 * <pre>
+	 * |  0.707 * cos(phi)	-sin(phi)	0.707 * cos(phi) |
+	 * |  0.707 * sin(phi)	 cos(phi)	0.707 * sin(phi) |
+	 * | -0.707           	 0.0     	0.707            |
+	 * </pre>
+	 * Notice: cos(pi/4) = sin(pi/4) = 0.707
+	 * @param phi the rotation angle in the z-axis.
+	 * @return
+	 */
 	public static double[][] rotation(double phi){
 		double[][] r = new double[3][3];
 		
@@ -171,20 +193,44 @@ public class LinAlg {
 		return r;
 	}
 	
+	/**
+	 * create the matrix:
+	 * <pre>
+	 * | x y z |
+	 * | 1 0 0 |
+	 * | 0 1 0 |
+	 * </pre>
+	 * where x, y, and z are the coordinates of the afumigatus cell.
+	 * <br/><br/>
+	 * And compute the gram Schimidt process over it.
+	 * @param afumigatus
+	 * @return
+	 */
 	public static double[][] gramSchimidt(Afumigatus afumigatus){
 		double[][] base = getBase(afumigatus);
-		double[] e1 = multiply(base[0], 1.0/norm(base[0]));
-		double normE1 = norm(e1);
+		double[] e1 = multiply(base[0], 1.0/norm2(base[0]));
+		double normE1 = norm2(e1);
 		double[] e2 = sum(base[1], multiply(e1, -dotProduct(base[1], e1)/(normE1*normE1)));
-		e2 = multiply(e2, 1.0/norm(e2));
-		double normE2 = norm(e2);
+		e2 = multiply(e2, 1.0/norm2(e2));
+		double normE2 = norm2(e2);
 		double[] e3 = sum(sum(base[2], multiply(e1, -dotProduct(base[2], e1)/(normE1*normE1))), multiply(e2, -dotProduct(base[2], e2)/(normE2*normE2)));
-		e3 = multiply(e3, 1.0/norm(e3));
+		e3 = multiply(e3, 1.0/norm2(e3));
 		return transpose(new double[][] {
 			e2, e3, e1
 		});
 	}
 	
+	/**
+	 * create the matrix:
+	 * <pre>
+	 * | x y z |
+	 * | 1 0 0 |
+	 * | 0 1 0 |
+	 * </pre>
+	 * where x, y, and z are the coordinates of the afumigatus cell.
+	 * @param afumigatus
+	 * @return
+	 */
 	public static double[][] getBase(Afumigatus afumigatus){
 		double[] x = new double[]{1.0, 0.0, 0.0};
 		double[] y = new double[]{0.0, 1.0, 0.0};
@@ -195,6 +241,11 @@ public class LinAlg {
 		};
 	}
 	
+	/**
+	 * compute matrix transposition.
+	 * @param m
+	 * @return
+	 */
 	public static double[][] transpose(double[][] m){
 		int lines = m.length;
 		int cols  = m[0].length;
@@ -207,6 +258,12 @@ public class LinAlg {
 		return m1;
 	}
 	
+	/**
+	 * dot product between two matrices.
+	 * @param m1
+	 * @param m2
+	 * @return
+	 */
 	public static double[][] dotProduct(double[][] m1, double[][] m2) {
 		int lines = m1.length;
 		int cols  = m1[0].length;
@@ -222,6 +279,12 @@ public class LinAlg {
 		return m;
 	}
 	
+	/**
+	 * dot product between a matrix and a vector.
+	 * @param m
+	 * @param v
+	 * @return
+	 */
 	public static double[] dotProduct(double[][] m, double[] v) {
 		int lines = m.length;
 		int cols  = m[0].length;
@@ -234,6 +297,12 @@ public class LinAlg {
 		return v1;
 	}
 	
+	/**
+	 * dot product between two vectors.
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
 	public static double dotProduct(double[] v1, double[] v2) {
 		double product = 0;
 		for(int i = 0; i < v1.length; i++) { 
@@ -243,7 +312,12 @@ public class LinAlg {
 		return product;
 	}
 	
-	public static double norm(double[] v) {
+	/**
+	 * norm-2 aka Euclidian-norm of a vector.
+	 * @param v
+	 * @return
+	 */
+	public static double norm2(double[] v) {
 		double norm = 0.0;
 		for(int i = 0; i < v.length; i++) { 
 			norm += v[i]*v[i];
@@ -251,6 +325,12 @@ public class LinAlg {
 		return Math.sqrt(norm);
 	}
 	
+	/**
+	 * multiplication of a vector by a scalar.
+	 * @param v
+	 * @param a
+	 * @return
+	 */
 	public static double[] multiply(double[] v, double a) {
 		double[] copy = v.clone();
 		for(int i = 0; i < v.length; i++) {
@@ -259,6 +339,12 @@ public class LinAlg {
 		return copy;
 	}
 	
+	/**
+	 * sum of two vectors.
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
 	public static double[] sum(double[] v1, double[] v2) {
 		double[] v = new double[v1.length];
 		for(int i = 0; i < v1.length; i++) {
@@ -291,6 +377,14 @@ public class LinAlg {
 		return unit;
 	}
 	
+	/**
+	 * <strong>Not used!</strong>
+	 * @param matrix
+	 * @param vector
+	 * @param dim1
+	 * @param dim2
+	 * @param dim3
+	 */
 	public static void dotProduct(double[][] matrix, double[][][] vector, int dim1, int dim2, int dim3) {
 
     	int size = matrix.length;
@@ -311,7 +405,11 @@ public class LinAlg {
 		}
     }
 	
-	
+	/**
+	 * create an eye matrix of size N.
+	 * @param N
+	 * @return
+	 */
 	public static double[][] identity(int N){
     	double[][] eye = new double[N][N];
     	for(int i = 0; i < N; i++)
@@ -319,6 +417,12 @@ public class LinAlg {
     	return eye;
     }
     
+	/**
+	 * adds two matrices.
+	 * @param matrix1
+	 * @param matrix2
+	 * @return
+	 */
     public static double[][] add(double[][] matrix1, double[][] matrix2){
     	int lines = matrix1.length;
     	int cols = matrix1[0].length;
@@ -331,6 +435,11 @@ public class LinAlg {
     	return result;
     }
     
+    /**
+     * compute the determinant of a matrix.
+     * @param matrix
+     * @return
+     */
     public static double determinant(double[][] matrix) {
         if (matrix.length != matrix[0].length)
             throw new IllegalStateException("invalid dimensions");
@@ -345,6 +454,11 @@ public class LinAlg {
         return det;
     }
 
+    /**
+     * compute the inverse of a matrix.
+     * @param matrix
+     * @return
+     */
     public static double[][] inverse(double[][] matrix) {
         double[][] inverse = new double[matrix.length][matrix.length];
 
@@ -367,6 +481,13 @@ public class LinAlg {
         return inverse;
     }
 
+    /**
+     * computes the minor of a matrix.
+     * @param matrix
+     * @param row
+     * @param column
+     * @return
+     */
     public static double[][] minor(double[][] matrix, int row, int column) {
         double[][] minor = new double[matrix.length - 1][matrix.length - 1];
 
@@ -377,6 +498,12 @@ public class LinAlg {
         return minor;
     }
     
+    /**
+     * Multiply a matrix by a scalar.
+     * @param matrix
+     * @param val
+     * @return
+     */
     public static double[][] multiply(double[][] matrix, double val){
     	int lines = matrix.length;
     	int cols = matrix[0].length;
@@ -390,8 +517,9 @@ public class LinAlg {
     }
     
     
-    /*
+    /**
      * solve the system
+     * <pre>
      *| d1   sd1   0    0    0  ...               | 
      *| sd1  d0   sd0   0    0  ...               | 
      *|  0   sd0  d0   sd0   0  ...               |
@@ -402,10 +530,8 @@ public class LinAlg {
      *|  .    .    .    .    .      .             |
      *|  0    0    0    0    0  ... sd0  d0   sd1 |
      *|  0    0    0    0    0  ...  0   sd1  d1  |
-     * 
+     * </pre>
      * This method solves the linear system vector by vector of three-D array "Y". 
-     */
-    /**
      * 
      * @param d0
      * @param d1
@@ -479,15 +605,8 @@ public class LinAlg {
     }
     
     /**
-     * 
-     * @param d0
-     * @param d1
-     * @param sd0
-     * @param sd1
-     * @param size
-     * @param array
-     * @return vector
      * solve the system
+     * <pre>
      *| d1   sd1   0    0    0  ...               | 
      *| sd1  d0   sd0   0    0  ...               | 
      *|  0   sd0  d0   sd0   0  ...               |
@@ -498,6 +617,14 @@ public class LinAlg {
      *|  .    .    .    .    .      .             |
      *|  0    0    0    0    0  ... sd0  d0   sd1 |
      *|  0    0    0    0    0  ...  0   sd1  d1  |
+     *</pre>
+     * @param d0
+     * @param d1
+     * @param sd0
+     * @param sd1
+     * @param size
+     * @param array
+     * @return vector
      */
     public static double[] solveTridiagonalLinearSystem(
     		double diagonal0, 

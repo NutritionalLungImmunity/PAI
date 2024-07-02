@@ -1,5 +1,10 @@
 package edu.uf.Diffusion;
 
+/**
+ * Solves the PDE problem for a 3D homogeneous with periodic boundary conditions.
+ * @author henriquedeassis
+ *
+ */
 public class FADIPeriodic extends FADI{
 
 	public FADIPeriodic(double f, double pdeFactor, double deltaT) {

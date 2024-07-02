@@ -1,5 +1,10 @@
 package edu.uf.Diffusion;
 
+/**
+ * Solves the PDE problem for a 3D homogeneous with open boundary conditions.
+ * @author henriquedeassis
+ *
+ */
 public class FADIOpen extends FADI{
 
 	public FADIOpen(double f, double pdeFactor, double deltaT) {

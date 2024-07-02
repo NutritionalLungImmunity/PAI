@@ -67,34 +67,68 @@ public class Voxel {
     	this.externalState = state;
     }
     
+    /**
+     * x coordinate of the voxel.
+     * @return
+     */
     public int getX() {
 		return x;
 	}
 
+    /**
+     * set the x coordinate of the voxel.
+     * @param x
+     */
 	public void setX(int x) {
 		this.x = x; 
 	}
 
+	/**
+	 * y coordinate of the voxel.
+	 * @return
+	 */
 	public int getY() {
 		return y;
 	}
 
+	/**
+	 * set the y coordinate of the voxel.
+	 * @param y
+	 */
 	public void setY(int y) {
 		this.y = y;
 	}
 
+	/**
+	 * z coordinate of the voxel.
+	 * @return
+	 */
 	public int getZ() {
 		return z;
 	}
 
+	/**
+	 * set the z coordinate of the voxel.
+	 * @param z
+	 */
 	public void setZ(int z) {
 		this.z = z;
 	}
 
+	/**
+	 * This method is used for chemoattraction. Get voxel weight. The weight is proportional to the chemokine concentration. 
+	 * This method is used by "Util.calcDriftProbability" and "Util.getVoxel."
+	 * @return
+	 */
 	public double getP() {
 		return p;
 	}
 
+	/**
+	 * This method is used for chemoattraction. Set voxel weight. The weight is proportional to the chemokine concentration. 
+	 * This method is used by "Util.calcDriftProbability" and "Util.getVoxel."
+	 * @param p
+	 */
 	public void setP(double p) {
 		this.p = p;
 	}
@@ -150,6 +184,10 @@ public class Voxel {
         this.interactables.get(interactable.getName()).add(interactable);
     }*/
     
+	/**
+	 * Set a cell to the appropriate collections of the voxel.
+	 * @param cell
+	 */
     public void setCell(Cell cell) {
     	if(cell instanceof InfectiousAgent) 
     		this.infectiousAgents.put(cell.getId(), (InfectiousAgent) cell);
@@ -159,6 +197,11 @@ public class Voxel {
     	this.interactables.put(cell.getId(), cell);
     }
     
+    /**
+     * Given the cell ID, remove the cell from all the collections on the voxel and return it. 
+     * @param id
+     * @return
+     */
     public Cell removeCell(int id) {
     	Interactable agent = this.interactables.remove(id);
     	if(agent != null && agent instanceof Cell) {
@@ -173,10 +216,31 @@ public class Voxel {
     	return null;
     }
     
+    /**
+     * Add the Molecule "molecule" to the dictionary "molecules" with the name "molName." 
+     * The dictionary "molecules" has the structure {String: molecule-name; Molecule: molecule-object}.
+     * @param molName
+     * @param molecule
+     */
     public static void setMolecule(String molName, Molecule molecule) {
     	setMolecule(molName, molecule, false, false);
     }
     
+    /**
+     * Add the Molecule "molecule" to the dictionary "molecules" with the name "molName." 
+     * The dictionary "molecules" has the structure {String: molecule-name; Molecule: molecule-object}.
+     * If "infectiousAgentMolecule" is true, also add the molecule to the "infectiousAgentMolecules" 
+     * dictionary. If "moleculeInteractable" is true, also add the molecule to the "moleculeInteractable" 
+     * dictionary. The "infectiousAgentMolecules" and "moleculeInteractable" dictionaries have the 
+     * same structure as the "molecules" dictionary. These two dictionaries are used to handle the 
+     * interactions between Infectious agents (e.g., Aspergillus, Klebsiella, etc) and molecules that 
+     * interact with them (e.g., siderophores). And Interactions between molecules with themselves. 
+     * These separate lists are for optimization purposes. 
+     * @param molName
+     * @param molecule
+     * @param infectiousAgentMolecule
+     * @param moleculeInteractable
+     */
     public static void setMolecule(String molName, Molecule molecule, boolean infectiousAgentMolecule, boolean moleculeInteractable) {
         molecules.put(molName, molecule);
         //interactables.put(molecule.getId(), molecule);
@@ -186,15 +250,37 @@ public class Voxel {
         	Voxel.moleculeInteractable.put(molName, molecule);
     }
     
+    /**
+     * Get a molecule object given its name.
+     * @param molName
+     * @return
+     */
     public static Molecule getMolecule(String molName) {
     	return molecules.get(molName);
     }
 
+    /**
+     * Set a voxel to the list of neighbors of this voxel. This method is used by the "GridFactory."
+     * @param neighbor
+     */
     public void setNeighbor(Voxel neighbor) {
         this.neighbors.add(neighbor);
     }
 
-    public void next(int x, int y, int z, int xbin, int ybin, int zbin) {
+    /**
+     * Iterates through the list of cells and calls "updateStatus" and "move."  
+     * If the cell is a Leukocyte, it also calls "kill." If the cell is an 
+     * infectious agent (e.g., Aspergillus, Klebsiella, etc.) it also calls "grow." 
+     * This method also iterates through the lists of infectious agents inside 
+     * Leukocytes calling "grow" and updating their status with "updateStatus."
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void next(int x, int y, int z) {
+    	int xbin = GridFactory.getXbin();
+    	int ybin = GridFactory.getYbin();
+    	int zbin = GridFactory.getZbin();
         HashMap<Integer, Cell> listCell = (HashMap<Integer, Cell>) ((HashMap) this.cells).clone();
         Cell agent = null;
         for(Map.Entry<Integer, Cell> entry : listCell.entrySet()) {
@@ -214,6 +300,15 @@ public class Voxel {
         }
     }
 
+    /**
+     * Calls "updateStatus." If the cell is a leukocyte, iterates through its phagosome content, 
+     * updates the status of the infectious agent with "updateStatus," and kills the infectious 
+     * agent using the leukocyte method, "kill."
+     * @param agent
+     * @param x
+     * @param y
+     * @param z
+     */
     protected void update(Cell agent, int x, int y, int z) {
     	agent.updateStatus(x, y, z);
     	if(agent instanceof Leukocyte){//isinstance(agent, Phagocyte):
@@ -229,11 +324,24 @@ public class Voxel {
         }
     }
     
+    /**
+     * Handles infectious agent growth inside Leukocytes.
+     * @param x
+     * @param y
+     * @param z
+     * @param xbin
+     * @param ybin
+     * @param zbin
+     * @param agent
+     */
     protected void grow(int x, int y, int z, int xbin, int ybin, int zbin, Leukocyte agent) {
     	for (InfectiousAgent phAgent : agent.getPhagosome())
             phAgent.grow(x, y, z, xbin, ybin, zbin, agent);
     }
     
+    /**
+     * Calls "turnOver" and "computeTotalMolecule" over the list of molecules in the voxel.
+     */
     public void degrade() {
         for(Map.Entry<String, Molecule> entry : this.molecules.entrySet()) {
         	entry.getValue().turnOver(this.x, this.y, this.z);
@@ -241,6 +349,10 @@ public class Voxel {
         }
     }
     
+    /**
+     * Shuffle the lists of "Interactable" agents (e.g., Cells and Molecules) 
+     * and do a double for-loop over them, calling the method "interact" from each agent.
+     */
     public void interact() {
     	
         List<Cell> cells = (List<Cell>) this.toList(this.cells);
@@ -328,8 +440,10 @@ public class Voxel {
         }
     }
     
-    
-public void interact_legacy() {
+    /**
+     * <strong>Not used</strong>
+     */
+    public void interact_legacy() {
     	
         List<Cell> cells = (List<Cell>) this.toList(this.cells);
         List<Molecule> mols = (List<Molecule>) this.toList(molecules);

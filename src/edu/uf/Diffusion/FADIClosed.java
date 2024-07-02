@@ -1,5 +1,10 @@
 package edu.uf.Diffusion;
 
+/**
+ * Solves the PDE problem for a 3D homogeneous closed space.
+ * @author henriquedeassis
+ *
+ */
 public class FADIClosed extends FADI{
 
 	public FADIClosed(double f, double pdeFactor, double deltaT) {

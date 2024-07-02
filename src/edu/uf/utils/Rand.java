@@ -15,6 +15,10 @@ public class Rand {
 		this.secRand = new SecureRandom();
 	}
 	
+	/**
+	 * Get/create singleton Rand object.
+	 * @return
+	 */
 	public static Rand getRand() {
 		if(Rand.rand == null) {
 			Rand.rand = new Rand();
@@ -40,7 +44,11 @@ public class Rand {
 		return x;
 	}
 	
-	/*CHECK THIS FUNCTION */
+	/**
+	 * A Poisson distributed random number with mean lambda.
+	 * @param lambda mean
+	 * @return
+	 */
 	public int randpois(double lambda) {
 		double L = Math.exp(-lambda);
 	  	double p = 1.0;
@@ -53,6 +61,15 @@ public class Rand {
 	  	return k - 1; 
 	}
 	
+	/**
+	 * Creates a sample, without replacement, of length "size" out of a list of length "max." 
+	 * "size" cannot be larger than "max."
+	 * <strong> Actually, I think this method only works if max==size. Currently, it is only really being 
+	 * used this way. numSamples != -1 is never being used in the "Voxel" class. </strong>
+	 * @param max
+	 * @param size
+	 * @return
+	 */
 	public int[] sample(int max, int size) {//int[] array) {
 		if(max == 0 || size == 0) return new int[0];
 		int[] array = new int[size];
@@ -70,10 +87,20 @@ public class Rand {
 		return array;
 	}
 	
+	/**
+	 * A uniformly distributed random number between 0 and 1.
+	 * @return
+	 */
 	public double randunif() {
 		return secRand.nextDouble();
 	}
 	
+	/**
+	 * A uniformly distributed random number between "min" and "max".
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public int randunif(int min, int max) {
 		return secRand.nextInt(max - min) + min;
 	}

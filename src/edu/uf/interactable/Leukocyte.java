@@ -64,6 +64,10 @@ public abstract class Leukocyte extends Cell{
 		this.engaged = engaged;
 	}
 
+	/**
+	 * <strong>This method is too specific. It should be changed.</strong>
+	 * @param aspergillus
+	 */
     public void addAspergillus(Afumigatus aspergillus) {
         this.phagosome.add(aspergillus);
     }

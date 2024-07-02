@@ -33,7 +33,11 @@ public abstract class Recruiter {
     	}
     }*/
     
-    
+    /**
+     * Create "qtty" cells at random positions inside the simulated space. 
+     * The type of cell depends on the implementation of the method "createCell."
+     * The quantity depends on the method "getQtty."
+     */
     public void recruit() {
     	Voxel[][][] grid = GridFactory.getGrid();
     	int qtty = getQtty();
@@ -46,16 +50,45 @@ public abstract class Recruiter {
     	}
     }
 
+    /**
+     * Create a cell. Different implementations should create different kinds of cells 
+     * (e.g., Macrophages, Neutrophils, NK, etc.)
+     * @return
+     */
     public abstract Cell createCell();
     
+    /**
+     * Compute the number of cells to be created in the next iteration, given the overall amount 
+     * of chemokine in the simulated space. The implementation of this method should specify the 
+     * chemokine and call "getQtty(double chemokine)."
+     * @return
+     */
     public abstract int getQtty();
     
+    /**
+     * Compute the number of cells to be created in the next iteration, given the overall 
+     * amount of chemokine "c." The implementation can be tailored to the cell being recruited.
+     * @param c
+     * @return
+     */
     protected abstract int getQtty(double c);
 
     //public abstract double chemoatract(Quadrant voxel);
 
+    /**
+     * This method should return if cells are able to leave the simulated space. 
+     * Living in the simulated space is an additional way of decreasing the number 
+     * of cells. The other way is death. 
+     * <strong>This method is not being used.</strong>
+     * @return
+     */
     public abstract boolean leave();
 
+    /**
+     * <strong>This method is not being used.</strong>
+     * @param voxel
+     * @return
+     */
     public abstract Cell getCell(Voxel voxel);
     
 }

@@ -33,6 +33,18 @@ public class Exec {
 		molecules = new ArrayList<>(); 
 	}
 	
+	/**
+	 * This method runs a simulation iteration, except for molecule diffusion, cell recruitment, 
+	 * and molecule reset count. This method runs everything at the "Voxel" level. That is, it 
+	 * iterates through the 3D array of voxels and calls the "Voxel" methods "interact," "next," 
+	 * "degrade," and the "Exec" method "gc." The "Exec.gc" method receives a "Voxel" as an argument. 
+	 * Therefore, it is also at the voxel level (I.e., it operates at the voxel. Diffusion, recruitment, 
+	 * and molecule counts are at the grid level. Those are operations that take the whole 3D grid.
+	 * This method is called by "Run.run."
+	 * @param xbin size of the grid on the x-axis
+	 * @param ybin size of the grid on the x-axis
+	 * @param zbin size of the grid on the x-axis
+	 */
     public static void next(int xbin, int ybin, int zbin) {
     	Voxel[][][] grid = GridFactory.getGrid();
     	for(int x = 0; x < xbin; x++)
@@ -40,18 +52,30 @@ public class Exec {
     			for(int z = 0; z < zbin; z++) {
                     grid[x][y][z].interact();  
                     Exec.gc(grid[x][y][z]);
-                    grid[x][y][z].next(x, y, z, xbin, ybin, zbin);
+                    grid[x][y][z].next(x, y, z);
                     grid[x][y][z].degrade();
     			}
     }
     
+    /**
+     * This method iterates through the recruiters that were initialized and 
+     * recruits cells. For example, if we initialize "MacrophageRecruiter" 
+     * and "NeutrophilRecruiter," this method will recruit macrophages and 
+     * neutrophils according to the algorithms of these two recruiters. 
+     * If no recruiters were initialized, this method will do nothing.
+     * This method is called by "Run.run."
+     * @param recruiters
+     */
     public static void recruit(Recruiter[] recruiters) {
     	Voxel[][][] grid = GridFactory.getGrid();
     	for (Recruiter recruiter : recruiters) 
             recruiter.recruit();
     }
     
-    
+    /**
+     * This method will iterate through the list of molecules and call the "diffusion.solve" method.
+     * This method is called by "Run.run."
+     */
     public static void diffusion() {
     	for(Molecule mol : Exec.molecules)  
     		mol.diffuse();    	
@@ -71,10 +95,19 @@ public class Exec {
         }
     }*/
     
+    /**
+     * Add a molecule to the list. This list is used by "Exec.diffusion" and "Exec.resetCount."
+     * @param mol
+     */
     public static void setMolecule(Molecule mol) {
     	molecules.add(mol); 
     }
 
+    /**
+     * This method will iterate through the list of molecules and reset their counts for 
+     * the purpose of statistics. It will also do the same ad-hoc for Liver. If the molecule 
+     * is a Setter, it will run "update." This method is called by "Run.run."
+     */
     public static void resetCount() {
     	Liver.getLiver().reset();
         for (Molecule mol : molecules) {
@@ -83,7 +116,20 @@ public class Exec {
         }
     }
 
-    public static void gc(Voxel voxel) {
+    /**
+     * This method iterates through the list of cells in a "Voxel" and does two things. 
+     * (1) if the cell life status is "DEAD" and the cell method "removeUponDeath" returns 
+     * true, this method removes this cell from all the simulator lists. (2) If the cell 
+     * has an "isInternalizing" method and it returns true, this method removes the cell 
+     * from the "Voxel" list. However, the cell will still be in the phagocytosed cell list. 
+     * This method is called by "Exec.next."
+     * <br/><br/>
+     * <strong>Note: If the cell is removed from all lists, it no longer has any valid reference, 
+     * and the Java garbage collection system will remove that object automatically. That is not 
+     * true for C++ implementation.</strong>
+     * @param voxel
+     */
+    protected static void gc(Voxel voxel) {
         Map<Integer, Interactable> tmpAgents = (Map<Integer, Interactable>) ((HashMap)voxel.getInteractables()).clone();
         for(Map.Entry<Integer, Interactable> entry : tmpAgents.entrySet()) {
         	if(entry.getValue() instanceof Cell) {
@@ -103,7 +149,7 @@ public class Exec {
         	}
         }
     }
-
+    
     private static void releasePhagosome(List<InfectiousAgent> phagosome, Voxel voxel) {
         for(InfectiousAgent entry : phagosome)
         	if (entry.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD)
