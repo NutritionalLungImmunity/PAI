@@ -9,7 +9,6 @@ import edu.uf.interactable.Cell;
 import edu.uf.interactable.IL1;
 import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.MIP2;
-import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.TNFa;
 import edu.uf.utils.Constants;
 
@@ -98,8 +97,11 @@ public class NeutrophilNetwork extends IntracellularModel{
 		}
 	}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
-	public void updateStatus(Cell cell, int x, int y, int z) {
+	public void updateStatus(int id, int x, int y, int z) {
 		// TODO Auto-generated method stub
 		
 	}

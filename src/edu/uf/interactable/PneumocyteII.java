@@ -48,8 +48,8 @@ public class PneumocyteII extends Cell {
 
     
 	public void die() {
-		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
-    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, IntracellularModel.DEAD);
             PneumocyteII.totalCells--;
         }
     }
@@ -84,7 +84,7 @@ public class PneumocyteII extends Cell {
     /**
      * Disabled.
      */
-    public void move(Voxel oldVoxel, int steps) {}
+    public void move(int x, int y, int z, int steps) {}
 
 	@Override
 	public String getName() {

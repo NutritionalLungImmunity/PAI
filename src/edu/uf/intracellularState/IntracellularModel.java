@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uf.interactable.Binder;
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.Molecule;
 
 public abstract class IntracellularModel{
@@ -13,6 +12,12 @@ public abstract class IntracellularModel{
 	public static final int STATUS = Phenotype.createPhenotype();
 	public static final int LIFE_STATUS = Phenotype.createPhenotype();
 	public static final int LOCATION = Phenotype.createPhenotype();
+	
+	public static final int DEAD = Phenotype.createPhenotype();;
+	public static final int ALIVE = Phenotype.createPhenotype();
+	public static final int APOPTOTIC = Phenotype.createPhenotype();
+	public static final int NECROTIC = Phenotype.createPhenotype();
+	public static final int DYING = Phenotype.createPhenotype();
 	
 	private int bnIteration;
 	protected int[] booleanNetwork;
@@ -25,7 +30,7 @@ public abstract class IntracellularModel{
 		this.phenotypes = new HashMap<>();
 		this.states = new HashMap<>();
 		this.inputs = new int[NUM_RECEPTORS];
-		this.states.put(LIFE_STATUS, Cell.ALIVE);
+		this.states.put(LIFE_STATUS, ALIVE);
 	}
 	
 	public int getBnIteration() {
@@ -86,12 +91,12 @@ public abstract class IntracellularModel{
 	 * (see updateStatus implementation). This method updates other internal statuses of the cell that are 
 	 * not related to the Boolean Network (e.g., Afumigatus change from resting conidia to swelling conidia, 
 	 * cells life status changing from apoptotic to dead, etc).
-	 * @param cell The cell agent it operates over
+	 * @param id of the cell agent it operates over. Every cell has a unique numeric id that can be used to retrieve that cell.
 	 * @param x
 	 * @param y
 	 * @param z
 	 */
-	public abstract void updateStatus(Cell cell, int x, int y, int z);
+	public abstract void updateStatus(int id, int x, int y, int z);
 	
 	/**
 	 * This method is part of the phenotype family (see also IntracellularModel.getPhenotype, 
@@ -329,19 +334,15 @@ public abstract class IntracellularModel{
 		this.states.put(stateName, stateValue);
 	}
 	
-	/*public void removePhenotype(int phenotype) {
-		this.phenotypes.remove(phenotype);
-	}*/
-	
 	/**
 	 * Returns dead if life status is "DEAD," or "DYING," or "APOPTOTIC," or "NECROTIC."
 	 * @return
 	 */
 	public boolean isDead() {
-		return  this.getState(LIFE_STATUS) == Cell.DEAD ||
-				this.getState(LIFE_STATUS) == Cell.DYING || 
-				this.getState(LIFE_STATUS) == Cell.APOPTOTIC || 
-				this.getState(LIFE_STATUS) == Cell.NECROTIC;
+		return  this.getState(LIFE_STATUS) == DEAD ||
+				this.getState(LIFE_STATUS) == DYING || 
+				this.getState(LIFE_STATUS) == APOPTOTIC || 
+				this.getState(LIFE_STATUS) == NECROTIC;
 	}
 	/*protected int e(int[] bn, int i) {
 		if(i<0)return 0;

@@ -8,7 +8,6 @@ import java.util.Random;
 import edu.uf.interactable.Hepcidin;
 import edu.uf.interactable.IL1;
 import edu.uf.interactable.IL10;
-import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TLRBinder;
 import edu.uf.interactable.TNFa;

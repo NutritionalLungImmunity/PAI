@@ -368,7 +368,7 @@ public class Liver extends Cell{
 	}
 
 	@Override
-	public void move(Voxel oldVoxel, int steps) {
+	public void move(int x, int y, int z, int steps) {
 		// TODO Auto-generated method stub
 		
 	}

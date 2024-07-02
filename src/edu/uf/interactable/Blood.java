@@ -1,7 +1,6 @@
 package edu.uf.interactable;
 
 import edu.uf.compartments.GridFactory;
-import edu.uf.compartments.Voxel;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
@@ -165,7 +164,7 @@ public class Blood extends Cell{
 	}
 
 	@Override
-	public void move(Voxel oldVoxel, int steps) {}
+	public void move(int x, int y, int z, int steps) {}
 
 	/**
 	 * Disabled.

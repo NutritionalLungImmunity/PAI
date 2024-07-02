@@ -101,8 +101,8 @@ public class DC extends Leukocyte{
     public void incIronPool(double qtty) {}
 
     public void die() {
-    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
-    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
+    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, IntracellularModel.DEAD);
             DC.totalCells = DC.totalCells - 1;
         }
     }

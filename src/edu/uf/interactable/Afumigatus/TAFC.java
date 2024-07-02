@@ -4,8 +4,6 @@ import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Iron;
-import edu.uf.interactable.MCP1;
-import edu.uf.interactable.Molecule;
 import edu.uf.interactable.Siderophore;
 import edu.uf.interactable.Transferrin;
 import edu.uf.primitives.Interactions;

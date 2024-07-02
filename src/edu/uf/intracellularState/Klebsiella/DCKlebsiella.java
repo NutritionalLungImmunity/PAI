@@ -46,16 +46,16 @@ public class DCKlebsiella extends IntracellularModel{
 	}
 
 	@Override
-	public void updateStatus(Cell cell, int x, int y, int z) {
-		DC mac = (DC) cell;
-		if(this.getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD)
+	public void updateStatus(int id, int x, int y, int z) {
+		DC mac = (DC) Cell.get(id);
+		if(this.getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)
             return;
-        if(mac.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Cell.NECROTIC) {
+        if(mac.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.NECROTIC) {
         	mac.die();
             //for(InfectiousAgent entry : this.getPhagosome()) //WARNING-COMMENT
             //	entry.setState(Afumigatus.RELEASING);
         }else if(mac.getPhagosome().size() > Constants.MA_MAX_CONIDIA)
-        	mac.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.NECROTIC);
+        	mac.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, IntracellularModel.NECROTIC);
         
         if(Rand.getRand().randunif() < Constants.MA_HALF_LIFE && mac.getPhagosome().size() == 0 &&
         		Macrophage.getTotalCells() > Constants.MIN_MA) 

@@ -28,8 +28,11 @@ public class NeutrophilKlebsiella extends IntracellularModel{
 		}
 	}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
-	public void updateStatus(Cell cell, int x, int y, int z) {
+	public void updateStatus(int id, int x, int y, int z) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -138,8 +138,9 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	}*/
 
 	@Override
-	public void move(Voxel oldVoxel, int steps) {
+	public void move(int x, int y, int z, int steps) {
 		if(!engulfed && !entrapped && Rand.getRand().randunif() < 0.01) { //REVIEW HARD-CODE
+			Voxel oldVoxel = GridFactory.getGrid()[x][y][z];
 			List<Voxel> neighbors = oldVoxel.getNeighbors();
 			int numNeighbors = neighbors.size();
 			int i = Rand.getRand().randunif(0, numNeighbors);
@@ -151,8 +152,8 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 
 	@Override
 	public void die() {
-		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
-    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, IntracellularModel.DEAD);
             Klebsiella.totalCells--;
         }
     }

@@ -9,7 +9,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.InfectiousAgent;
 import edu.uf.interactable.Lactoferrin;
-import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.TLRBinder;
 import edu.uf.interactable.Afumigatus.Afumigatus;
@@ -101,9 +100,9 @@ public class NeutrophilStateModel extends IntracellularModel{
 	}
 
 	@Override
-	public void updateStatus(Cell cell, int x, int y, int z) {
-		Neutrophil net = (Neutrophil) cell;
-		if(this.getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD)
+	public void updateStatus(int id, int x, int y, int z) {
+		Neutrophil net = (Neutrophil) Cell.get(id);
+		if(this.getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)
             return;
         
         

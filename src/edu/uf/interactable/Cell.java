@@ -1,6 +1,10 @@
 package edu.uf.interactable;
 
-import edu.uf.compartments.Voxel;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.time.Clock;
@@ -9,17 +13,18 @@ import edu.uf.utils.Id;
 
 public abstract class Cell extends Interactable{
 	
-	public static final int DEAD = Phenotype.createPhenotype();;
-	public static final int ALIVE = Phenotype.createPhenotype();
-	public static final int APOPTOTIC = Phenotype.createPhenotype();
-	public static final int NECROTIC = Phenotype.createPhenotype();
-	public static final int DYING = Phenotype.createPhenotype();
+	public static Map<Integer, Cell> cells;
+	
+	static {
+		cells = new HashMap<>();
+	}
+	
+	
 	
 	private int id;
     
     private double ironPool;
     //private int status;
-    private int state;
     private boolean engulfed;
     protected Clock clock;
     protected IntracellularModel intracellularModel;
@@ -31,6 +36,15 @@ public abstract class Cell extends Interactable{
     	this.clock = new Clock((int) Constants.INV_UNIT_T);
     	this.id = Id.getId(); 
     	this.externalState = 0;
+    	Cell.cells.put(this.id, this);
+    }
+    
+    public static void rm(int id) {
+    	Cell.cells.remove(id);
+    }
+    
+    public static Cell get(int id) {
+    	return Cell.cells.get(id);
     }
     
     public void setExternalState(int state) {
@@ -126,7 +140,9 @@ public abstract class Cell extends Interactable{
     	this.clock.tic();
     	if(!this.getClock().toc())return;
     	this.intracellularModel.processBooleanNetwork();
-    	this.intracellularModel.updateStatus(this, x, y, z);
+    	this.intracellularModel.updateStatus(this.getId(), x, y, z);
+    	//if(this.intracellularModel.isDead())
+    	//	this.die();
     }
     
     /**
@@ -142,13 +158,15 @@ public abstract class Cell extends Interactable{
 
     /**
      * This method belongs to a quintet of cell methods that are called by the Voxels objects 
-     * (see grow, kill, updateStatus, and interact). This method moves the cell from the current 
-     * voxel "oldVoxel" to a new voxel. If the cell has internal content like a phagocytosed 
+     * (see grow, kill, updateStatus, and interact). This method moves the cell from the voxel at  
+     * position (x, y, z) to a new voxel. If the cell has internal content like a phagocytosed 
      * bacterium, the content is moved, too.
-     * @param oldVoxel current voxel
+     * @param x axis position in the grid
+	 * @param y axis position in the grid
+	 * @param z axis position in the grid
      * @param steps a counter of how many voxels the cell has traversed.
      */
-    public abstract void move(Voxel oldVoxel, int steps);
+    public abstract void move(int x, int y, int z, int steps);
 
     /**
      * If the "intracellularModel" life status is not "DEAD," this method sets it to "DEAD" 

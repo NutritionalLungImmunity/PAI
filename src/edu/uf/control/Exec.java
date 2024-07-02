@@ -136,13 +136,14 @@ public class Exec {
         		Cell v = (Cell) entry.getValue();
         		//if isinstance(v, Cell):
         		if(v instanceof Liver)continue;//Dirty hack!
-        		if (v.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD && v.removeUponDeath()) {
+        		if (v.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD && v.removeUponDeath()) {
         			//if(v instanceof Neutrophil)System.out.println(v.hasPhenotype(NeutrophilStateModel.NETOTIC));
         			if (v instanceof Leukocyte) {
         				List<InfectiousAgent> phagosome = ((Leukocyte)v).getPhagosome();
         				Exec.releasePhagosome(phagosome, voxel);
         			}
         			voxel.removeCell(entry.getKey());
+        			Cell.rm(v.getId());
         		}else if (v instanceof Internalizable) 
         			if (((Internalizable)v).isInternalizing())
         				voxel.removeCell(entry.getKey());
@@ -152,7 +153,7 @@ public class Exec {
     
     private static void releasePhagosome(List<InfectiousAgent> phagosome, Voxel voxel) {
         for(InfectiousAgent entry : phagosome)
-        	if (entry.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Cell.DEAD)
+        	if (entry.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)
         		voxel.setCell(entry);
     }
 }

@@ -3,6 +3,7 @@ package edu.uf.interactable;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.IntracellularModel;
@@ -85,9 +86,10 @@ public abstract class Leukocyte extends Cell{
         }
     }
 
-    public void move(Voxel oldVoxel, int steps) {
+    public void move(int x, int y, int z, int steps) {
         if(steps < this.getMaxMoveSteps()) {
         	
+        	Voxel oldVoxel = GridFactory.getGrid()[x][y][z];
         	Util.calcDriftProbability(oldVoxel, this);
             Voxel newVoxel = Util.getVoxel(oldVoxel, Rand.getRand().randunif());
         	
@@ -104,7 +106,7 @@ public abstract class Leukocyte extends Cell{
             		p.setZ(newVoxel.getZ() + Rand.getRand().randunif());
             	}
             }
-            move(newVoxel, steps);
+            move(newVoxel.getX(), newVoxel.getY(), newVoxel.getZ(), steps);
         }
     }
     

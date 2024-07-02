@@ -286,7 +286,7 @@ public class Voxel {
         for(Map.Entry<Integer, Cell> entry : listCell.entrySet()) {
         	agent = entry.getValue();
             this.update(agent, x, y, z);
-            agent.move(this, 0);
+            agent.move(this.getX(), this.getY(), this.getZ(), 0);
             if(agent instanceof Leukocyte && !((Leukocyte) agent).getPhagosome().isEmpty())
             	this.grow(x, y, z, xbin, ybin, zbin, (Leukocyte) agent);
         }
@@ -295,7 +295,7 @@ public class Voxel {
         for(Map.Entry<Integer, InfectiousAgent> entry : listInf.entrySet()) {
         	infAgent = entry.getValue();
         	this.update(infAgent, x, y, z);
-        	infAgent.move(this, 0);
+        	infAgent.move(this.getX(), this.getY(), this.getZ(), 0);
         	infAgent.grow(x, y, z, xbin, ybin, zbin);
         }
     }

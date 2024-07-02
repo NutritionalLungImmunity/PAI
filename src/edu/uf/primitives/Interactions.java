@@ -437,7 +437,7 @@ public class Interactions {
                 //System.out.println(Rand.getRand().randunif());
                 if (Rand.getRand().randunif() < pr) {
                     intAspergillus(neutrophil, aspergillus);
-                    aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, Cell.DYING));
+                    aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, IntracellularModel.DYING));
                     neutrophil.bind(aspergillus, 4);
                     
                 }else {
@@ -615,7 +615,7 @@ public class Interactions {
                 if(Rand.getRand().randunif() < prInteract) {
                 	intAspergillus(mac, aspergillus, aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != Afumigatus.HYPHAE);
                     if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE && mac.getBooleanNetwork().hasPhenotype(new int[] {AspergillusMacrophage.M1, AspergillusMacrophage.M2B})){ 
-                    	aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, Cell.DYING));
+                    	aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, IntracellularModel.DYING));
                         if(aspergillus.getNextSepta() != null) {
                         	aspergillus.getNextSepta().setRoot(true);
                         if(aspergillus.getNextBranch() != null)
@@ -870,7 +870,7 @@ public class Interactions {
 	 * @return
 	 */
 	private static int getDeadState(Afumigatus asp, int state) {
-		if(asp.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Afumigatus.DEAD)return Afumigatus.DEAD;
+		if(asp.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)return IntracellularModel.DEAD;
 		return state;
 	}
     

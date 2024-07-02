@@ -94,8 +94,8 @@ public class Macrophage extends Leukocyte{
     }
 
     public void die() {
-    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
-    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
+    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, IntracellularModel.DEAD);
             Macrophage.totalCells = Macrophage.totalCells - 1;
         }
     }

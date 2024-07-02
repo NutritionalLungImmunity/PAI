@@ -38,8 +38,11 @@ public class PneumocyteIIKlebsiella extends IntracellularModel{
 			this.getPhenotype().put(BDefensin.getMolecule().getPhenotype(), this.max(new int[] {this.booleanNetwork[2]}));
 	}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
-	public void updateStatus(Cell cell, int x, int y, int z) {
+	public void updateStatus(int id, int x, int y, int z) {
 		// TODO Auto-generated method stub
 		
 	}

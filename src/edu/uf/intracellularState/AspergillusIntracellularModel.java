@@ -56,8 +56,8 @@ public class AspergillusIntracellularModel extends IntracellularModel{
     static int i = 0;
     static int j = 0;
 	@Override
-	public void updateStatus(Cell cell, int x, int y, int z) {
-		Afumigatus asp = (Afumigatus) cell;
+	public void updateStatus(int id, int x, int y, int z) {
+		Afumigatus asp = (Afumigatus) Cell.get(id);
 		
 		this.lipActivation = Rand.getRand().randunif() < Util.activationFunction(asp.getIronPool(), Constants.Kd_LIP, Constants.HYPHAE_VOL, 1.0) ? 1 : 0;
 		//System.out.println(lipActivation);
@@ -76,7 +76,7 @@ public class AspergillusIntracellularModel extends IntracellularModel{
             this.setState(STATUS, Afumigatus.GERM_TUBE);
             Afumigatus.incTotalCells(3);
 			Afumigatus.decTotalCells(2);
-        }else if(this.getState(IntracellularModel.LIFE_STATUS) == Cell.DYING) {
+        }else if(this.getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DYING) {
         	asp.die();
         }
 

@@ -1,12 +1,10 @@
 package edu.uf.interactable.Afumigatus;
 
 import java.util.Set;
-import java.util.ArrayList;
 
 import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Cell;
-import edu.uf.interactable.InfectiousAgent;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Internalizable;
 import edu.uf.interactable.Iron;
@@ -316,7 +314,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 	}
 	
 	public synchronized void grow(int x, int y, int z, int xbin, int ybin, int zbin, Leukocyte phagocyte) {
-		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == Afumigatus.DEAD)return;
+		if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)return;
 		Voxel[][][] grid = GridFactory.getGrid();
 		
 		this.computeGrowthRate();
@@ -462,8 +460,8 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
     	if(interactable instanceof Iron) {  //UNCOMENT WHEN CREATE IRON
-    		if(Interactions.releaseIron(this, (Iron) interactable, Cell.DYING, x, y, z)) return true;
-            return Interactions.releaseIron(this, (Iron) interactable, Cell.DEAD, x, y, z);
+    		if(Interactions.releaseIron(this, (Iron) interactable, IntracellularModel.DYING, x, y, z)) return true;
+            return Interactions.releaseIron(this, (Iron) interactable, IntracellularModel.DEAD, x, y, z);
     	}
             
         if(interactable instanceof Macrophage) 
@@ -531,8 +529,8 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     }
 
     public void die() {
-    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DEAD) {
-    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, Cell.DEAD);
+    	if(this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) {
+    		this.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, IntracellularModel.DEAD);
             Afumigatus.totalCells[AspergillusIntracellularModel.hasLifeStage(this.getBooleanNetwork().getState(IntracellularModel.STATUS))]--;
             Afumigatus.totalCells[0]--;
         }
@@ -547,7 +545,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
      * Disabled.
      */
 	@Override
-	public void move(Voxel oldVoxel, int steps) {}
+	public void move(int x, int y, int z, int steps) {}
 
 
 	/**
@@ -567,8 +565,8 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 	@Override
 	public boolean isSecretingSiderophore(Siderophore mol) {
 		if (this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == Afumigatus.FREE && 
-				this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DYING && 
-				this.getBooleanNetwork().getState(AspergillusIntracellularModel.LIFE_STATUS) != Cell.DEAD) 
+				this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DYING && 
+				this.getBooleanNetwork().getState(AspergillusIntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) 
     		if (this.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.SECRETING_TAFC) && 
                     (this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.SWELLING_CONIDIA || 
                     		this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE ||
@@ -581,8 +579,8 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 	@Override
 	public boolean isUptakingSiderophore(Siderophore mol) {
 		if (this.getBooleanNetwork().getState(IntracellularModel.LOCATION) == Afumigatus.FREE && 
-				this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != Cell.DYING && 
-				this.getBooleanNetwork().getState(AspergillusIntracellularModel.LIFE_STATUS) != Cell.DEAD) 
+				this.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) != IntracellularModel.DYING && 
+				this.getBooleanNetwork().getState(AspergillusIntracellularModel.LIFE_STATUS) != IntracellularModel.DEAD) 
             if (this.getBooleanNetwork().hasPhenotype(AspergillusIntracellularModel.UPTAKING_TAFC) && 
                     (this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.SWELLING_CONIDIA || 
             		this.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == Afumigatus.HYPHAE ||
