@@ -59,12 +59,12 @@ public abstract class IntracellularModel{
 	 * "IntracellularModel" class of the Boolean Network is split into the receptors and the rest 
 	 * of the Network. Each one has its own array. Let's call them input array and Network array. 
 	 * This separation aims to decouple the internal dynamics from the external signals.
-	 * <br><br/>
+	 * <br/><br/>
 	 * Each position in the input array corresponds to the receptor for a Binder (e.g., a molecule). 
 	 * However, those positions are not fixed a-prior. Instead, during initialization, each Binder 
 	 * class receives a unique sequential interactionId. This ID becomes the index in the input array, 
 	 * and that position in the array becomes the receptor for that Binder. 
-	 * <br><br/>
+	 * <br/><br/>
 	 * This method receives an index (that should come from Binder.getInteractionId()) and an activation 
 	 * level and sets the input array at that position with that value. (I.e., input[index] = level;)
 	 * @param idx index of the input array. (that should come from Binder.getInteractionId())
@@ -107,7 +107,7 @@ public abstract class IntracellularModel{
 	 * "IntracellularModel.hasPhenotype(Molecule mol)" will check if one of the phenotypes from 
 	 * molecule "mol" is in the list of phenotypes assigned to that intracellular model. If it is, 
 	 * that molecule can be secreted; if not, it can't.
-	 * <br><br/>
+	 * <br/><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype 
 	 * activation level (usually 1-4).
 	 */
@@ -115,7 +115,7 @@ public abstract class IntracellularModel{
 	
 	/**
 	 * Returns the phenotypes dictionary. The dictionary has the structure: {Integer: phenotypeID, Integer: activation-level}.
-	 * <br><br/>
+	 * <br/><br/>
 	 * activation-level is usually a number between 1-4. Can be 0 for not active or -1 for not apply or "null."
 	 * @return
 	 */
@@ -125,9 +125,9 @@ public abstract class IntracellularModel{
 	
 	/**
 	 * Returns the activation level associated with phenotype "phenotype" in the phenotypes dictionary.
-	 * <br><br/>
+	 * <br/><br/>
 	 * The dictionary has the structure: {Integer: phenotypeID, Integer: activation-level}.
-	 * <br><br/>
+	 * <br/><br/>
 	 * activation-level is usually a number between 1-4. Can be 0 for not active or -1 for not apply or "null."
 	 * @param phenotype
 	 * @return
@@ -145,7 +145,7 @@ public abstract class IntracellularModel{
 	 * IntracellularModel.addPhenotype(Integer), Phenotype.createPhenotype(), Molecule.getPhenotype, 
 	 * and Molecule.setPhenotype). These methods try to solve the problem of an intracellular 
 	 * model that is agnostic (as much as possible) to its outputs (e.g., the molecules it secretes).
-	 * <br><br/>
+	 * <br/><br/>
 	 * This method clears the phenotype dictionary so that a new one can be computed in the next 
 	 * interaction of the Intracellular model.
 	 */
@@ -167,7 +167,7 @@ public abstract class IntracellularModel{
 	 * <strong> Subsequently, this method will check if one of the phenotypes from molecule "mol" 
 	 * is in the list of phenotypes assigned to that intracellular model. If it is, that molecule 
 	 * can be secreted; if not, it can't. </strong>
-	 * <br><br/>
+	 * <br/><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype activation level (usually 1-4).
 	 * @param molecule
 	 * @return
@@ -190,9 +190,9 @@ public abstract class IntracellularModel{
 	 * Subsequently, the "IntracellularModel.hasPhenotype(Molecule mol)" will check if one of the 
 	 * phenotypes from molecule "mol" is in the list of phenotypes assigned to that intracellular model. 
 	 * If it is, that molecule can be secreted; if not, it can't.
-	 * <br><br/>
+	 * <br/><br/>
 	 * <strong>This method is an alternative to "IntracellularModel.hasPhenotype(Molecule mol)."</strong>
-	 * <br><br/>
+	 * <br/><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype activation level (usually 1-4).
 	 * @param phenotype
 	 * @return
@@ -215,11 +215,11 @@ public abstract class IntracellularModel{
 	 * Subsequently, the "IntracellularModel.hasPhenotype(Molecule mol)" will check if one of the 
 	 * phenotypes from molecule "mol" is in the list of phenotypes assigned to that intracellular model. 
 	 * If it is, that molecule can be secreted; if not, it can't.
-	 * <br><br/>
+	 * <br/><br/>
 	 * <strong>This method is an alternative to "IntracellularModel.hasPhenotype(Molecule mol), and it 
 	 * returns true if at least one of the phenotypes in the array "phenotypes" is in the phenotypes 
 	 * dictionary."</strong>
-	 * <br><br/>
+	 * <br/><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype activation level (usually 1-4).
 	 * @param phenotype
 	 * @return
@@ -245,10 +245,10 @@ public abstract class IntracellularModel{
 	 * Subsequently, the "IntracellularModel.hasPhenotype(Molecule mol)" will check if one of the 
 	 * phenotypes from molecule "mol" is in the list of phenotypes assigned to that intracellular 
 	 * model. If it is, that molecule can be secreted; if not, it can't.
-	 * <br><br/>
+	 * <br/><br/>
 	 * <strong>This method is used by "IntracellularModel.computePhenotype" to assign (add) a phenotype 
 	 * and its level of activation to the dictionary of phenotypes.</strong>
-	 * <br><br/>
+	 * <br/><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype activation level (usually 1-4).
 	 * @param phenotype
 	 * @param level
@@ -272,11 +272,11 @@ public abstract class IntracellularModel{
 	 * Subsequently, the "IntracellularModel.hasPhenotype(Molecule mol)" will check if one of the 
 	 * phenotypes from molecule "mol" is in the list of phenotypes assigned to that intracellular 
 	 * model. If it is, that molecule can be secreted; if not, it can't.
-	 * <br><br/>
+	 * <br/><br/>
 	 * "IntracellularModel.computePhenotype" to assign (add) a phenotype to and a "null" (-1) level 
 	 * of activation to the dictionary of phenotypes. This method can be used for phenotypes for which 
 	 * the level of activation does not apply.</strong>
-	 * <br><br/>
+	 * <br/><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype activation 
 	 * level (usually 1-4 but in this case -1 - I.e., "null").
 	 * @param phenotype
@@ -291,7 +291,7 @@ public abstract class IntracellularModel{
 	 * These methods attempt to set and retrieve states not related to the main intracellular model 
 	 * (e.g., Boolean Network). There are several kinds of status, and each kind can have several states. 
 	 * For example, calling the method "setStatus(LIFE_STATUS, NECROTIC)" will set the cell's life status to "NECROTIC."
-	 * <br><br/>
+	 * <br/><br/>
 	 * <strong>This method returns the states dictionary. The states has the structure: {Integer: state-type, Integer: state-ID}.</strong>
 	 * @return
 	 */
@@ -304,7 +304,7 @@ public abstract class IntracellularModel{
 	 * These methods attempt to set and retrieve states not related to the main intracellular model 
 	 * (e.g., Boolean Network). There are several kinds of status, and each kind can have several states. 
 	 * For example, calling the method "setStatus(LIFE_STATUS, NECROTIC)" will set the cell's life status to "NECROTIC."
-	 * <br><br/>
+	 * <br/><br/>
 	 * <strong>The states dictionary has the structure: {Integer: state-type, Integer: state-ID}.
 	 * This method returns the status related to the state-kind "state." For example, calling 
 	 * "getState(LIFE_STATUS)" will return the life status of the cell (e.g., DEAD, NECROTIC, APOTOTIC, etc).</strong>
@@ -320,7 +320,7 @@ public abstract class IntracellularModel{
 	 * (e.g., Boolean Network). There are several kinds of status, and each kind can have several states. 
 	 * <strong>For example, calling this method as "setStatus(LIFE_STATUS, NECROTIC)" will set the cell's 
 	 * life status to "NECROTIC."</strong>
-	 * <br><br/>
+	 * <br/><br/>
 	 * The states-dictionary has the structure: {Integer: state-type, Integer: state-ID}.
 	 * @return
 	 */
@@ -355,12 +355,12 @@ public abstract class IntracellularModel{
 	 * "IntracellularModel" class of the Boolean Network is split into the receptors and the 
 	 * rest of the Network. Each one has its own array. Let's call them input array and Network array. 
 	 * This separation aims to decouple the internal dynamics from the external signals.
-	 * <br><br/>
+	 * <br/><br/>
 	 * Each position in the input array corresponds to the receptor for a Binder (e.g., a molecule). 
 	 * However, those positions are not fixed a-prior. Instead, during initialization, each Binder class 
 	 * receives a unique sequential interactionId. This ID becomes the index in the input array, and that 
 	 * position in the array becomes the receptor for that Binder. 
-	 * <br><br/>
+	 * <br/><br/>
 	 * This method receives a binder calls Binder.getInteractionId() and retrieves the level of activation 
 	 * of its receptor. It should be used inside the Boolean network or other intracellular models.
 	 * @param i a Binder object

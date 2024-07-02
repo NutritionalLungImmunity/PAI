@@ -52,6 +52,9 @@ public class Transferrin extends Molecule{
     
     public void turnOver(int x, int y, int z) {}
     
+    /**
+     * Disabled.
+     */
     public void degrade() {}
 
     public void computeTotalMolecule(int x, int y, int z) {

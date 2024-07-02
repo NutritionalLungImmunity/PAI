@@ -80,7 +80,10 @@ public class PneumocyteII extends Cell {
     	//if(this.hasPhenotype(new int[] {Leukocyte.APOPTOTIC})) //I DON'T KNOW IF THIS CODE WORKS
 			
     }*/
-            
+           
+    /**
+     * Disabled.
+     */
     public void move(Voxel oldVoxel, int steps) {}
 
 	@Override

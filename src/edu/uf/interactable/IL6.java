@@ -61,13 +61,11 @@ public class IL6 extends Molecule{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return NAME;
 	}
 
 	@Override
 	public double getThreshold() {
-		// TODO Auto-generated method stub
 		return -1;
 	}
 

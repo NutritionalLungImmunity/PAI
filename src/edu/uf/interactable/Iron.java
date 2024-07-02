@@ -43,6 +43,9 @@ public class Iron extends Molecule{
     	this.set(100*6.4e-18*0, 0, x, y, z);
     }
     
+    /**
+     * Disabled.
+     */
     public void degrade() {}
     
 

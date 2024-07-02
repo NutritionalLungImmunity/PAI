@@ -50,6 +50,9 @@ public class Lactoferrin extends Molecule{
     	return -1;
     }
     
+    /**
+     * Disabled.
+     */
     public void degrade() {} //REVIEW
 
     public int getIndex(String str) {

@@ -11,15 +11,11 @@ public abstract class Setter extends Molecule{
 	
     /**
      * Disabled.
-     * @param index
-     * @param inc
      */
 	public void incTotalMolecule(int index, double inc) {}
 	
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double inc(double qtty, String index, int x, int y, int z) {
 		return 0;
@@ -27,8 +23,6 @@ public abstract class Setter extends Molecule{
 	
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double inc(double qtty, int index, int x) {
         return 0;
@@ -36,8 +30,6 @@ public abstract class Setter extends Molecule{
 	
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public double inc(double qtty, int index, int x, int y, int z) {
         return 0;
@@ -45,8 +37,6 @@ public abstract class Setter extends Molecule{
     
     /**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public double dec(double qtty, int index, int x) {
         return 0;
@@ -54,8 +44,6 @@ public abstract class Setter extends Molecule{
 	
     /**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double dec(double qtty, String index, int x, int y, int z) {
 		return -1;
@@ -63,8 +51,6 @@ public abstract class Setter extends Molecule{
 
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public double dec(double qtty, int index, int x, int y, int z) {
         return 0;
@@ -72,8 +58,6 @@ public abstract class Setter extends Molecule{
 	
     /**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double pdec(double p, String index, int x, int y, int z) {
 		return 0;
@@ -81,8 +65,6 @@ public abstract class Setter extends Molecule{
 	
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double pdec(double p, int index, int x) {
         return 0;
@@ -90,8 +72,6 @@ public abstract class Setter extends Molecule{
 
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public double pdec(double p, int index, int x, int y, int z) {
         return 0;
@@ -99,8 +79,6 @@ public abstract class Setter extends Molecule{
 	
     /**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double pinc(double p, String index, int x, int y, int z) {
 		return 0;
@@ -108,8 +86,6 @@ public abstract class Setter extends Molecule{
 	
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double pinc(double p, int index, int x) {
         return 0;
@@ -117,8 +93,6 @@ public abstract class Setter extends Molecule{
 
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public double pinc(double p, int index, int x, int y, int z) {
         return 0;
@@ -126,29 +100,21 @@ public abstract class Setter extends Molecule{
     
     /**
      * Disabled.
-     * @param index
-     * @param inc
      */
 	public void set(double qtty, String index, int x, int y, int z) {}
 	
 	/**
      * Disabled.
-     * @param index
-     * @param inc
      */
 	public void set(double qtty, int index, int x) {}
 
 	/**
      * Disabled.
-     * @param index
-     * @param inc
      */
     public void set(double qtty, int index, int x, int y, int z) {}
 	
     /**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double get(String index, int x, int y, int z) {
 		return 0;
@@ -156,8 +122,6 @@ public abstract class Setter extends Molecule{
 	
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
 	public double get(int index, int x) {
 		return 0;
@@ -165,8 +129,6 @@ public abstract class Setter extends Molecule{
 
 	/**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public double get(int index, int x, int y, int z) {
         return 0;
@@ -192,15 +154,11 @@ public abstract class Setter extends Molecule{
     
     /**
      * Disabled.
-     * @param index
-     * @param inc
      */
     public void degrade() {}
 
     /**
      * Disabled. Return 0
-     * @param index
-     * @param inc
      */
     public int getIndex(String str) {
         return 0;
@@ -208,8 +166,6 @@ public abstract class Setter extends Molecule{
 
     /**
      * Disabled.
-     * @param index
-     * @param inc
      */
     public void computeTotalMolecule(int x, int y, int z) {}
 

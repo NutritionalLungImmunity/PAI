@@ -163,10 +163,10 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 		Klebsiella.totalIron = Klebsiella.totalIron + qtty;
 	}
 
-	@Override
 	/**
      * Disabled.
      */
+	@Override
 	public int getMaxMoveSteps() {
 		return -1;
 	}

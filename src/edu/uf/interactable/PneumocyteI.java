@@ -31,6 +31,9 @@ public class PneumocyteI extends Cell{
     	return interactionId;
     }
 
+    /**
+     * Disabled.
+     */
 	@Override
 	public void move(Voxel oldVoxel, int steps) {}
 

@@ -45,6 +45,9 @@ public class LPS extends Molecule {
         //degrade(Constants.DAMP_HALF_LIFE, x, y, z);
     }
     
+    /**
+     * Disabled. <strong>Review!</strong>
+     */
     public void degrade() {} //REVIEW
 
     public int getIndex(String str) {
