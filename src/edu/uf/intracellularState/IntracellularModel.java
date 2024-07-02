@@ -109,8 +109,7 @@ public abstract class IntracellularModel{
 	 * that molecule can be secreted; if not, it can't.
 	 * <br><br/>
 	 * Notice Phenotypes are maps containing the phenotype ID (described above) and the phenotype 
-	 * activation level (usually 1-4).Notice Phenotypes are maps containing the phenotype ID 
-	 * (described above) and the phenotype activation level (usually 1-4).
+	 * activation level (usually 1-4).
 	 */
 	protected abstract void computePhenotype();
 	
