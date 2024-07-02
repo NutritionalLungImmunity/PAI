@@ -26,6 +26,10 @@ public class NK extends Cell{
     	return interactionId;
     }
 
+    /**
+	 * Disabled. <strong> Review!</strong>
+	 * @param b
+	 */
 	@Override
 	public void move(Voxel oldVoxel, int steps) {}
 
@@ -41,8 +45,16 @@ public class NK extends Cell{
 		return false;
 	}
 
+	/**
+	 * Disabled.
+	 * @param b
+	 */
 	public void setInjury(boolean b) {}
 	
+	/**
+	 * Disabled.
+	 * @param b
+	 */
 	@Override
 	public void incIronPool(double ironPool) {}
 

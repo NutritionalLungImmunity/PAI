@@ -10,7 +10,7 @@ import edu.uf.utils.Util;
 
 public class DC extends Leukocyte{
 
-    public static final String NAME = "Macrophage";
+    public static final String NAME = "DC";
 
     private static String chemokine = null;
     

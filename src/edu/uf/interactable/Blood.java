@@ -6,8 +6,12 @@ import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
-import edu.uf.utils.Util;
 
+/**
+ * Blood is a Molecule-like cell. It's a singleton and it works like a molecule. It is implemented as a cell because I needed the "updateStatus" method.
+ * @author henriquedeassis
+ *
+ */
 public class Blood extends Cell{
 	
 	public static final int RESTING = 0;
@@ -17,7 +21,7 @@ public class Blood extends Cell{
 	
 	//public static final int TREATED = 3;
 	
-	private String NAME = "HEMORRHAGE";
+	private String NAME = "BLOOD";
 	private static int interactionId = Id.getMoleculeId();
 	
 	private int[][][] status;
@@ -40,6 +44,12 @@ public class Blood extends Cell{
         }
 	}
 	
+	/**
+	 * Ad-hoc method to set Tranexamic acid in the Blood in the Voxel at position (x, y, z).
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void setTxa(int x, int y, int z) {
 		this.txa[x][y][z] = true;
 	}
@@ -54,14 +64,29 @@ public class Blood extends Cell{
 		return hemorrhage;
 	}
 
+	/**
+	 * Returns the Blood array. This is a Molecule-like array.
+	 * @return
+	 */
 	public int[][][] getHemorrhageStatus(){
 		return status;
 	}
 	
+	/**
+	 * Returns true if the status of Blot in the Voxel at position (x, y, z) is "HEMORRHAGIC" or "FILLED."
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public boolean hasBlood(int x, int y, int z) {
 		return status[x][y][z] == HEMORRHAGIC || status[x][y][z] == FILLED;
 	}
 	
+	/**
+	 * Sets the blood status in the Voxel at position (x, y, z). 
+	 * The status are "RESTING," "HEMORRHAGIC," "COAGULATED," and "FILLED."
+	 */
 	public void setStatus(int status, int x, int y, int z) {
 		this.status[x][y][z] = status;
 	}
@@ -74,6 +99,10 @@ public class Blood extends Cell{
 		return interactable.interact(this, x, y, z);
 	}
 	
+	/**
+	 * Updates the blood status in the Voxel at position (x, y, z). 
+	 * The status are "RESTING," "HEMORRHAGIC," "COAGULATED," and "FILLED."
+	 */
 	@Override
 	public void updateStatus(int x, int y, int z) {
 		int xbin = GridFactory.getXbin();
@@ -138,15 +167,27 @@ public class Blood extends Cell{
 	@Override
 	public void move(Voxel oldVoxel, int steps) {}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
 	public void die() {}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
 	public void incIronPool(double ironPool) {}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
 	public int getMaxMoveSteps() {return -1;}
 
+	/**
+	 * Disabled.
+	 */
 	@Override
 	public boolean isTime() {return true;}
 

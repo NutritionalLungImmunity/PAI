@@ -544,10 +544,16 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 
 
 	@Override
+	/**
+     * Disabled.
+     */
 	public void move(Voxel oldVoxel, int steps) {}
 
 
 	@Override
+	/**
+     * Disabled.
+     */
 	public int getMaxMoveSteps() {
 		// TODO Auto-generated method stub
 		return -1;

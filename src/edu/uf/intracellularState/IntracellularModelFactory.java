@@ -20,6 +20,13 @@ public class IntracellularModelFactory {
 	public static final String PNEUMOCYTE_II_KLEBSIELLA_MODEL= PneumocyteIIKlebsiella.name;
 	public static final String NK_KLEBSIELLA_MODEL= NKKlebsiella.name;
 	
+	/**
+	 * Creates an "IntracellularModel" object. The string "network" identifies the desired implementation. 
+	 * Valid values for the string "network" are provided by the constants of this class. 
+	 * @param network
+	 * @return A "IntracellularModel" object with the implementation designated by the string 
+	 * "network" if this is a valid string; null otherwise. 
+	 */
 	public static IntracellularModel createBooleanNetwork(String network) {
 		if(network.contentEquals(ASPERGILLUS_MACROPHAGE))
 			return new AspergillusMacrophage();

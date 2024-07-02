@@ -30,6 +30,11 @@ public abstract class Siderophore extends Molecule{
     	return -1;
     }
     
+    /**
+     * Disabled. <strong> review: siderophores undergo turnover</strong>
+     * @param index
+     * @param inc
+     */
     public void degrade() {} //REVIEW
 
     public int getIndex(String str) {
@@ -41,12 +46,26 @@ public abstract class Siderophore extends Molecule{
     	this.totalMoleculesAux[1] = this.totalMoleculesAux[1] + this.get(0, x, y, z);
     }
     
+    /**
+     * Returns the quantity of siderophore that should be secreted if conditions apply. 
+     * If the cell or phenotype has activation levels, this should refer to the amount 
+     * secreted in the maximum activation level. 
+     * @return
+     */
     public abstract double getSiderophoreQtty();
     
+    /**
+     * <strong>Not used</strong>
+     * @param siderophore
+     */
     public void setHasSiderophore(boolean siderophore) {
     	this.hasSiderophore = siderophore;
     }
     
+    /**
+     * <strong>Used by Klebsiella, but hasSiderophore is never initialized.</strong>
+     * @param siderophore
+     */
     public boolean hasSiderophore() {
     	return this.hasSiderophore;
     }

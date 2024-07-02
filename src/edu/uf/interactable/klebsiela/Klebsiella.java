@@ -40,7 +40,7 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	private static double totalIron;
 	private double ironPool;
 	private boolean engulfed;
-	private boolean entraped;
+	private boolean entrapped;
 	
 	private Set<Siderophore> hasSiderophore;
 	
@@ -58,7 +58,7 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 		this.ironPool = ironPool;
 		Klebsiella.totalIron = Klebsiella.totalIron + ironPool;
 		this.engulfed = false;
-		this.entraped = false;
+		this.entrapped = false;
 		
 		this.hasSiderophore  = new HashSet<>();
 		if(yersiniabactin) this.hasSiderophore.add(Yersiniabactin.getMolecule());
@@ -90,10 +90,19 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 		//return interactionId;
 	}
 	
-	public void setEntraped(boolean entraped) {
-		this.entraped = entraped;
+	/**
+	 * Set the bacteria to the entrapped state. Bacteria can become entrapped by NETs, and that prevents their movement. 
+	 * @param entrapped
+	 */
+	public void setEntrapped(boolean entrapped) {
+		this.entrapped = entrapped;
 	}
 	
+	/**
+	 * Returns true if the bacteria is encapsulated. The encapsulated status is defined
+	 *  a-priory during simulation initialization, and it affects (or should) bacterial virulence. 
+	 * @return
+	 */
 	public boolean isEncapsulated() {
 		return this.cps;
 	}
@@ -130,14 +139,14 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 
 	@Override
 	public void move(Voxel oldVoxel, int steps) {
-		if(!engulfed && !entraped && Rand.getRand().randunif() < 0.01) { //REVIEW HARD-CODE
+		if(!engulfed && !entrapped && Rand.getRand().randunif() < 0.01) { //REVIEW HARD-CODE
 			List<Voxel> neighbors = oldVoxel.getNeighbors();
 			int numNeighbors = neighbors.size();
 			int i = Rand.getRand().randunif(0, numNeighbors);
 			oldVoxel.removeCell(this.getId());
 			neighbors.get(i).setCell(this);
 		}
-		this.entraped = false;
+		this.entrapped = false;
 	}
 
 	@Override
@@ -155,6 +164,9 @@ public class Klebsiella extends InfectiousAgent implements Internalizable{
 	}
 
 	@Override
+	/**
+     * Disabled.
+     */
 	public int getMaxMoveSteps() {
 		return -1;
 	}

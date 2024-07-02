@@ -72,6 +72,8 @@ public abstract class Cell extends Interactable{
 	}
 	
 	/**
+	 * This method is part of the bind family. (See also IntracellularModel.activateReceptor, 
+	 * IntracellularModel.input, and Binder.getInteractionId()).
 	 * This method takes an object of the kind "Binder" and uses it to activate its receptor in the 
 	 * "intracellularModel" object to the level "level." The "intracellularModel" object can select 
 	 * the appropriate receptor for the "Binder" object given the "Binder" "interactionId." This method 
