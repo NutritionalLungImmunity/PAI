@@ -1,6 +1,7 @@
 package edu.uf.control;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,6 +145,15 @@ public class Exec {
         			}
         			voxel.removeCell(entry.getKey());
         			Cell.rm(v.getId());
+        		}else if(v instanceof Leukocyte) {
+        			List<InfectiousAgent> phagosome = ((Leukocyte)v).getPhagosome();
+        			List<InfectiousAgent> aux = (List<InfectiousAgent>) ((ArrayList<InfectiousAgent>)phagosome).clone();
+        			for(InfectiousAgent c : aux) 
+        				if (c.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD) {
+        					phagosome.remove(c);
+        					Cell.rm(c.getId());
+        				}
+        			
         		}else if (v instanceof Internalizable) 
         			if (((Internalizable)v).isInternalizing())
         				voxel.removeCell(entry.getKey());
@@ -152,8 +162,14 @@ public class Exec {
     }
     
     private static void releasePhagosome(List<InfectiousAgent> phagosome, Voxel voxel) {
-        for(InfectiousAgent entry : phagosome)
-        	if (entry.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD)
+    	
+    	List<InfectiousAgent> aux = (List<InfectiousAgent>) ((ArrayList<InfectiousAgent>)phagosome).clone();
+        for(InfectiousAgent entry : aux)
+        	if (entry.getBooleanNetwork().getState(IntracellularModel.LIFE_STATUS) == IntracellularModel.DEAD) {
+        		phagosome.remove(entry);
+        		Cell.rm(entry.getId());
+        	}else {
         		voxel.setCell(entry);
+        	}
     }
 }

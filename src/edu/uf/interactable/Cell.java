@@ -1,19 +1,16 @@
 package edu.uf.interactable;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import edu.uf.intracellularState.IntracellularModel;
-import edu.uf.intracellularState.Phenotype;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 
 public abstract class Cell extends Interactable{
 	
-	public static Map<Integer, Cell> cells;
+	private static Map<Integer, Cell> cells;
 	
 	static {
 		cells = new HashMap<>();

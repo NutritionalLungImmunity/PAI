@@ -112,7 +112,7 @@ public class Main {
         //recruiters[1] = new NeutrophilReplenisher();
         
         run.run(
-        		3750,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
+        		2160,//(int) 72*2*(30/Constants.TIME_STEP_SIZE),  
         		xbin, 
         		ybin, 
         		zbin,  
