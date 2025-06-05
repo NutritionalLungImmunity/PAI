@@ -9,10 +9,9 @@ public class GDTKlebsiella extends IntracellularModel{
 
 	@Override
 	public void processBooleanNetwork(int... args) {
-		this.booleanNetwork[0] = input(IL17.getMolecule());
+		this.booleanNetwork[0] = getInput(IL17.getMolecule());
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

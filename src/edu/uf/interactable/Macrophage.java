@@ -17,7 +17,7 @@ public class Macrophage extends Leukocyte{
     
     private int maxMoveStep;
     private boolean engaged;
-    private static int interactionId = Id.getMoleculeId();
+    private static int interactionId = Id.getId();
     
     
     

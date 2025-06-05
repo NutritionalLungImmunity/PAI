@@ -1,7 +1,5 @@
 package edu.uf.utils;
 
-import edu.uf.interactable.Afumigatus.Afumigatus;
-
 public class LinAlg {
 	
 	private static final double cosTheta = Math.cos(Math.PI/4.0);
@@ -33,8 +31,10 @@ public class LinAlg {
 			System.exit(1);
 		}
 		double d = 0;
+		int aux = 0;
 		for(int i = 0; i < x.length; i++) {
-			d += (x[i] - y[i])*(x[i] - y[i]);
+			aux = x[i] - y[i];
+			d += aux*aux;
 		}
 		return Math.sqrt(d); 
 	}
@@ -51,8 +51,10 @@ public class LinAlg {
 			System.exit(1);
 		}
 		double d = 0;
+		double aux = 0.0;
 		for(int i = 0; i < x.length; i++) {
-			d += (x[i] - y[i])*(x[i] - y[i]);
+			aux = x[i] - y[i];
+			d += aux*aux;
 		}
 		return Math.sqrt(d); 
 	}
@@ -206,8 +208,8 @@ public class LinAlg {
 	 * @param afumigatus
 	 * @return
 	 */
-	public static double[][] gramSchimidt(Afumigatus afumigatus){
-		double[][] base = getBase(afumigatus);
+	public static double[][] gramSchimidt(double x, double y, double z){
+		double[][] base = getBase(x, y, z);
 		double[] e1 = multiply(base[0], 1.0/norm2(base[0]));
 		double normE1 = norm2(e1);
 		double[] e2 = sum(base[1], multiply(e1, -dotProduct(base[1], e1)/(normE1*normE1)));
@@ -231,11 +233,11 @@ public class LinAlg {
 	 * @param afumigatus
 	 * @return
 	 */
-	public static double[][] getBase(Afumigatus afumigatus){
+	public static double[][] getBase(double i, double j, double k){
 		double[] x = new double[]{1.0, 0.0, 0.0};
 		double[] y = new double[]{0.0, 1.0, 0.0};
 		//double[] z = new double[]{0.0, 0.0, afumigatus.getZ()};
-		double[] v = new double[]{afumigatus.getDx(), afumigatus.getDy(), afumigatus.getDz()};
+		double[] v = new double[]{i, j, k};
 		return new double[][] {
 			v,x,y
 		};
@@ -376,34 +378,6 @@ public class LinAlg {
 		unit[2] = normal[2] / magnitude;
 		return unit;
 	}
-	
-	/**
-	 * <strong>Not used!</strong>
-	 * @param matrix
-	 * @param vector
-	 * @param dim1
-	 * @param dim2
-	 * @param dim3
-	 */
-	public static void dotProduct(double[][] matrix, double[][][] vector, int dim1, int dim2, int dim3) {
-
-    	int size = matrix.length;
-    	
-    	//dim1 == -1 ? vector.length : (dim2 == -1 ? vector[0].length : vector[0][0].length)
-		double[] v = new double[(dim1 == -1 ? vector.length : (dim2 == -1 ? vector[0].length : vector[0][0].length))];
-		for(int i = 0; i < size; i++) 
-			for(int j = 0; j < size; j++) 
-				v[i] += matrix[i][j]*(dim1 == -1 ? vector[j][dim2][dim3] : (dim2 == -1 ? vector[dim1][j][dim3] : vector[dim1][dim2][j]));
-		
-		for(int i = 0; i < size; i++) {
-			if(dim1 == -1)
-				vector[i][dim2][dim3] = v[i];
-			else if(dim2 == -1)
-				vector[dim1][i][dim3] = v[i];
-			else
-				vector[dim1][dim2][i] = v[i];
-		}
-    }
 	
 	/**
 	 * create an eye matrix of size N.

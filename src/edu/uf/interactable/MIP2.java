@@ -15,7 +15,7 @@ public class MIP2 extends Chemokine{
     
 
     private MIP2(double[][][][] qttys, Diffuse diffuse) {
-    	super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
         Neutrophil.setChemokine(MIP2.NAME);
         this.setPhenotye(Phenotype.createPhenotype());
     }
@@ -37,9 +37,9 @@ public class MIP2 extends Chemokine{
     	return Constants.Kd_MIP2;
     }
     
-    public void turnOver(int x, int y, int z) {
+    /*public void turnOver(int x, int y, int z) {
     	this.pdec(1-Constants.MIP2_HALF_LIFE, 0, x, y, z);
-    }
+    }*/
     
     public void degrade() {
     	degrade(Constants.MIP2_HALF_LIFE, 0);
@@ -66,8 +66,8 @@ public class MIP2 extends Chemokine{
         if (interactable instanceof PneumocyteII) 
         	return Interactions.secrete((Cell) interactable, this, Constants.P_MIP2_QTTY, x, y, z, 0); 
         
-        if (interactable instanceof Macrophage) 
-        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
+        if (interactable instanceof Macrophage) return true;
+        	//return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_MIP2_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

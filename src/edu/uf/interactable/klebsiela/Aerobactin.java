@@ -20,7 +20,7 @@ public class Aerobactin extends Siderophore{
     
     
     private Aerobactin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Aerobactin getMolecule(Diffuse diffuse) {

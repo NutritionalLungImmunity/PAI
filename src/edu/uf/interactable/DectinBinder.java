@@ -4,20 +4,20 @@ import edu.uf.utils.Id;
 
 /**
  * This class is a wildcard non-interactable Binder used to implicitly represent any molecule that 
- * binds TLR, especially TLR4 (e.g., LPS - although currently there is an LPS Molecule class). 
+ * binds Dectin. 
  * @author henriquedeassis
  *
  */
-public class TLRBinder implements Binder{
+public class DectinBinder implements Binder{
 	private static int id;
-	private static TLRBinder binder;
+	private static DectinBinder binder;
 	static {
 		id = Id.getId();
 	}
 	
-	public static TLRBinder getBinder() {
+	public static DectinBinder getBinder() {
 		if(binder == null) {
-			binder = new TLRBinder();
+			binder = new DectinBinder();
 		}
 		return binder;
 	}

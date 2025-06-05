@@ -5,8 +5,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Rand;
-import edu.uf.utils.Util;
 
 public class Granule extends Molecule{
 
@@ -17,7 +15,7 @@ public class Granule extends Molecule{
 	private static Granule molecule = null;    
     
     private Granule(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Granule getMolecule(Diffuse diffuse) {

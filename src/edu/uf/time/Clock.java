@@ -35,11 +35,13 @@ public class Clock {
 	}
 	
 	/**
-	 * Updates the iteration counter and resets it if "size" iterations have passed. 
-	 * This method should only be called once every iteration. It also keeps track of 
-	 * the number of times it reset the count. 
-	 * <strong> Notice: right now, this method is being called in cell.updateStatus." 
-	 * This must be reviewed. </strong>
+	 * Advances the internal iteration counter and resets it after {@code size} iterations.
+	 *
+	 * <p>This method should be called once per simulation iteration. When the counter reaches {@code size}, 
+	 * it wraps back to zero and increments an internal {@code count} representing the number of full cycles completed.</p>
+	 *
+	 * <p><strong>Note:</strong> This method is currently called inside {@code Cell.updateStatus()}. 
+	 * This behavior should be reviewed to ensure correct timing and separation of concerns.</p>
 	 */
 	public void tic() {
 		this.iteration = (this.iteration + 1) % size;
@@ -47,18 +49,26 @@ public class Clock {
 	}
 	
 	/**
-	 * Returns true if N iterations have passed. N="size" received by the "Clock" constructor. 
-	 * This method does not update the iteration count. The number of iterations is updated 
-	 * by the "tic" method.
-	 * @return
+	 * Returns {@code true} if a full cycle of {@code size} iterations has completed.
+	 *
+	 * <p>The value of {@code size} is set during construction of the {@code Clock} instance. 
+	 * This method does not advance the iteration count; it simply checks whether the current 
+	 * iteration is at the start of a new cycle (i.e., divisible by {@code size}). 
+	 * Use the {@code tic()} method to update the iteration counter.</p>
+	 *
+	 * @return {@code true} if {@code iteration % size == 0}; {@code false} otherwise
 	 */
 	public boolean toc() {
 		return iteration % size == 0;
 	}
 	
 	/**
-	 * Returns the number of times the iteration count was reset.
-	 * @return
+	 * Returns the number of times the iteration counter has completed a full cycle and been reset.
+	 *
+	 * <p>This value is incremented each time the {@code tic()} method wraps the internal iteration 
+	 * counter back to zero.</p>
+	 *
+	 * @return the number of completed iteration cycles
 	 */
 	public long getCount() {
 		return this.count;

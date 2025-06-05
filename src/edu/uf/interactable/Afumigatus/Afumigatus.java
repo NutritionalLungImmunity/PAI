@@ -4,7 +4,6 @@ import java.util.Set;
 
 import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.Internalizable;
 import edu.uf.interactable.Iron;
@@ -15,7 +14,6 @@ import edu.uf.interactable.PositionalInfectiousAgent;
 import edu.uf.interactable.Siderophore;
 import edu.uf.intracellularState.AspergillusIntracellularModel;
 import edu.uf.intracellularState.IntracellularModel;
-import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.time.Clock;
 import edu.uf.utils.Constants;
@@ -40,7 +38,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     private boolean isRoot;
     private boolean growable;
     private boolean branchable;
-    private int growthIteration;
+    //private int growthIteration;
     private int treeSize;
     
     private double xTip;
@@ -52,14 +50,14 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     private double percentGrow;
     private double iterationsToGrow;
     private double epithelialInhibition;
-    private double netGermBust;
+    //private double netGermBust;
     private boolean aspEpiInt;
     private boolean engaged;
     
     private double nitrogenPool;
     private double heme;
     
-    private static int interactionId = Id.getMoleculeId();
+    private static int interactionId = Id.getId();
     
     public static final Afumigatus DEF_OBJ = new Afumigatus();
     
@@ -79,7 +77,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
         this.yTip = yTip;
         this.zTip = zTip;
         double[] ds = new double[] {dx, dy, dz};
-        LinAlg.multiply(ds, 1.0/LinAlg.norm2(ds));
+        LinAlg.multiply(ds, 1.0/LinAlg.norm2(ds)); //Not doing anything!
         
         this.dx = ds[0];
         this.dy = ds[1];
@@ -90,7 +88,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
 
         this.growable = true;
         this.branchable = false;
-        this.growthIteration = growthIteration;
+        //this.growthIteration = growthIteration;
 
         this.nextSepta = null;
         this.nextBranch = null;
@@ -107,7 +105,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
         this.percentGrow = 1e-4;
         
         this.epithelialInhibition = 2.0;
-        this.netGermBust = 1.0;
+        //this.netGermBust = 1.0;
         this.aspEpiInt = true;
         this.engaged = false;
         
@@ -176,9 +174,9 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     	return this.epithelialInhibition;
     }
     
-    public void setNetGermBust(double bust) {
+    /*public void setNetGermBust(double bust) {
     	this.netGermBust = bust;
-    }
+    }*/
     
     public void incHeme(double qtty) {
     	this.heme += qtty;
@@ -329,7 +327,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
         }   */        
         if (this.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == AspergillusIntracellularModel.FREE) {
             Voxel voxel = Util.findVoxel(this.xTip, this.yTip, this.zTip, xbin, ybin, zbin, grid);
-            if (voxel != null && voxel.getTissueType() != voxel.AIR) {
+            if (voxel != null && voxel.getTissueType() != Voxel.AIR) {
                 Afumigatus nextSepta = this.elongate();
                 if (nextSepta != null)
                     voxel.setCell(nextSepta);
@@ -410,7 +408,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
                 
                 this.setIronPool(this.getIronPool() / 2.0);
                 double[] growthVector = new double[] {dx, dy, dz};
-				double[][] base = LinAlg.gramSchimidt(this);
+				double[][] base = LinAlg.gramSchimidt(this.getX(), this.getY(), this.getZ());
 				double[][] baseInv = LinAlg.transpose(base);
 				double[][] R = LinAlg.rotation(2*Rand.getRand().randunif()*Math.PI);
 				R = LinAlg.dotProduct(base, LinAlg.dotProduct(R, baseInv));
@@ -435,7 +433,7 @@ public class Afumigatus extends PositionalInfectiousAgent implements Internaliza
     }*/
     
     protected void computeGrowthRate() {
-    	double k = 0.5;
+    	//double k = 0.5;
     	double eps = 1e-16;
     	double iron = this.getIronPool()/Constants.HYPHAE_VOL + eps;
     	double heme = this.heme/Constants.HYPHAE_VOL + eps;

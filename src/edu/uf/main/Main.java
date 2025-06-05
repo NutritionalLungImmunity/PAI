@@ -6,13 +6,17 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.MacrophageRecruiter;
 import edu.uf.compartments.NeutrophilRecruiter;
 import edu.uf.compartments.Recruiter;
-import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.compartments.Voxel;
+import edu.uf.control.Exec;
 import edu.uf.intracellularState.AspergillusIntracellularModel;
 import edu.uf.main.initialize.Initialize;
 import edu.uf.main.initialize.InitializeBaseModel;
+import edu.uf.main.initialize.InitializeExample;
 import edu.uf.main.initialize.InitializeTranexamicModel;
 import edu.uf.main.print.PrintBaseModel;
+import edu.uf.main.print.PrintExample;
 import edu.uf.main.print.PrintHemeModel;
+import edu.uf.main.print.PrintStat;
 import edu.uf.main.run.Run;
 import edu.uf.main.run.RunSingleThread;
 import edu.uf.utils.Constants;
@@ -67,7 +71,7 @@ public class Main {
         
         //Constants.PR_ASPERGILLUS_CHANGE = 0.1732868;
         Constants.MAX_N = 522*1;//0.75;//*0.75;
-        //Constants.MAX_MA = 0;//0.75;//*0.75;
+        Constants.MAX_MA = 209;//0.75;//*0.75;
         Constants.RECRUITMENT_RATE_N *= 1.0;//0.25;//0.125;//0.25;
         Constants.NEUTROPHIL_HALF_LIFE = 0.05776227;
         Constants.NET_HALF_LIFE = 0.007701635;
@@ -97,7 +101,7 @@ public class Main {
         initialize.createPeriodicGrid(xbin, ybin, zbin);
         initialize.initializeMolecules(diffusion, false);
         initialize.initializePneumocytes(Integer.parseInt(input[3]));
-        initialize.initializeLiver();
+        //initialize.initializeLiver();
         initialize.initializeMacrophage(Integer.parseInt(input[2]));
         initialize.initializeNeutrophils(0);
         //initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
@@ -125,6 +129,60 @@ public class Main {
         
         stat.close();
         //System.out.println((toc - tic));
+	}
+	
+	
+	private static void exampleModel(String[] args) throws InterruptedException {
+			
+		InitializeExample initialize = new InitializeExample();
+		Run run = new RunSingleThread();
+		PrintStat stat = new PrintExample();
+		
+		
+		int xbin = 10;
+		int ybin = 10;
+		int zbin = 10;
+        
+        
+        String[] input = new String[]{"0", "1920", "15", "640"};
+        
+        
+        double f = 0.1;
+        double pdeFactor = Constants.D/(30/Constants.TIME_STEP_SIZE); 
+        double dt = 1;
+        Diffuse diffusion = new FADIPeriodic(f, pdeFactor, dt);
+        
+        initialize.createPeriodicGrid(xbin, ybin, zbin);
+        initialize.initializeMolecules(diffusion, false);
+        initialize.initializePneumocytes(Integer.parseInt(input[3]));
+        initialize.initializeLiver();
+        initialize.initializeMacrophage(Integer.parseInt(input[2]));
+        initialize.initializeNeutrophils(0);
+        initialize.initializeEC();
+        initialize.initializeTypeIPneumocytes(Integer.parseInt(input[3])/2);
+        initialize.infect(Integer.parseInt(input[1]), AspergillusIntracellularModel.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
+
+        Recruiter[] recruiters = new Recruiter[2];
+        recruiters[0] = new MacrophageRecruiter();
+        recruiters[1] = new NeutrophilRecruiter();
+        
+        run.run(
+        		2160,
+        		xbin, 
+        		ybin, 
+        		zbin,  
+        		recruiters,
+        		false,
+        		null,
+        		-1,
+        		stat
+        );
+        
+        stat.close();
+	}
+	
+	public static void main_(String[] args) throws Exception {
+		Main.exampleModel(args);
 	}
 	
 	
@@ -1515,6 +1573,10 @@ public class Main {
 	
 	
 	//THIS EXPERIMEENT IS NOT REPRODUCING OLD RESULT BECAUSE THERE IS NO TURN_OVER_RATE. WHICH TURN OUT TO BE MORE IMPORTANT THAN HALF LIFE
+	
+	
+
+
 
 	public static void main(String[] args) throws Exception {
 		//Turnover and degrade changed: Turnover now is automatic. In the future there should be turnover and then degrade in the serum.
@@ -1533,7 +1595,25 @@ public class Main {
 		Main.baseModel(args);
 		//Main.tranexamicAcidModel(args);
 		long toc = System.currentTimeMillis();
-		System.out.println((toc - tic));
+		System.out.println("Total: " + (toc - tic));
+		System.out.println("Voxel.Interact: " + Exec.interactTime);
+		System.out.println("Exec.gc: " + Exec.gcTime);
+		System.out.println("Voxel.next: " + Exec.nextTime);
+		System.out.println("Molecule.degrade: " + Exec.degradeTime);
+		System.out.println("Exec.next: " + RunSingleThread.eNextTime);
+		System.out.println("Exec.recruit: " + RunSingleThread.recruitTime);
+		System.out.println("Exec.diffusion: " + RunSingleThread.diffusionTime);
+		
+		/*System.out.println("toList: " + Voxel.toListTime);
+		System.out.println("vectors: " + Voxel.vectorsTime);
+		System.out.println("sample: " + Voxel.sampleTime);
+		System.out.println("shuffle: " + Voxel.shuffleTime);
+		System.out.println("size: " + Voxel.sizeTime);
+		System.out.println("createVec: " + Voxel.createVecTime);
+		System.out.println("small-shuffle: " + Voxel.smallShuffleTime);
+		System.out.println("for: " + Voxel.forTime);*/
+		
+		
 	}
 
 }

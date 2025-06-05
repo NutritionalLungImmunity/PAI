@@ -14,7 +14,7 @@ public class MIP1B extends Chemokine{
     private static MIP1B molecule = null; 
 
     private MIP1B(double[][][][] qttys, Diffuse diffuse) {
-        super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
         Macrophage.setChemokine(MIP1B.NAME);
         this.setPhenotye(Phenotype.createPhenotype());
     }
@@ -52,8 +52,8 @@ public class MIP1B extends Chemokine{
         if (interactable instanceof PneumocyteII) 
         	return Interactions.secrete((Cell) interactable, this, Constants.P_MIP1B_QTTY, x, y, z, 0);
         
-        if (interactable instanceof Macrophage) 
-        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
+        if (interactable instanceof Macrophage) return true;
+        	//return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_MIP1B_QTTY, x, y, z, 0);
         
         return interactable.interact(this, x, y, z); 
     }

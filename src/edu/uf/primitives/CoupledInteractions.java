@@ -19,10 +19,14 @@ import edu.uf.utils.Rand;
 
 
 /**
- * This class hides methods that would cause tight coupling with the Interactable classes. 
- * Internal methods (I.e., methods visible only to the Interactions class) also go here.
- * @author henriquedeassis
+ * A utility class providing a library of static methods for defining tightly coupled primitive interactions between agents.
  *
+ * <p>This class serves as a continuation of the {@code Interactions} class. Methods that are more tightly coupled 
+ * to specific agent implementations are placed here as a temporary workaround to manage coupling.</p>
+ *
+ * <p>Note: This is a transitional solution to address tight coupling issues and may be refactored in the future.</p>
+ *
+ * @author henriquedeassis
  */
 public class CoupledInteractions {
 
@@ -148,13 +152,14 @@ public class CoupledInteractions {
                 //if(this.getExternalState() == 1)  prInteract *= Constants.NET_COUNTER_INHIBITION;
                 if(Rand.getRand().randunif() < prInteract) {
                 	intAspergillus(mac, aspergillus, aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) != AspergillusIntracellularModel.HYPHAE);
-                    if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE && mac.getBooleanNetwork().hasPhenotype(new int[] {AspergillusMacrophage.M1, AspergillusMacrophage.M2B})){ 
+                    if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE && 
+                    		mac.getBooleanNetwork().hasPhenotype(new int[] {AspergillusMacrophage.M1, AspergillusMacrophage.M2B})){ 
                     	aspergillus.getBooleanNetwork().setState(IntracellularModel.LIFE_STATUS, getDeadState(aspergillus, IntracellularModel.DYING));
-                        if(aspergillus.getNextSepta() != null) {
+                        if(aspergillus.getNextSepta() != null) //{ //{???
                         	aspergillus.getNextSepta().setRoot(true);
                         if(aspergillus.getNextBranch() != null)
                         	aspergillus.getNextBranch().setRoot(true);
-                        }
+                        //}
                     }else {
                         if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.HYPHAE && mac.getBooleanNetwork().hasPhenotype(AspergillusMacrophage.M1)) {
                         	mac.setEngaged(true);
@@ -174,7 +179,9 @@ public class CoupledInteractions {
      */
 	static void intAspergillus(Leukocyte leukocyte, PositionalInfectiousAgent aspergillus, boolean phagocytose) {
         if(aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.LOCATION) == AspergillusIntracellularModel.FREE) {
-            if (aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA || aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA || aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.STERILE_CONIDIA || phagocytose){
+            if (aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA || 
+            	aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA || 
+            	aspergillus.getBooleanNetwork().getState(AspergillusIntracellularModel.STATUS) == AspergillusIntracellularModel.STERILE_CONIDIA || phagocytose){
             	if (!leukocyte.isDead()) {
             		if(leukocyte.getPhagosome().size() < leukocyte.getMaxCell()) {
                         //phagocyte.phagosome.hasConidia = true;

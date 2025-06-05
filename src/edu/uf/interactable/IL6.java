@@ -5,7 +5,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class IL6 extends Molecule{
     
@@ -16,7 +15,7 @@ public class IL6 extends Molecule{
 	private static IL6 molecule = null;
     
     protected IL6(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     

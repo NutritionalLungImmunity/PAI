@@ -8,7 +8,7 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Voxel;
 import edu.uf.control.MultiThreadExec;
 import edu.uf.interactable.Blood;
-import edu.uf.interactable.Hepcidin;
+import edu.uf.interactable.Heme;
 import edu.uf.interactable.IL10;
 import edu.uf.interactable.IL6;
 import edu.uf.interactable.Iron;
@@ -50,7 +50,7 @@ public class InitializeBaseModel extends Initialize{
     	TGFb tgfb = TGFb.getMolecule(diffuse);
     	MIP2 mip2 = MIP2.getMolecule(diffuse);
     	MIP1B mip1b = MIP1B.getMolecule(diffuse);
-    	//Heme heme = Heme.getMolecule(new double[1][xbin][ybin][zbin], null);
+    	//Heme heme = Heme.getMolecule(null);
     	//DNAse dnase = DNAse.getMolecule(new double[1][xbin][ybin][zbin], null, new int[] {});
     	//Granule gran = Granule.getMolecule(new double[1][xbin][ybin][zbin], diffuse);
     	

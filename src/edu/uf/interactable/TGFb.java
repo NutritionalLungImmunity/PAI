@@ -5,7 +5,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class TGFb extends Molecule{
 
@@ -14,8 +13,8 @@ public class TGFb extends Molecule{
 	
 	private static TGFb molecule = null;
 
-    private TGFb(double[][][][] qtty, Diffuse diffuse) {
-		super(qtty, diffuse);
+    private TGFb(double[][][][] qttys, Diffuse diffuse) {
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     

@@ -3,12 +3,15 @@ package edu.uf.Diffusion;
 public interface Diffuse {
 
 	/**
-	 * PDE solver for the diffusion problem. Solves the PDE in 3D for the state at index "index."
+	 * Solves the partial differential equation (PDE) for diffusion in 3D space, 
+	 * targeting the molecule state at the specified {@code index}.
 	 * <br/><br/>
-	 * Some molecules, such as siderophores, have more than one state (e.g., free/bound-to-iron). 
-	 * These states are accommodated into a fourth array dimension.
-	 * @param space
-	 * @param index
+	 * Some molecules—such as siderophores—can exist in multiple states 
+	 * (e.g., free or bound to iron). These states are represented as a fourth dimension 
+	 * in the array structure.
+	 *
+	 * @param space the 4D array representing molecule concentrations across space and state
+	 * @param index the index of the molecule state to solve for
 	 */
     public abstract void solver(double[][][][] space, int index);
     

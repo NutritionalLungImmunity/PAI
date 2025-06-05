@@ -6,22 +6,32 @@ import java.util.Date;
 import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.Chemokine;
-import edu.uf.interactable.Molecule;
 
 public class Util {
 	
 	/**
-	 * Computes the Michaelian kinetics given two reactants, "substrate1" and "substrate2" assuming Kcat = 1 and reaction volume  = 6.4e-11  (Voxel volume). 
-	 * This method treats the less concentrated as the enzyme and the more concentrated as the substrate.
-	 * <br/><br/>
-	 * v = (substrate1-concentration * substrate2-concentration) / (km + [more-concentrated-substrate])
-	 * <br/><br/>
-	 * substrate-concentration = substrate/6.4e-11 (For example, substrate1-concentration = substrate1/6.4e-11)
-	 * @param substrate1 a reactant
-	 * @param substrate2 another reactant
-	 * @param km Michaelian-constant
-	 * @param h integration factor
-	 * @return
+	 * Computes the reaction rate using Michaelis-Menten kinetics for two reactants, {@code substrate1} and {@code substrate2}, 
+	 * assuming {@code Kcat = 1} and a fixed reaction volume of {@code 6.4e-11} (i.e., the volume of a voxel).
+	 *
+	 * <p>The method treats the reactant with the lower concentration as the enzyme and the one with the higher concentration 
+	 * as the substrate.</p>
+	 *
+	 * <p>The rate is computed as:</p>
+	 * <pre>
+	 * v = ([S1] * [S2]) / (km + [substrate])
+	 * </pre>
+	 * where [S1] and [S2] are the concentrations of {@code substrate1} and {@code substrate2}, computed as:
+	 * <pre>
+	 * Concentrations are computed as:
+	 * [S1] = [S1] / 6.4e-11
+	 * [S2] = [S2] / 6.4e-11
+	 * </pre>
+	 *
+	 * @param substrate1 the first reactant
+	 * @param substrate2 the second reactant
+	 * @param km the Michaelis constant
+	 * @param h the integration factor
+	 * @return the computed reaction rate
 	 */
 	public static double michaelianKinetics(
 			double substrate1, 
@@ -32,19 +42,29 @@ public class Util {
 	}
 	
 	/**
-	 * Computes the Michaelian kinetics given two reactants, "substrate1" and "substrate2." 
-	 * This method treats the less concentrated as the enzyme and the more concentrated as the substrate.
-	 * <br/><br/>
-	 * v = (Kcat * substrate1-concentration * substrate2-concentration) / (km + [more-concentrated-substrate])
-	 * <br/><br/>
-	 * substrate-concentration = substrate/v (For example, substrate1-concentration = substrate1/v)
-	 * @param substrate1 a reactant
-	 * @param substrate2 another reactant
-	 * @param km Michaelian-constant
-	 * @param h integration factor
-	 * @param Kcat Catalitic-constant
-	 * @param v space volume (Usually the voxel volume - 6.4e-11 L)
-	 * @return
+	 * Computes the reaction rate using Michaelis-Menten kinetics for two reactants, {@code substrate1} and {@code substrate2}.
+	 *
+	 * <p>The method assumes one reactant acts as the enzyme (the less concentrated one) and the other as the substrate 
+	 * (the more concentrated one). Concentrations are derived from reactant amounts using the specified volume {@code v}.</p>
+	 *
+	 * <p>The reaction rate is calculated using the following equation:</p>
+	 * <pre>
+	 * v = (Kcat * [S1] * [S2]) / (km + [substrate])
+	 * </pre>
+	 * where [S1] and [S2] are the concentrations of {@code substrate1} and {@code substrate2}, computed as:
+	 * <pre>
+	 * * Concentrations are computed as:
+	 * [S1] = [S1] / v
+	 * [S2] = [S2] / v
+	 * </pre>
+	 *
+	 * @param substrate1 the first reactant
+	 * @param substrate2 the second reactant
+	 * @param km the Michaelis constant
+	 * @param h the integration factor
+	 * @param Kcat the catalytic constant
+	 * @param v the reaction volume (typically the voxel volume, e.g., 6.4e-11 L)
+	 * @return the computed reaction rate
 	 */
 	public static double michaelianKinetics(
 			double substrate1, 
@@ -84,29 +104,39 @@ public class Util {
 	}
 	
 	/**
-	 * Computes the function: p = 1 - exp(-(x/6.4e-11)/kd)
-	 * Where "p" is the probability of returning "true."
-	 * @param x
-	 * @param kd
-	 * @return
+	 * Computes the probability {@code p} using the function:
+	 * <pre>
+	 * p = 1 - exp(-(x / 6.4e-11) / kd)
+	 * </pre>
+	 * where {@code p} represents the probability of returning {@code true}.
+	 *
+	 * @param x  the molecule quantity or binding input
+	 * @param kd the dissociation constant
+	 * @return the computed probability {@code p}
 	 */
 	public static boolean activationFunction(double x, double kd) {
 		return activationFunction(x, kd, Constants.VOXEL_VOL);
 	}
 	
 	/**
-	 * Computes the function:
+	 * Computes a discrete activation level {@code y} based on the activation function:
+	 * 
 	 * <pre>
+	 * 		f(x) = 1 - exp(-(x / 6.4e-11) / kd)
+	 * 
 	 * 	    | 1 if f(x) <= 0.35
 	 *	    | 2 if f(x) >  0.35 & f(x) <= 0.69
 	 *	y = | 3 if f(x) >  0.69 & f(x) <= 0.90
 	 *	    | 4 if f(x) >  0.90
 	 *	    | 0 otherwise
 	 * </pre>
-	 * f(x) = 1 - exp(-(x/6.4e-11)/kd)
-	 * @param x quantity of activation molecule
-	 * @param kd of the activation molecule
-	 * @return
+	 *
+	 * <p>This method maps the continuous output of {@code f(x)} into a discrete range [0–4] to represent
+	 * graded activation levels.</p>
+	 *
+	 * @param x  the quantity of the activating molecule
+	 * @param kd the dissociation constant of the activating molecule
+	 * @return an integer between 0 and 4 representing the activation level
 	 */
 	public static int activationFunction5(double x, double kd) {
 		double d = activationFunction(x, kd, Constants.VOXEL_VOL, 1.0);
@@ -122,69 +152,100 @@ public class Util {
 	}
 	
 	/**
-	 * Computes the function: p = 1 - exp(-(x/v)/kd)
-	 * Where "p" is the probability of returning "true."
-	 * @param x
-	 * @param kd
-	 * @param v
-	 * @return
+	 * Computes the probability {@code p} using the function:
+	 * <pre>
+	 * p = 1 - exp(-(x / v) / kd)
+	 * </pre>
+	 * where {@code p} represents the probability of returning {@code true}.
+	 *
+	 * @param x  the quantity of the activating molecule
+	 * @param kd the dissociation constant
+	 * @param v  the volume in which the molecule is distributed (e.g., voxel volume)
+	 * @return the computed probability {@code p}
 	 */
 	public static boolean activationFunction(double x, double kd, double v) {
 		return activationFunction(x, kd, v, 1.0) > Rand.getRand().randunif();
 	}
 	
 	/**
-	 * Computes the function: y = 1 - b*exp(-(x/v)/kd)
-	 * @param x
-	 * @param kd
-	 * @param v
-	 * @param b
-	 * @return
+	 * Computes the function:
+	 * <pre>
+	 * y = 1 - b * exp(-(x / v) / kd)
+	 * </pre>
+	 * where {@code y} represents a scaled activation or probability-like output.
+	 *
+	 * @param x  the quantity of the activating molecule
+	 * @param kd the dissociation constant
+	 * @param v  the volume in which the molecule is distributed (e.g., voxel volume)
+	 * @param b  a scaling factor applied to the exponential term
+	 * @return the computed value {@code y}
 	 */
 	public static double activationFunction(double x, double kd, double v, double b) {
 		return activationFunction(x, kd, v, b, 1);
 	}
 	
 	/**
-	 * Computes the function: y = h * (1 - b*exp(-(x/v)/kd))
-	 * @deprecated: this function  should not be used unless h = 1.
-	 * @param x
-	 * @param kd
-	 * @param v
-	 * @param b
-	 * @param h integration factor
-	 * @return
+	 * Computes the function:
+	 * <pre>
+	 * y = h * (1 - b * exp(-(x / v) / kd))
+	 * </pre>
+	 * 
+	 * <p>This function models a scaled response or activation signal based on Michaelis-Menten-like kinetics, 
+	 * with an additional scaling factor {@code h}.</p>
+	 *
+	 * @deprecated This method should not be used unless {@code h = 1}, as the integration factor may introduce unintended behavior.
+	 *
+	 * @param x  the quantity of the activating molecule
+	 * @param kd the dissociation constant
+	 * @param v  the volume in which the molecule is distributed (e.g., voxel volume)
+	 * @param b  a scaling factor applied to the exponential term
+	 * @param h  the integration factor
+	 * @return the computed value {@code y}
 	 */
 	public static double activationFunction(double x, double kd, double v, double b, double h) {
 		x = x/v;
 		return h * (1 - b*Math.exp(-(x/kd)));
 	}
-	 /**
-	  * computes the function: p = 1 - exp(-x*dt/kd).
-	  * Where "p" is the probability of returning "true."
-	  * <strong> x is the concentration. Not quantity. 
-	  * <br/><br/>
-	  * Not used!</strong>
-	  * @param x concentration
-	  * @param kd
-	  * @param dt time interval (probably usually 2 min).
-	  * @return
-	  */
+	
+	/**
+	 * Computes the probability {@code p} using the function:
+	 * <pre>
+	 * p = 1 - exp(-x * dt / kd)
+	 * </pre>
+	 * where {@code p} represents the probability of returning {@code true}.
+	 *
+	 * <p><strong>Note:</strong> {@code x} represents the concentration (not quantity), and {@code dt} is the time interval 
+	 * (typically around 2 minutes).</p>
+	 *
+	 * <p><strong>Warning: This method is currently not used.</strong></p>
+	 *
+	 * @param x  the concentration of the activating molecule
+	 * @param kd the dissociation constant
+	 * @param dt the time interval over which the probability is evaluated
+	 * @return the computed probability {@code p}
+	 */
 	public static boolean ctActivationFunction(double x, double kd, double dt) {
 		return (1 - Math.exp(-(x*dt/kd))) > Rand.getRand().randunif();
 	}
 	
 	/**
-	 * compute the function: y = h * (1 - b + b * exp(-(x/v)/kd))
-	 * <br/><br/>
-	 * <strong>Not used!</strong>
-	 * @deprecated: this function should not be used unless h = 1;
-	 * @param x
-	 * @param kd
-	 * @param v
-	 * @param b
-	 * @param h integration factor
-	 * @return
+	 * Computes the function:
+	 * <pre>
+	 * y = h * (1 - b + b * exp(-(x / v) / kd))
+	 * </pre>
+	 * 
+	 * <p>This function represents a scaled response that incorporates both decay and amplification terms.</p>
+	 *
+	 * <p><strong>Not used!</strong></p>
+	 *
+	 * @deprecated This function should not be used unless {@code h = 1}, as the integration factor may produce unintended results.
+	 *
+	 * @param x  the quantity of the activating molecule
+	 * @param kd the dissociation constant
+	 * @param v  the reaction volume (e.g., voxel volume)
+	 * @param b  a scaling factor applied to the exponential term
+	 * @param h  the integration factor
+	 * @return the computed value {@code y}
 	 */
 	public static double inactivationFunction1(double x, double kd, double v, double b, double h) {
 		x = x/v;
@@ -244,13 +305,16 @@ public class Util {
     
     
     /**
-     * Given an initial amount of Fe, Apo-Tf, and TfFe computes the final relative amount of TfFe, 
-     * supposing that all the Fe, up to the maximum Transferrin (Tf) capacity, will be chelated. 
-     * This method uses a 3rd-degree polynomial as a surrogate model.  
-     * @param iron
-     * @param Tf
-     * @param TfFe
-     * @return
+     * Estimates the final relative amount of transferrin-bound iron (TfFe) given initial amounts of free iron, 
+     * apo-transferrin (Tf), and existing TfFe, assuming that all available iron (up to the transferrin binding capacity) 
+     * will be chelated.
+     *
+     * <p>This method uses a third-degree polynomial surrogate model to approximate the outcome.</p>
+     *
+     * @param iron the initial amount of free iron
+     * @param Tf   the initial amount of apo-transferrin (unbound transferrin)
+     * @param TfFe the initial amount of iron-bound transferrin
+     * @return the final relative amount of TfFe after chelation
      */
     public static double ironTfReaction(double iron, double Tf, double TfFe) {
         double totalBindingSite = 2*(Tf + TfFe); //# That is right 2*(Tf + TfFe)!
@@ -266,17 +330,22 @@ public class Util {
     }
     
     /**
-     * Given approximate coordinates, find a voxel where those coordinates belong. 
-     * <strong>WARNING: This method may not work and even prevent some features of 
-     * periodic boundary conditions.</strong>
-     * @param x
-     * @param y
-     * @param z
-     * @param xbin
-     * @param ybin
-     * @param zbin
-     * @param grid
-     * @return
+     * Attempts to locate the voxel corresponding to the given approximate spatial coordinates.
+     *
+     * <p>This method uses the provided coordinates and binning resolution to identify the voxel 
+     * in the 3D {@code grid} that contains the point ({@code x}, {@code y}, {@code z}).</p>
+     *
+     * <p><strong>WARNING:</strong> This method may be unreliable and could interfere with features 
+     * that rely on periodic boundary conditions.</p>
+     *
+     * @param x     the x-coordinate
+     * @param y     the y-coordinate
+     * @param z     the z-coordinate
+     * @param xbin  the bin size along the x-axis
+     * @param ybin  the bin size along the y-axis
+     * @param zbin  the bin size along the z-axis
+     * @param grid  the 3D voxel grid
+     * @return the voxel corresponding to the given coordinates, or {@code null} if not found
      */
     public static Voxel findVoxel(double x, double y, double z, int xbin, int ybin, int zbin, Voxel[][][] grid) {
     	int xx = (int) x;
@@ -288,11 +357,12 @@ public class Util {
     }
     
     /**
-     * Select the chemokine that attracts cell "cell" and compute its 
-     * chemoattractive power given its concentration. 
-     * @param voxel
-     * @param agent
-     * @return
+     * Selects the chemokine that attracts the given {@code agent} and computes its chemoattractive 
+     * strength based on the chemokine's concentration in the specified {@code voxel}.
+     *
+     * @param voxel the voxel in which the chemokine concentration is measured
+     * @param agent the cell or agent being evaluated for chemoattraction
+     * @return the computed chemoattractive power for the agent in the given voxel
      */
     public static double getChemoattraction(Voxel voxel, Cell agent) {
     	if(agent.attractedBy() == null)
@@ -303,11 +373,15 @@ public class Util {
     }
     
     /**
-     * Computes the weights of the voxels in the neighborhood of the Voxel 
-     * in which the cell "agent" is currently in. The weights are proportional 
-     * to the concentration of chemokine in each voxel. 
-     * @param voxel
-     * @param agent
+     * Computes the weights of neighboring voxels based on the concentration of the chemokine 
+     * that attracts the given {@code agent}.
+     *
+     * <p>The weights are assigned proportionally to the chemokine concentration in each neighboring voxel 
+     * relative to the voxel in which the {@code agent} currently resides. These weights are typically used 
+     * to bias movement or behavioral decisions based on chemotactic gradients.</p>
+     *
+     * @param voxel the current voxel occupied by the agent
+     * @param agent the cell or agent influenced by chemokine concentration
      */
     public static void calcDriftProbability(Voxel voxel, Cell agent) {
     	
@@ -329,19 +403,21 @@ public class Util {
     }
     
     /**
-     * Select a voxel in the neighborhood of the Voxel in which the cell "agent" 
-     * is currently in. The probability of a voxel being selected is proportional 
-     * to its weight. The weight must have been computed with "calcDriftProbability" 
-     * and is proportional to the concentration of chemokine in the voxel. 
-     * This method works as a roulette. "P" is a random number between 
-     * zero and sum(weight-in-the-neighbohood). The method iterates through the voxels 
-     * in the neighborhood and sums their weights into a variable "cumP" as soon as 
-     * "cumP" becomes larger or equal to "P" that voxel is selected. 
-     * @param voxel the current Voxel. The current Voxel is also considered a neighbor of itself in this method.
-     * @param P a random number between zero and sum(weight-in-the-neighbohood) for the roulette.
-     * @return
+     * Selects a voxel from the neighborhood of the given {@code voxel} based on chemokine-driven weights.
+     *
+     * <p>The probability of selecting each neighboring voxel (including the current one) is proportional 
+     * to its chemokine-derived weight, which must have been previously computed using {@code calcDriftProbability}.</p>
+     *
+     * <p>This method implements a weighted roulette-wheel selection:  
+     * a random number {@code P} is drawn from the interval {@code [0, totalWeight]}, where {@code totalWeight} is 
+     * the sum of weights in the neighborhood. The method iterates over the neighboring voxels, 
+     * accumulating weights into {@code cumP}, and selects the first voxel for which {@code cumP >= P}.</p>
+     *
+     * @param voxel the current voxel (also included as part of its own neighborhood)
+     * @param P     a random number in the range [0, totalWeight] used for roulette selection
+     * @return the selected voxel based on weighted probability
      */
-    public static Voxel getVoxel(Voxel voxel, double P) {
+    public static Voxel getVoxel(Voxel voxel, double P) { 
     	//System.out.println("# " + P + " " + voxel.getP());
         double cumP = voxel.getP();
         if(P <= cumP) 

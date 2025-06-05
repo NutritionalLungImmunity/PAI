@@ -6,37 +6,37 @@ import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 
-public class IL23 extends Molecule{
+public class IL13 extends Molecule{
 	
-	public static final String NAME = "IL23";
+	public static final String NAME = "IL13";
 	public static final int NUM_STATES = 1;
 	
-	private static IL23 molecule = null;
+	private static IL13 molecule = null;   
     
-    private IL23(double[][][][] qttys, Diffuse diffuse) {
+    private IL13(double[][][][] qttys, Diffuse diffuse) {
     	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
-    public static IL23 getMolecule(Diffuse diffuse) {
+    public static IL13 getMolecule(Diffuse diffuse) {
     	if(molecule == null) {
     		double[][][][] values = new double[NUM_STATES][GridFactory.getXbin()][GridFactory.getYbin()][GridFactory.getZbin()];
-    		molecule = new IL23(values, diffuse); 
+    		molecule = new IL13(values, diffuse); 
     	}
     	return molecule;
     }
     
-    public static IL23 getMolecule() {
+    public static IL13 getMolecule() {
     	return getMolecule(null);
     }
     
     @Override
     public double getKd() {
-    	return Constants.Kd_IL23;
+    	return Constants.IL13_Kd;
     }
     
     public void degrade() {
-    	degrade(Constants.TNF_HALF_LIFE, 0);
+    	degrade(Constants.IL13_HALF_LIFE, 0);
     }
 
     public int getIndex(String str) {
@@ -48,12 +48,14 @@ public class IL23 extends Molecule{
     }
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
-        if (interactable instanceof DeltaGammaT) 
-        	return Interactions.bind((Cell) interactable, this, x, y, z, 0);
-        
-        if (interactable instanceof Macrophage) 
-        	return Interactions.secrete((Leukocyte) interactable, this, Constants.MA_IL23_QTTY, x, y, z, 0);
-        
+        if (interactable instanceof Macrophage) {
+        	Cell cell = (Cell) interactable;
+        	if (!cell.isDead()) { 
+        		Interactions.secrete(cell, this, Constants.MA_IL10_QTTY, x, y, z, 0);
+        		Interactions.bind(cell, this, x, y, z, 0);
+            }
+        	return true;
+        }
         return interactable.interact(this, x, y, z);
     }
 
@@ -64,7 +66,7 @@ public class IL23 extends Molecule{
 
 	@Override
 	public double getThreshold() {
-		return 0;
+		return -1;
 	}
 
 	@Override
@@ -76,5 +78,4 @@ public class IL23 extends Molecule{
 	public boolean isTime() {
 		return true;
 	}
-	
 }

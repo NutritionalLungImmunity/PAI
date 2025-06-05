@@ -3,7 +3,6 @@ package edu.uf.main.run;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.List;
 
 import edu.uf.compartments.GridFactory;
 import edu.uf.compartments.Recruiter;

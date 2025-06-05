@@ -1,15 +1,7 @@
 package edu.uf.interactable;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
-import edu.uf.interactable.Interactable;
-import edu.uf.interactable.Macrophage;
-import edu.uf.interactable.Molecule;
-import edu.uf.interactable.TLRBinder;
-import edu.uf.interactable.Neutrophil; //WARNING!! It uses to be .covid.Neutrophil
-import edu.uf.interactable.PneumocyteII; //WARNING!! It uses to be .covid.Pneumocyte
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -21,7 +13,7 @@ public class LPS extends Molecule {
 	private static LPS molecule = null;
     
     protected LPS(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static LPS getMolecule(Diffuse diffuse) {

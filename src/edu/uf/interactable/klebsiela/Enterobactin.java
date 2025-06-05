@@ -23,7 +23,7 @@ public class Enterobactin extends Siderophore {
     
     
     private Enterobactin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Enterobactin getMolecule(Diffuse diffuse) {

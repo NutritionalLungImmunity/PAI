@@ -3,10 +3,8 @@ package edu.uf.interactable;
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Afumigatus.Afumigatus;
-import edu.uf.interactable.invitro.Invitro;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class Heme extends Molecule{
 
@@ -21,7 +19,7 @@ public class Heme extends Molecule{
   
     
     private Heme(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Heme getMolecule(Diffuse diffuse) {

@@ -65,8 +65,8 @@ public class AspergillusIntracellularModel extends IntracellularModel{
     	
     }
 
-    static int i = 0;
-    static int j = 0;
+    //static int i = 0;
+    //static int j = 0;
 	@Override
 	public void updateStatus(int id, int x, int y, int z) {
 		Afumigatus asp = (Afumigatus) Cell.get(id);
@@ -77,12 +77,12 @@ public class AspergillusIntracellularModel extends IntracellularModel{
 		//System.out.println(this.hasPhenotype(RESTING_CONIDIA));
 		//System.out.println(Constants.PR_ASPERGILLUS_CHANGE);
 		//System.out.println(Rand.getRand().randunif());
-		if(this.getState(STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING)j++;
+		//if(this.getState(STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING)j++;
         if(this.getState(STATUS) == AspergillusIntracellularModel.RESTING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_SWELLING && Rand.getRand().randunif() < Constants.PR_ASPERGILLUS_CHANGE) { 
             this.setState(STATUS, AspergillusIntracellularModel.SWELLING_CONIDIA);
             Afumigatus.incTotalCells(2);
 			Afumigatus.decTotalCells(1);
-			i++;
+			//i++;
 			//System.out.println(i/((double)j));
         }else if(!asp.isEngaged() && this.getState(STATUS) == AspergillusIntracellularModel.SWELLING_CONIDIA && asp.getClock().getCount() >= Constants.ITER_TO_GERMINATE) {
             this.setState(STATUS, AspergillusIntracellularModel.GERM_TUBE);

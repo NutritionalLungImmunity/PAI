@@ -2,7 +2,6 @@ package edu.uf.intracellularState.Klebsiella;
 
 import edu.uf.interactable.IFN_I;
 import edu.uf.interactable.IFN_II;
-import edu.uf.interactable.klebsiela.Klebsiella;
 import edu.uf.intracellularState.IntracellularModel;
 
 public class NKKlebsiella extends IntracellularModel{
@@ -17,10 +16,9 @@ public class NKKlebsiella extends IntracellularModel{
 
 	@Override
 	public void processBooleanNetwork(int... args) {
-		this.booleanNetwork[0] = input(IFN_I.getMolecule());
+		this.booleanNetwork[0] = getInput(IFN_I.getMolecule());
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

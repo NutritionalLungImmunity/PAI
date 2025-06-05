@@ -21,7 +21,7 @@ public class Yersiniabactin extends Siderophore{
     
     
     private Yersiniabactin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Yersiniabactin getMolecule(Diffuse diffuse) {

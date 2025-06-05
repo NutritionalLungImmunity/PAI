@@ -5,10 +5,8 @@ import java.util.Map;
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.AspergillusMacrophage;
-import edu.uf.intracellularState.FMacrophageBooleanNetwork;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 
 public class Transferrin extends Molecule{
@@ -30,7 +28,7 @@ public class Transferrin extends Molecule{
     }
     
     private Transferrin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Transferrin getMolecule(Diffuse diffuse) {
@@ -50,6 +48,9 @@ public class Transferrin extends Molecule{
     	return Constants.Kd_TfR2;
     }
     
+    /**
+     * Disabled.
+     */
     public void turnOver(int x, int y, int z) {}
     
     /**

@@ -5,7 +5,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class IFN_II extends Molecule{
 	
@@ -15,7 +14,7 @@ public class IFN_II extends Molecule{
 	private static IFN_II molecule = null;
     
     private IFN_II(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     

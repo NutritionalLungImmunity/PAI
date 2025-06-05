@@ -4,7 +4,6 @@ import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class Hepcidin extends Molecule{
 
@@ -14,7 +13,7 @@ public class Hepcidin extends Molecule{
 	private static Hepcidin molecule = null;    
     
     private Hepcidin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Hepcidin getMolecule(Diffuse diffuse) {

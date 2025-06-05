@@ -5,7 +5,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class TNFa extends Molecule{
 
@@ -15,7 +14,7 @@ public class TNFa extends Molecule{
 	private static TNFa molecule = null;
     
     private TNFa(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     
@@ -50,7 +49,7 @@ public class TNFa extends Molecule{
 
     protected boolean templateInteract(Interactable interactable, int x, int y, int z) {
         if (interactable instanceof Macrophage) {
-        	Interactions.secrete((Leukocyte) interactable, this, Constants.MA_TNF_QTTY, x, y, z, 0);
+        	//Interactions.secrete((Leukocyte) interactable, this, Constants.MA_TNF_QTTY, x, y, z, 0);
             return Interactions.bind((Leukocyte) interactable, this, x, y, z, 0);
         }
         if (interactable instanceof Neutrophil) { 

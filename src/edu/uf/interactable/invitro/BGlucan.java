@@ -1,17 +1,13 @@
 package edu.uf.interactable.invitro;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Interactable;
-import edu.uf.interactable.MCP1;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
 //import edu.uf.interactable.covid.DAMP;
 import edu.uf.interactable.Neutrophil;  //WARNING!! It uses to be .covid.Neutrophil
 import edu.uf.interactable.PneumocyteII;  //WARNING!! It uses to be .covid.Pneumocyte
-import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -23,7 +19,7 @@ public class BGlucan extends Molecule{
 	private static BGlucan molecule = null;
     
     protected BGlucan(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static BGlucan getMolecule(Diffuse diffuse) {

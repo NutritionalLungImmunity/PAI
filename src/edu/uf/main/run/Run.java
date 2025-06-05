@@ -12,20 +12,21 @@ public interface Run {
 	public static final List<Integer> L = Arrays.asList(0,1,2,3);
 	
 	/**
-	 * Runs the simulation. The simulator must have been initialized. 
-	 * The grid must have been created, and the cells, the molecules, 
-	 * the recruiters, and the class-to-print statistics must have been 
-	 * initialized. 
-	 * @param iterations number of iterations to run the simulation.
-	 * @param xbin 
-	 * @param ybin
-	 * @param zbin
-	 * @param recruiters array of recruiters (e.g., MacrophageRecruiter, NeutrophilRecruiter, etc)
-	 * @param printLattice (Boolean) if true prints the lattice.
-	 * @param outputFile (Optional) can be null. If provided prints the statistics into a file. If not prints into the screen.
-	 * @param nthreads Only for RunMultiThread, otherwise use -1. Number of threads to run the code.
-	 * @param printStat class handling the statistics output format.
-	 * @throws InterruptedException
+	 * Runs the simulation for a specified number of iterations.
+	 *
+	 * <p>Before calling this method, the simulator must be properly initialized, including the creation 
+	 * of the grid, cells, molecules, recruiters, and the statistics output handler.</p>
+	 *
+	 * @param iterations   the number of iterations to run the simulation
+	 * @param xbin         x-axis length
+	 * @param ybin         y-axis length
+	 * @param zbin         z-axis length
+	 * @param recruiters   an array of recruiter objects (e.g., {@code MacrophageRecruiter}, {@code NeutrophilRecruiter}, etc.)
+	 * @param printLattice whether to print the lattice at each iteration
+	 * @param outputFile   optional file for outputting statistics; if {@code null}, statistics will be printed to the screen
+	 * @param nthreads     number of threads to use (only applicable in {@code RunMultiThread}; use {@code -1} otherwise)
+	 * @param printStat    the class responsible for formatting and outputting statistics
+	 * @throws InterruptedException if the simulation is interrupted during execution
 	 */
 	public void run(
 			int iterations, 

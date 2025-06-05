@@ -20,7 +20,7 @@ public class Salmochelin extends Siderophore{
     
     
     private Salmochelin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Salmochelin getMolecule(Diffuse diffuse) {

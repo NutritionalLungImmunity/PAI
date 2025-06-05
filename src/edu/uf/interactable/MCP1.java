@@ -15,7 +15,7 @@ public class MCP1 extends Chemokine{
     private static MCP1 molecule = null; 
 
     private MCP1(double[][][][] qttys, Diffuse diffuse) {
-        super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
         Macrophage.setChemokine(MCP1.NAME);
         this.setPhenotye(Phenotype.createPhenotype());
     }

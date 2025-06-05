@@ -3,7 +3,6 @@ package edu.uf.main.initialize;
 import java.util.List;
 
 import edu.uf.Diffusion.Diffuse;
-import edu.uf.compartments.Voxel;
 import edu.uf.interactable.PneumocyteII;
 
 public class InitializeBaseInvitroModel extends InitializeBaseModel{

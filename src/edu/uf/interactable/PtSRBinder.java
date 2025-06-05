@@ -4,20 +4,20 @@ import edu.uf.utils.Id;
 
 /**
  * This class is a wildcard non-interactable Binder used to implicitly represent any molecule that 
- * binds TLR, especially TLR4 (e.g., LPS - although currently there is an LPS Molecule class). 
+ * binds Phosphatidil-Serine (PtSR). 
  * @author henriquedeassis
  *
  */
-public class TLRBinder implements Binder{
+public class PtSRBinder implements Binder{
 	private static int id;
-	private static TLRBinder binder;
+	private static PtSRBinder binder;
 	static {
 		id = Id.getId();
 	}
 	
-	public static TLRBinder getBinder() {
+	public static PtSRBinder getBinder() {
 		if(binder == null) {
-			binder = new TLRBinder();
+			binder = new PtSRBinder();
 		}
 		return binder;
 	}

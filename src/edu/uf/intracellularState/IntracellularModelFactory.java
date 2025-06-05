@@ -21,11 +21,13 @@ public class IntracellularModelFactory {
 	public static final String NK_KLEBSIELLA_MODEL= NKKlebsiella.name;
 	
 	/**
-	 * Creates an "IntracellularModel" object. The string "network" identifies the desired implementation. 
-	 * Valid values for the string "network" are provided by the constants of this class. 
-	 * @param network
-	 * @return A "IntracellularModel" object with the implementation designated by the string 
-	 * "network" if this is a valid string; null otherwise. 
+	 * Creates and returns an {@link IntracellularModel} object based on the specified implementation name.
+	 *
+	 * <p>The {@code network} parameter identifies the desired implementation. Valid values are defined 
+	 * as constants within this class.</p>
+	 *
+	 * @param network the name of the intracellular model implementation to instantiate
+	 * @return an {@link IntracellularModel} corresponding to the given name if valid; {@code null} otherwise
 	 */
 	public static IntracellularModel createBooleanNetwork(String network) {
 		if(network.contentEquals(ASPERGILLUS_MACROPHAGE))

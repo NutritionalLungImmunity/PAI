@@ -20,8 +20,8 @@ public abstract class Siderophore extends Molecule{
     }
     
     
-    protected Siderophore(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    protected Siderophore(double[][][][] qttys, Diffuse diffuse, String name) {
+		super(qttys, diffuse, name);
 	}
     
     

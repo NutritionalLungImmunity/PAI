@@ -1,6 +1,5 @@
 package edu.uf.interactable;
 
-import edu.uf.compartments.Voxel;
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
@@ -11,7 +10,7 @@ public class NK extends Cell{
 
 	public static final String NAME = "NK";
 	private static int totalCells = 0;
-	private static int interactionId = Id.getMoleculeId();
+	private static int interactionId = Id.getId();
 
 	public NK(IntracellularModel model) {
 		super(model);

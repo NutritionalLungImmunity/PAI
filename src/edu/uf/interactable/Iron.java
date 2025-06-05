@@ -4,7 +4,6 @@ import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.primitives.Interactions;
-import edu.uf.utils.Constants;
 
 public class Iron extends Molecule{
 
@@ -14,7 +13,7 @@ public class Iron extends Molecule{
 	private static Iron molecule = null; 
     
     private Iron(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Iron getMolecule(Diffuse diffuse) {

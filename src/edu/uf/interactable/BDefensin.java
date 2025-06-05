@@ -6,7 +6,6 @@ import edu.uf.interactable.klebsiela.Klebsiella;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class BDefensin extends Molecule{
 
@@ -16,7 +15,7 @@ public class BDefensin extends Molecule{
 	private static BDefensin molecule = null;
     
     private BDefensin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     

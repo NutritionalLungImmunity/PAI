@@ -5,11 +5,9 @@ import java.util.Map;
 
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
-import edu.uf.interactable.Afumigatus.TAFC;
 import edu.uf.intracellularState.Phenotype;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class Lipocalin2 extends Molecule{
 	
@@ -27,7 +25,7 @@ private static final Map<String, Integer> INDEXES;
     }
     
     private Lipocalin2(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     

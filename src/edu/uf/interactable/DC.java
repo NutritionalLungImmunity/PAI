@@ -6,7 +6,6 @@ import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Rand;
-import edu.uf.utils.Util;
 
 public class DC extends Leukocyte{
 
@@ -19,7 +18,7 @@ public class DC extends Leukocyte{
     
     private int maxMoveStep;
     private boolean engaged;
-    private static int interactionId = Id.getMoleculeId();
+    private static int interactionId = Id.getId();
     
     
 	public DC(IntracellularModel network) {

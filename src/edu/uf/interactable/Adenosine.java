@@ -4,8 +4,6 @@ import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Id;
-import edu.uf.utils.Util;
 
 public class Adenosine extends Molecule{
 
@@ -15,7 +13,7 @@ public class Adenosine extends Molecule{
 	private static Adenosine molecule = null;    
     
     private Adenosine(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+		super(qttys, diffuse, NAME);
 	}
     
     public static Adenosine getMolecule(Diffuse diffuse) {

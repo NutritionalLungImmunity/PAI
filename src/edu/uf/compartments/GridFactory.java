@@ -14,11 +14,12 @@ public class GridFactory {
 	
 	/**
 	 * Sets the parameters of the voxel grid.
-	 * @param xbin size of the grid on the x-axis
-	 * @param ybin size of the grid on the y-axis
-	 * @param zbin size of the grid on the z-axis
-	 * @param numSamples number of Interactable objects to sample for interactions. (Usually -1: all).
-	 * @param kind kind of grid. Either "PERIODIC_GRID" or not.
+	 *
+	 * @param xbin the size of the grid along the x-axis
+	 * @param ybin the size of the grid along the y-axis
+	 * @param zbin the size of the grid along the z-axis
+	 * @param numSamples the number of Interactable objects to sample for interactions (usually -1 for all)
+	 * @param kind the type of grid; either "PERIODIC_GRID" or another value
 	 */
 	public static void set(int xbin, int ybin, int zbin, int numSamples, String kind) {
 		GridFactory.xbin = xbin;
@@ -41,10 +42,11 @@ public class GridFactory {
 	}
 
 	/**
-	 * Create a 3D voxel array if one does not exist. Returns the 3D voxel array 
-	 * if it has been previously created. Before creating the voxel array, make 
-	 * sure that the parameters are set using the method "set."
-	 * @return
+	 * Creates a 3D voxel array if one does not already exist. Returns the 3D voxel array 
+	 * if it has been previously created. Before calling this method, ensure that the 
+	 * parameters have been set using the {@code set} method.
+	 *
+	 * @return the 3D voxel array
 	 */
 	public static Voxel[][][] getGrid(){
 		if(grid == null) {

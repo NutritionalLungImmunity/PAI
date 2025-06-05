@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import edu.uf.interactable.Cell;
 import edu.uf.interactable.IL1;
 import edu.uf.interactable.Lactoferrin;
 import edu.uf.interactable.MIP2;
@@ -34,7 +33,6 @@ public class NeutrophilNetwork extends IntracellularModel{
     public static final int PYROPTOTIC = Phenotype.createPhenotype();
 	
 	{
-		this.inputs = new int[NUM_RECEPTORS];
 		this.booleanNetwork = new int[size];
 	}
 	
@@ -51,7 +49,7 @@ public class NeutrophilNetwork extends IntracellularModel{
 			for(int i : array) {
 				switch(i) {
 					case 0:
-						this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | input(IL1.getMolecule());
+						this.booleanNetwork[IL1R] = this.booleanNetwork[IL1B] | getInput(IL1.getMolecule());
 						break;
 					case 1:
 						this.booleanNetwork[NFkB] = (this.booleanNetwork[IL1R] | this.booleanNetwork[TNFR] | this.booleanNetwork[CXCL2R]) ;
@@ -63,13 +61,13 @@ public class NeutrophilNetwork extends IntracellularModel{
 						this.booleanNetwork[IL1B] = this.booleanNetwork[NFkB];
 						break;
 					case 4:
-						this.booleanNetwork[TNFR] = input(TNFa.getMolecule());
+						this.booleanNetwork[TNFR] = getInput(TNFa.getMolecule());
 						break;
 					case 5:
 						this.booleanNetwork[Dectin] = 0;//e(B_GLUC);
 						break;
 					case 6:
-						this.booleanNetwork[CXCL2R] = input(MIP2.getMolecule());
+						this.booleanNetwork[CXCL2R] = getInput(MIP2.getMolecule());
 						break;
 					default:
 						System.err.println("No such interaction " + i + "!");
@@ -78,9 +76,7 @@ public class NeutrophilNetwork extends IntracellularModel{
 			}
 		}
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
-		
+		this.inputs.clear();
 		this.clearPhenotype();
 		this.computePhenotype();
 		

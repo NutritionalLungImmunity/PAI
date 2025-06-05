@@ -22,7 +22,7 @@ public class TAFC extends Siderophore{
     
     
     private TAFC(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static TAFC getMolecule(Diffuse diffuse) {

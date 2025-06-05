@@ -28,7 +28,6 @@ public class NeutrophilStateModel extends IntracellularModel{
 	public static final int NETOTIC = 3;
 	
 	{
-		this.inputs = new int[NUM_RECEPTORS];
 		this.booleanNetwork = new int[size];
 	}
 	
@@ -51,7 +50,7 @@ public class NeutrophilStateModel extends IntracellularModel{
 			for(int i : array) {
 				switch(i) {
 					case 0:
-						this.booleanNetwork[ACTIVE] = input(Afumigatus.DEF_OBJ) | input(TLRBinder.getBinder()) | this.booleanNetwork[ACTIVE];
+						this.booleanNetwork[ACTIVE] = getInput(Afumigatus.DEF_OBJ) | getInput(TLRBinder.getBinder()) | this.booleanNetwork[ACTIVE];
 						break;
 					case 1:
 						
@@ -77,8 +76,7 @@ public class NeutrophilStateModel extends IntracellularModel{
 			}
 		}
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

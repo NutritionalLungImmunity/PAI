@@ -1,15 +1,10 @@
 package edu.uf.interactable.invitro;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Interactable;
-import edu.uf.interactable.MCP1;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Molecule;
-import edu.uf.interactable.Neutrophil;
-import edu.uf.interactable.TNFa;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Util;
 
@@ -21,7 +16,7 @@ public class GM_CSF extends Molecule{
 	private static GM_CSF molecule = null;
     
     private GM_CSF(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static GM_CSF getMolecule(Diffuse diffuse) {

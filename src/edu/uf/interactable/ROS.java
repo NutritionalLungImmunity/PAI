@@ -5,7 +5,6 @@ import edu.uf.compartments.GridFactory;
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
-import edu.uf.utils.Util;
 
 public class ROS extends Molecule{
 
@@ -15,7 +14,7 @@ public class ROS extends Molecule{
 	private static ROS molecule = null;
     
     protected ROS(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static ROS getMolecule(Diffuse diffuse) {

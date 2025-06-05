@@ -2,7 +2,6 @@ package edu.uf.main.run;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.List;
 
 import edu.uf.compartments.Recruiter;
 import edu.uf.control.Exec;
@@ -11,6 +10,10 @@ import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.main.print.PrintStat;
 
 public class RunSingleThread implements Run{
+	
+	public static long eNextTime = 0;
+	public static long recruitTime = 0;
+	public static long diffusionTime = 0;
 
 	@Override
 	public void run(
@@ -32,12 +35,22 @@ public class RunSingleThread implements Run{
                 return;
             for (int ii : L) {
 
-                if (ii == 0) 
+                if (ii == 0) {
+                	long start = System.currentTimeMillis();
                     Exec.next(xbin, ybin, zbin);
-                else if (ii == 1)
+                    long end = System.currentTimeMillis();
+                    eNextTime += (end - start);
+                }else if (ii == 1) {
+                	long start = System.currentTimeMillis();
                 	Exec.recruit(recruiters);
-                else if (ii == 2) 
+                	long end = System.currentTimeMillis();
+                	recruitTime += (end - start);
+                }else if (ii == 2) {
+                	long start = System.currentTimeMillis();
                 	Exec.diffusion();
+                	long end = System.currentTimeMillis();
+                	diffusionTime += (end - start);
+                }
             }
             
             /*if(k==360) {

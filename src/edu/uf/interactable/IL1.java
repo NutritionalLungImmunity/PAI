@@ -17,7 +17,7 @@ public class IL1 extends Molecule{
 	public boolean hasInteractWithLiver = false;
     
     private IL1(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 		this.setPhenotye(Phenotype.createPhenotype());
 	}
     

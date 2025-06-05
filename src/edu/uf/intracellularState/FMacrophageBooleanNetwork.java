@@ -6,12 +6,18 @@ import java.util.List;
 import java.util.Random;
 
 import edu.uf.interactable.Hepcidin;
+import edu.uf.interactable.IFN_I;
+import edu.uf.interactable.IFN_II;
 import edu.uf.interactable.IL1;
 import edu.uf.interactable.IL10;
+import edu.uf.interactable.IL4;
+import edu.uf.interactable.Molecule;
+import edu.uf.interactable.PtSRBinder;
 import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TLRBinder;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.Afumigatus.Afumigatus;
+import edu.uf.interactable.invitro.BGlucan;
 //import edu.uf.interactable.covid.SAMP;
 import edu.uf.interactable.invitro.GM_CSF;
 import edu.uf.utils.Constants;
@@ -60,7 +66,6 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 	//public static final int FNP = 28; //IN THE OUTER CLASS!
 	
 	{
-		this.inputs = new int[NUM_RECEPTORS];
 		this.booleanNetwork = new int[size];
 	}
 	
@@ -68,7 +73,7 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 	
 	@Override
 	public void processBooleanNetwork(int... args) {
-
+		
 		int k = 0;
 		List<Integer> array = new ArrayList<>(size);
 		for(int i = 0; i < size; i++)
@@ -79,30 +84,28 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 			for(int i : array) {
 				switch(i) {
 					case 0:
-						this.booleanNetwork[IFNGR] = this.booleanNetwork[IFNB];// | e(this.inputs, IFNG_e);
+						this.booleanNetwork[IFNGR] = max(this.booleanNetwork[IFNB], getInput(Molecule.searchMolecule(IFN_II.NAME)));
 						break;
 					case 1:
-						this.booleanNetwork[CSF2Ra] = input(GM_CSF.getMolecule());
+						this.booleanNetwork[CSF2Ra] = getInput(Molecule.searchMolecule("GM_CSF"));
 						break;
 					case 2:
-						this.booleanNetwork[IL1R] = max(this.booleanNetwork[IL1B], input(IL1.getMolecule()));
+						this.booleanNetwork[IL1R] = max(this.booleanNetwork[IL1B], getInput(Molecule.searchMolecule(IL1.NAME)));
 						break;
 					case 3:
-						/*this.booleanNetwork[TLR4] = (e(this.inputs, LPS_e) | (e(this.inputs, Heme_e) & 
-								(-e(this.inputs, Hpx_e) + N)) | e(this.inputs, DAMP_e) | e(this.inputs, VIRUS_e)) & 
-								(-this.booleanNetwork[FCGR] + N);*/
-						/*this.booleanNetwork[TLR4] = and(and(input(TLRBinder.getBinder()),
-								  not(input(Hemopexin.getMolecule()), N)), not(this.booleanNetwork[FCGR], N));*/
-						this.booleanNetwork[TLR4] = min(input(TLRBinder.getBinder()), not(this.booleanNetwork[FCGR], N));
+						this.booleanNetwork[TLR4] = min(getInput(TLRBinder.getBinder()), not(this.booleanNetwork[FCGR], N));
 						break;
 					case 4:
-						this.booleanNetwork[FCGR] = 0;//(e(this.inputs, IC_e) & e(this.inputs, LPS_e)) | (e(this.inputs, IC_e) & e(IL1.getMolecule()));
+						this.booleanNetwork[FCGR] = max(
+								min(getInput(Molecule.searchMolecule("IC")), getInput(TLRBinder.getBinder())),
+								min(getInput(Molecule.searchMolecule("IC")), getInput(Molecule.searchMolecule(IL1.NAME)))
+						);
 						break;
 					case 5:
-						this.booleanNetwork[IL4Ra] = 0;//e(this.inputs, IL4_e);
+						this.booleanNetwork[IL4Ra] = getInput(Molecule.searchMolecule(IL4.NAME));
 						break;
 					case 6:
-						this.booleanNetwork[IL10R] = max(input(IL10.getMolecule()), this.booleanNetwork[IL10_out]);
+						this.booleanNetwork[IL10R] = max(getInput(Molecule.searchMolecule(IL10.NAME)), this.booleanNetwork[IL10_out]);
 						break;
 					case 7:
 						this.booleanNetwork[STAT1] = min(this.booleanNetwork[IFNGR], not(max(this.booleanNetwork[SOCS1], this.booleanNetwork[STAT3]), N));
@@ -164,10 +167,10 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 						});
 						break;
 					case 21:
-						this.booleanNetwork[TNFR] = input(TNFa.getMolecule());
+						this.booleanNetwork[TNFR] = getInput(Molecule.searchMolecule(TNFa.NAME));
 						break;
 					case 22:
-						this.booleanNetwork[Dectin] = input(Afumigatus.DEF_OBJ);//e(this.inputs, B_GLUC_e);
+						this.booleanNetwork[Dectin] = max(getInput(Afumigatus.DEF_OBJ), getInput(Molecule.searchMolecule(BGlucan.NAME)));
 						break;
 					case 23:
 						this.booleanNetwork[SOCS1] = this.booleanNetwork[STAT6];
@@ -176,16 +179,16 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 						this.booleanNetwork[IRF4] = this.booleanNetwork[JMJD3];
 						break;
 					case 25:
-						this.booleanNetwork[ALK5] = input(TGFb.getMolecule());
+						this.booleanNetwork[ALK5] = getInput(Molecule.searchMolecule(TGFb.NAME));
 						break;
 					case 26:
 						this.booleanNetwork[SMAD2] = this.booleanNetwork[ALK5];
 						break;
 					case 27:
-						//this.booleanNetwork[PtSR] = input(SAMP.getMolecule());
+						this.booleanNetwork[PtSR] = getInput(PtSRBinder.getBinder());
 						break;
 					case 28:
-						this.booleanNetwork[FPN] = (-input(Hepcidin.getMolecule()) + N);
+						//this.booleanNetwork[FPN] = (-getInput(Hepcidin.getMolecule()) + N);
 						break;
 					default:
 						System.err.println("No such interaction " + i + "!");
@@ -194,9 +197,7 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 			}
 		}
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
-		
+		this.inputs.clear();
 		this.clearPhenotype();
 		this.computePhenotype();
 		

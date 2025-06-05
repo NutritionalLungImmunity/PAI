@@ -2,7 +2,6 @@ package edu.uf.interactable;
 
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.IntracellularModel;
-import edu.uf.intracellularState.NeutrophilStateModel;
 import edu.uf.primitives.Interactions;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
@@ -11,6 +10,7 @@ import edu.uf.utils.Rand;
 public class Neutrophil extends Leukocyte{
     public static final String NAME = "Neutrophils";
 
+    public static boolean netOnly = true;
 
     private static String chemokine;
     private static int totalCells = 0;
@@ -23,7 +23,7 @@ public class Neutrophil extends Leukocyte{
     public boolean depleted = false;
     private boolean control;
     
-    private static int interactionId = Id.getMoleculeId();
+    private static int interactionId = Id.getId();
 
     public Neutrophil(double ironPool, IntracellularModel network) {
     	super(ironPool, network);
@@ -108,11 +108,11 @@ public class Neutrophil extends Leukocyte{
         	return Interactions.macrophagePhagApoptoticNeutrophilS(this, (Leukocyte) interactable);
 
         if(interactable instanceof PneumocyteI) {
-        	control = Interactions.typeIPneumocyteNET(this, (Cell) interactable, control);
+        	control = Interactions.typeIPneumocyteNET(this, (PneumocyteI) interactable, control, netOnly);
         	return true;
 		}
         if (interactable instanceof Iron) 
-        	return Interactions.releaseIron(this, (Molecule) interactable, NeutrophilStateModel.NETOTIC, x, y, z);
+        	return Interactions.releaseIron(this, (Molecule) interactable, IntracellularModel.NETOTIC, x, y, z);
         
         return interactable.interact(this, x, y, z);
     }

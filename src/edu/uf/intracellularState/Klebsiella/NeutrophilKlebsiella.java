@@ -10,10 +10,9 @@ public class NeutrophilKlebsiella extends IntracellularModel{
 
 	@Override
 	public void processBooleanNetwork(int... args) {
-		this.booleanNetwork[0] = input(TLRBinder.getBinder());
+		this.booleanNetwork[0] = getInput(TLRBinder.getBinder());
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

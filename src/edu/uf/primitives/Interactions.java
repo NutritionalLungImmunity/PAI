@@ -4,6 +4,7 @@ import edu.uf.interactable.Cell;
 import edu.uf.interactable.InfectiousAgent;
 import edu.uf.interactable.Leukocyte;
 import edu.uf.interactable.Molecule;
+import edu.uf.interactable.PneumocyteI;
 import edu.uf.interactable.PositionalInfectiousAgent;
 import edu.uf.interactable.Siderophore;
 import edu.uf.intracellularState.AspergillusIntracellularModel;
@@ -15,12 +16,15 @@ import edu.uf.utils.Util;
 
 
 /**
- * This class contains static methods with primitive interactions between agents. 
- * The pattern followed here is that each method should have the two agents interacting 
- * as arguments, plus additional information, such as grid coordinates. The x, y, and z 
- * coordinates in the grid are especially important when one of the agents is a molecule. 
- * @author henriquedeassis
+ * A utility class providing a library of static methods for defining primitive interactions between agents.
  *
+ * <p>The standard pattern followed in this class is that each method accepts two interacting agents as arguments, 
+ * along with any additional required context—typically including the grid coordinates {@code x}, {@code y}, and {@code z}.</p>
+ *
+ * <p>These spatial coordinates are particularly important when one of the agents involved in the interaction is 
+ * a molecule, as interactions may depend on spatial distribution within the simulation grid.</p>
+ *
+ * @author henriquedeassis
  */
 public class Interactions {
 	
@@ -70,7 +74,6 @@ public class Interactions {
 	 * @return
 	 */
     public static boolean secrete(Cell cell, Molecule mol, double qtty, int x, int y, int z, int w) {
-    	
     	if (cell.getBooleanNetwork().hasPhenotype(mol)) {
     		double level = cell.getBooleanNetwork().getPhenotype().get(mol.getPhenotype())/4.0; //CHANGE FROM 5.0 -> 4.0
     		mol.inc(qtty * level, w, x, y, z);
@@ -475,7 +478,7 @@ public class Interactions {
      * @param control a boolean flag
      * @return control
      */
-    public static boolean typeIPneumocyteNET(Leukocyte neutrophil, Cell pneumocyteI, boolean control) {
+    public static boolean typeIPneumocyteNET1(Leukocyte neutrophil, Cell pneumocyteI, boolean control) {
     	if(neutrophil.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC)) {
     		//cell.setInjury(true);
     		//if(cell.isInjury() || (control && Rand.getRand().randunif() < Constants.PR_NET_KILL_EPI)) {
@@ -485,6 +488,20 @@ public class Interactions {
     		}//else {
     			control = false;
     		//}
+    	}
+		return control;
+    }
+    
+    public static boolean typeIPneumocyteNET(Leukocyte neutrophil, PneumocyteI pneumocyteI, boolean control, boolean netOnly) {
+    	if(neutrophil.getBooleanNetwork().hasPhenotype(NeutrophilStateModel.NETOTIC)) {
+    		if(netOnly) {
+    			if((control && Rand.getRand().randunif() < Constants.PR_NET_KILL_EPI)) 
+    	    		pneumocyteI.die();
+    		}else {
+    			if(pneumocyteI.isInjury() || (control && Rand.getRand().randunif() < Constants.PR_NET_KILL_EPI)) 
+    				pneumocyteI.die();
+    		}
+    		control = false;
     	}
 		return control;
     }

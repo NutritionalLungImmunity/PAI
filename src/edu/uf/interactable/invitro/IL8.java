@@ -1,12 +1,9 @@
 package edu.uf.interactable.invitro;
 
-import java.util.List;
-
 import edu.uf.Diffusion.Diffuse;
 import edu.uf.compartments.GridFactory;
 import edu.uf.interactable.Chemokine;
 import edu.uf.interactable.Interactable;
-import edu.uf.interactable.MCP1;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
 import edu.uf.interactable.PneumocyteII;
@@ -22,7 +19,7 @@ public class IL8 extends Chemokine{
     
 
     private IL8(double[][][][] qttys, Diffuse diffuse) {
-    	super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
         //Neutrophil.setChemokine(IL8.NAME);
     }
 

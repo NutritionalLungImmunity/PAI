@@ -15,7 +15,7 @@ public class Albumin extends Molecule{
 	//public static final double NON_HEMORHAGE = 0.0;
     
     private Albumin(double[][][][] qttys, Diffuse diffuse) {
-		super(qttys, diffuse);
+    	super(qttys, diffuse, NAME);
 	}
     
     public static Albumin getMolecule(Diffuse diffuse) {

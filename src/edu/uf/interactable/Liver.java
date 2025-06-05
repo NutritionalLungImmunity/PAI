@@ -1,6 +1,5 @@
 package edu.uf.interactable;
 
-import edu.uf.compartments.Voxel;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Id;
 import edu.uf.utils.Util;
@@ -54,7 +53,7 @@ public class Liver extends Cell{
     
     private static Liver liver;
     
-    private static int interactionId = Id.getMoleculeId();
+    private static int interactionId = Id.getId();
     
     private  Liver() {
     	super(null);

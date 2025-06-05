@@ -17,6 +17,7 @@ public class TranexamicAcid extends Setter{
 	private Set<Integer> iterations;
     
     private TranexamicAcid(int[] iterations) {
+    	super(NAME);
 		this.iterations = new HashSet<>();
 		for(int i : iterations)
 			this.iterations.add(i);

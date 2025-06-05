@@ -22,12 +22,11 @@ public class DCKlebsiella extends IntracellularModel{
 	
 	@Override
 	public void processBooleanNetwork(int... args) {
-		this.booleanNetwork[NIL23] = input(TLRBinder.getBinder());
-		this.booleanNetwork[NIFN] = input(TLRBinder.getBinder());
-		this.booleanNetwork[NIL1] = input(TLRBinder.getBinder());
+		this.booleanNetwork[NIL23] = getInput(TLRBinder.getBinder());
+		this.booleanNetwork[NIFN] = getInput(TLRBinder.getBinder());
+		this.booleanNetwork[NIL1] = getInput(TLRBinder.getBinder());
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

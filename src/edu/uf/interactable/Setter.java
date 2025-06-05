@@ -5,8 +5,8 @@ public abstract class Setter extends Molecule{
 	 
 	private int iteration;
     
-    protected Setter() {
-		super(new double[][][][] {}, null);
+    protected Setter(String name) {
+		super(new double[][][][] {}, null, name);
 	}
 	
     /**
@@ -136,17 +136,22 @@ public abstract class Setter extends Molecule{
     
     
     /**
-     * This method counts the number of simulation-iterations. The purpose of a Setter 
-     * is to change state after N-iterations. This method is called by "Exec.resetCount."
+     * Increments the internal counter used to track the number of simulation iterations.
+     *
+     * <p>This counter is typically used to trigger state changes after a defined 
+     * number of iterations. This method is called by {@code Exec.resetCount()}.</p>
      */
     public void update() {
     	this.iteration++;
     }
     
     /**
-     * This method returns how many iterations the simulation has run for. The purpose 
-     * of a Setter is to change state after N-iterations.
-     * @return
+     * Returns the number of iterations the simulation has executed so far.
+     *
+     * <p>This value is typically used to determine when a state change 
+     * should occur after a specified number of iterations.</p>
+     *
+     * @return the number of completed simulation iterations
      */
     public int getIteration() {
     	return iteration;

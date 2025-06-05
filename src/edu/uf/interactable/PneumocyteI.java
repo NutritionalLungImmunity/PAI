@@ -1,6 +1,5 @@
 package edu.uf.interactable;
 
-import edu.uf.compartments.Voxel;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.IntracellularModel;
 import edu.uf.intracellularState.Phenotype;
@@ -11,7 +10,7 @@ public class PneumocyteI extends Cell{
 	
 	public static final String NAME = "TypeI_Pneumocyte";
 	private static int totalCells = 0;
-	private static int interactionId = Id.getMoleculeId();
+	private static int interactionId = Id.getId();
 	
 	public static final int OPEN = Phenotype.createPhenotype();
 	

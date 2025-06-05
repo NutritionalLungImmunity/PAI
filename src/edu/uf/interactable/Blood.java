@@ -21,7 +21,7 @@ public class Blood extends Cell{
 	//public static final int TREATED = 3;
 	
 	private String NAME = "BLOOD";
-	private static int interactionId = Id.getMoleculeId();
+	private static int interactionId = Id.getId();
 	
 	private int[][][] status;
 	

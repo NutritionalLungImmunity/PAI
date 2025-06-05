@@ -3,32 +3,32 @@ package edu.uf.main.print;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import edu.uf.interactable.IL10;
-import edu.uf.interactable.MIP1B;
+
+import edu.uf.interactable.EndothelialCell;
+import edu.uf.interactable.IL4;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
-import edu.uf.interactable.TGFb;
+import edu.uf.interactable.PneumocyteI;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 
-public class PrintCoinjury extends PrintStat{
-	
+public class PrintExample extends PrintStat{
 
 	@Override
 	public void printStatistics(int k, File file){
+		if(k%15 != 0)return;
 		String str = k + "\t" + 
 	              Afumigatus.getTotalCells0() + "\t" +
-	              /*Afumigatus.getTotalRestingConidia() + "\t" +
+	              Afumigatus.getTotalRestingConidia() + "\t" +
 	              Afumigatus.getTotalSwellingConidia() + "\t" +
 	              Afumigatus.getTotalGerminatingConidia() + "\t" +
-	              Afumigatus.getTotalHyphae() + "\t" +*/
-	              //Granule.getMolecule().getTotalMolecule(0) + "\t" +
-	              IL10.getMolecule().getTotalMolecule(0) + "\t" +
-	              TGFb.getMolecule().getTotalMolecule(0) + "\t" +
+	              Afumigatus.getTotalHyphae() + "\t" +
 	              TNFa.getMolecule().getTotalMolecule(0) + "\t" +
-	              MIP1B.getMolecule().getTotalMolecule(0) + "\t" +
 	              MIP2.getMolecule().getTotalMolecule(0) + "\t" +
+	              IL4.getMolecule().getTotalMolecule(0)  + "\t" +
+	              EndothelialCell.getTotalCells() + "\t" +
+	              PneumocyteI.getTotalCells() + "\t" +
 	              Macrophage.getTotalCells() + "\t" +
 	              Neutrophil.getTotalCells();
 		

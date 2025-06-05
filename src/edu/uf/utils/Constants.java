@@ -111,6 +111,9 @@ public class Constants {
 	public static double DRIFT_BIAS = 1e-100;
 	public static double PR_MOVE_ASP = 0.75; // DUMMY
 	
+	public static double IL13_Kd = -1;
+	public static double IL13_HALF_LIFE = -1;
+	
 	
 	//Average number of displaced voxels
 	public static double MA_MOVE_RATE_REST = 1.44*TIME_STEP_SIZE/VOXEL_LEN * 15;
@@ -121,7 +124,7 @@ public class Constants {
 	
 	
 	public static double MAX_N = 522;//*3;
-	public static double MAX_MA = 209;//*3;
+	public static double MAX_MA = 209*3;
 	public static double MIN_MA = 15;
 
 	public static double PR_MA_PHAG = 0.9054552746554831;
@@ -181,8 +184,8 @@ public class Constants {
 	public static double DEFAULT_TFFE_CONCENTRATION = DEFAULT_TFFE_REL_CONCENTRATION * DEFAULT_TF_CONCENTRATION;
 	public static double DEFAULT_TFFE2_CONCENTRATION = DEFAULT_TFFE2_REL_CONCENTRATION * DEFAULT_TF_CONCENTRATION;
 
-	public static double RECRUITMENT_RATE_N = 4.882812e+14;//*2;
-	public static double RECRUITMENT_RATE_MA = 4.882812e+14;//*2; //arbitrary unity
+	public static double RECRUITMENT_RATE_N =  4.882812e+14;
+	public static double RECRUITMENT_RATE_MA = 4.882812e+14; //arbitrary unity
 	
 	
 	
@@ -388,6 +391,10 @@ public class Constants {
     public static double ENT_QTTY = -1;
     public static double ENT_UP_RATE = -1;
     public static double K_M_LPC2_ENT = -1;
+    
+    public static double  Kd_IL4  = 3.26e-10; //THIS VALUE IS DUMMY (come from TNF)
+    public static double IL4_QTTY = 3.2179e-20 * STD_UNIT_T * 15;  //THIS VALUE IS DUMMY (come from TNF)
+    
     
     
     /*

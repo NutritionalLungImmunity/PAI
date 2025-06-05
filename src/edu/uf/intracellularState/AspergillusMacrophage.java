@@ -2,6 +2,7 @@ package edu.uf.intracellularState;
 
 import edu.uf.interactable.Cell;
 import edu.uf.interactable.IL10;
+import edu.uf.interactable.IL4;
 import edu.uf.interactable.IL6;
 import edu.uf.interactable.MIP1B;
 import edu.uf.interactable.MIP2;
@@ -30,8 +31,8 @@ public class AspergillusMacrophage extends FMacrophageBooleanNetwork{
 			this.getPhenotype().put(IL10.getMolecule().getPhenotype(), this.max(new int[] {this.booleanNetwork[NFkB], this.booleanNetwork[STAT1], this.booleanNetwork[STAT5]}));
 			this.getPhenotype().put(M1, this.max(new int[] {this.booleanNetwork[NFkB], this.booleanNetwork[STAT1], this.booleanNetwork[STAT5]}));
 		}
-		//if(this.booleanNetwork[STAT6] > 0)
-		//	this.getPhenotype().put(M2A, this.booleanNetwork[STAT6]);
+		if(this.booleanNetwork[STAT6] > 0)
+			this.getPhenotype().put(IL4.getMolecule().getPhenotype(), this.booleanNetwork[STAT6]);
 		if(this.booleanNetwork[ERK] > 0) {
 			this.getPhenotype().put(IL6.getMolecule().getPhenotype(), this.max(new int[] {this.booleanNetwork[NFkB], this.booleanNetwork[STAT1], this.booleanNetwork[STAT5]}));
 			this.getPhenotype().put(TNFa.getMolecule().getPhenotype(), this.max(new int[] {this.booleanNetwork[NFkB], this.booleanNetwork[STAT1], this.booleanNetwork[STAT5]}));

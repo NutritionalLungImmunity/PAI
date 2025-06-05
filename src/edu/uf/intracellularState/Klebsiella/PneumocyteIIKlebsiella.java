@@ -15,12 +15,11 @@ public class PneumocyteIIKlebsiella extends IntracellularModel{
 
 	@Override
 	public void processBooleanNetwork(int... args) {
-		this.booleanNetwork[0] = input(TLRBinder.getBinder());
-		this.booleanNetwork[1] = max(new int[] {input(IL1.getMolecule()), input(IL17.getMolecule()), input(TNFa.getMolecule())});
-		this.booleanNetwork[2] = input(IL1.getMolecule());
+		this.booleanNetwork[0] = getInput(TLRBinder.getBinder());
+		this.booleanNetwork[1] = max(new int[] {getInput(IL1.getMolecule()), getInput(IL17.getMolecule()), getInput(TNFa.getMolecule())});
+		this.booleanNetwork[2] = getInput(IL1.getMolecule());
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

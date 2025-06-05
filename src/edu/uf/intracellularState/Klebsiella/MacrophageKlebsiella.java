@@ -46,7 +46,6 @@ public class MacrophageKlebsiella extends IntracellularModel{
 	//public static final int FNP = 28; //IN THE OUTER CLASS!
 	
 	{
-		this.inputs = new int[NUM_RECEPTORS];
 		this.booleanNetwork = new int[size];
 	}
 	
@@ -65,19 +64,19 @@ public class MacrophageKlebsiella extends IntracellularModel{
 			for(int i : array) {
 				switch(i) {
 					case 0:
-						this.booleanNetwork[IFNGR] = max(this.booleanNetwork[IFNB], input(IFN_III.getMolecule()));// | e(this.inputs, IFNG_e);
+						this.booleanNetwork[IFNGR] = max(this.booleanNetwork[IFNB], getInput(IFN_III.getMolecule()));// | e(this.inputs, IFNG_e);
 						break;
 					case 1:
-						this.booleanNetwork[CSF2Ra] = input(GM_CSF.getMolecule());
+						this.booleanNetwork[CSF2Ra] = getInput(GM_CSF.getMolecule());
 						break;
 					case 2:
-						this.booleanNetwork[IL1R] = max(this.booleanNetwork[IL1B], input(IL1.getMolecule()));
+						this.booleanNetwork[IL1R] = max(this.booleanNetwork[IL1B], getInput(IL1.getMolecule()));
 						break;
 					case 3:
-						this.booleanNetwork[TLR4] = input(TLRBinder.getBinder());
+						this.booleanNetwork[TLR4] = getInput(TLRBinder.getBinder());
 						break;
 					case 4:
-						this.booleanNetwork[IL10R] = max(input(IL10.getMolecule()), this.booleanNetwork[IL10_out]);
+						this.booleanNetwork[IL10R] = max(getInput(IL10.getMolecule()), this.booleanNetwork[IL10_out]);
 						break;
 					case 5:
 						this.booleanNetwork[STAT1] = min(this.booleanNetwork[IFNGR], not(this.booleanNetwork[STAT3], N));
@@ -108,10 +107,10 @@ public class MacrophageKlebsiella extends IntracellularModel{
 						this.booleanNetwork[IL10_out] = this.booleanNetwork[STAT3]; 
 						break;
 					case 13:
-						this.booleanNetwork[TNFR] = input(TNFa.getMolecule());
+						this.booleanNetwork[TNFR] = getInput(TNFa.getMolecule());
 						break;
 					case 14:
-						this.booleanNetwork[FPN] = (-input(Hepcidin.getMolecule()) + N);
+						this.booleanNetwork[FPN] = (-getInput(Hepcidin.getMolecule()) + N);
 						break;
 					default:
 						System.err.println("No such interaction " + i + "!");
@@ -120,8 +119,7 @@ public class MacrophageKlebsiella extends IntracellularModel{
 			}
 		}
 		
-		for(int i = 0; i < NUM_RECEPTORS; i++)
-			this.inputs[i] = 0;
+		this.inputs.clear();
 		
 		this.clearPhenotype();
 		

@@ -6,12 +6,10 @@ import java.io.PrintWriter;
 import java.util.Map.Entry;
 
 import edu.uf.compartments.Voxel;
-import edu.uf.interactable.Heme;
 import edu.uf.interactable.Interactable;
 import edu.uf.interactable.MIP2;
 import edu.uf.interactable.Macrophage;
 import edu.uf.interactable.Neutrophil;
-import edu.uf.interactable.PneumocyteI;
 import edu.uf.interactable.Transferrin;
 import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.NeutrophilStateModel;
