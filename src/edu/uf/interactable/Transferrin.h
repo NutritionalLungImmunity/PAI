@@ -11,7 +11,7 @@
 #include "Molecule.h"
 #include "../diffusion/Diffuse.h"
 #include <unordered_map>
-
+#include<string>
 
 namespace edu {
 namespace uf {
@@ -28,7 +28,7 @@ public:
     int getClassId() const override;
     virtual double getKd() override;
     virtual void degrade() override;
-    virtual int getIndex(const char* str) const override;
+    virtual int getIndex(const std::string& str) const override;
     virtual void computeTotalMolecule(int x, int y, int z) override;
 
 
@@ -45,7 +45,7 @@ protected:
 private:
     Transferrin(double**** qttys, int xbin, int ybin, int zbin, char wbin, Diffuse* diffuse);
     static Transferrin* molecule;
-    const unordered_map<const char*, int> INDEXES = {
+    const unordered_map<std::string, int> INDEXES = {
     		    {"Tf", 0},
     		    {"TfFe", 1},
 				{"TfFe2", 2}

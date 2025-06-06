@@ -57,7 +57,7 @@ public:
     	}
     }
 
-    static void recruit(Recruiter** recruiters, int recruiterCount){
+    static void recruit(std::vector<Recruiter*> recruiters, int recruiterCount){
     	for (int i = 0; i < recruiterCount; i++) {
     		recruiters[i]->recruit();
     	}

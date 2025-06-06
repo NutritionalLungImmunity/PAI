@@ -24,6 +24,8 @@ public:
     static const int _ITER_REST = 12;
     static const int N = 4;
 
+    static int activeCount;
+
     PneumocyteStateModel();
 
     virtual void processBooleanNetwork() override;

@@ -12,6 +12,7 @@
 
 #include "../diffusion/Diffuse.h"
 #include "Interactable.h"
+#include<string>
 
 namespace edu {
 namespace uf {
@@ -70,7 +71,7 @@ public:
 
     virtual void degrade() = 0;
     virtual void computeTotalMolecule(int x, int y, int z) = 0;
-    virtual int getIndex(const char* str) const = 0;
+    virtual int getIndex(const std::string& str) const = 0;
     virtual double getThreshold() const = 0;
     virtual int getNumState() const = 0;
     virtual double getKd() = 0;

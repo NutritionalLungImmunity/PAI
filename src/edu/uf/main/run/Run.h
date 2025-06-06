@@ -37,7 +37,7 @@ public:
         int xbin,
         int ybin,
         int zbin,
-		Recruiter** recruiters,
+		std::vector<Recruiter*> recruiters,
         int recruiterCount,
         bool printLattice,
         const string& outputFile,

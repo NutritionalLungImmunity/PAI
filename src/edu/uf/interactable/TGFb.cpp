@@ -58,7 +58,7 @@ void TGFb::degrade() {
     //degrade(utils::constexprants::TNF_HALF_LIFE, 0);
 }
 
-int TGFb::getIndex(const char* str) const {
+int TGFb::getIndex(const std::string& str) const {
     return 0;
 }
 

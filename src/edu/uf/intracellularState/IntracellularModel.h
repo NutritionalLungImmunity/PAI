@@ -11,6 +11,8 @@
 #define EDU_UF_INTRACELLULARSTATE_INTRACELLULARMODEL_H_
 
 #include <unordered_map>
+#include <vector>
+#include <algorithm>
 #include "../interactable/Binder.h"
 #include "../interactable/Molecule.h"
 
@@ -56,7 +58,11 @@ public:
     virtual void setState(int stateName, int stateValue);
     virtual bool isDead() const;
     virtual int getInput(const Binder* i) const;
-    virtual int amax(const int* a, int length) const;
+    //virtual int amax(const int* a, int length) const;
+    template<typename Container>
+    auto amax(const Container& container) -> typename Container::value_type;
+    template<typename T>
+    T amax(const T* arr, int size);
     virtual int max(int i, int j) const;
     virtual int amin(const int* a, int length) const;
     virtual int min(int i, int j) const;
@@ -74,6 +80,10 @@ private:
     unordered_map<int, int> phenotypes;
     unordered_map<int, int> states;
 };
+
+
+
+
 
 } /* namespace interactable */
 } /* namespace uf */

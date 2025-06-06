@@ -59,7 +59,7 @@ void MIP1B::degrade() {
     //degrade(utils::constexprants::TNF_HALF_LIFE, 0);
 }
 
-int MIP1B::getIndex(const char* str) const {
+int MIP1B::getIndex(const std::string& str) const {
     return 0;
 }
 
@@ -69,9 +69,9 @@ void MIP1B::computeTotalMolecule(int x, int y, int z) {
 
 bool MIP1B::templateInteract(Interactable* interactable, int x, int y, int z) {
 	if (dynamic_cast<PneumocyteII*>(interactable))
-		return Interactions::secrete(static_cast<Cell*>(interactable), this, utils::constexprants::P_MIP2_QTTY, x, y, z, 0);
+		return Interactions::secrete(static_cast<Cell*>(interactable), this, utils::constexprants::P_MIP1B_QTTY, x, y, z, 0);
 	if (dynamic_cast<Macrophage*>(interactable))
-		return Interactions::secrete(static_cast<Cell*>(interactable), this, utils::constexprants::MA_MIP2_QTTY, x, y, z, 0);
+		return Interactions::secrete(static_cast<Cell*>(interactable), this, utils::constexprants::MA_MIP1B_QTTY, x, y, z, 0);
 
     return interactable->interact(this, x, y, z);
 }

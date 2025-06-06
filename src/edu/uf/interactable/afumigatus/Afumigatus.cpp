@@ -5,7 +5,7 @@
  *      Author: henriquedeassis
  */
 
-#include "../afumigatus/Afumigatus.h"
+#include "Afumigatus.h"
 
 #include "../Macrophage.h"
 #include "../PneumocyteII.h"
@@ -385,7 +385,7 @@ Afumigatus* Afumigatus::branch(double* phi, double prBranch) {
                 phi = new double(2 * Rand::getRand().randunif() * M_PI);
             }
             setIronPool(getIronPool() / 2.0);
-            double* growthVector = new double[]{dx, dy, dz};
+            double* growthVector = new double[3]{dx, dy, dz};
             int lines = 3;
             int cols = 3;
             double** base =LinAlg::gramSchimidt(getX(), getY(), getZ());

@@ -69,7 +69,7 @@ void Iron::turnOver(int x, int y, int z) {
 	this->set(100*6.4e-18*0, 0, x, y, z);
 }
 
-int Iron::getIndex(const char* str) const {
+int Iron::getIndex(const std::string& str) const {
     return 0;
 }
 

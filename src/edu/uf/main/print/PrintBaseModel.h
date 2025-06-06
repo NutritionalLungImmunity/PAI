@@ -24,6 +24,7 @@
 #include "../../interactable/IL10.h"
 #include "../../interactable/MIP1B.h"
 #include "../../interactable/MIP2.h"
+#include "../../intracellularState/PneumocyteStateModel.h"
 #include <sstream>
 //#include <memory>
 //#include <iostream>
@@ -67,6 +68,7 @@ public:
             << MIP1B::getMolecule()->getTotalMolecule(0) << "\t"
             << MIP2::getMolecule()->getTotalMolecule(0) << "\t"
             << Macrophage::getTotalCells() << "\t"
+			<< PneumocyteStateModel::activeCount << "\t"
             << Neutrophil::getTotalCells();
 
         string output = str.str();
@@ -85,7 +87,10 @@ public:
                 cerr << "Exception writing to file: " << e.what() << endl;
             }
         }
-    }
+		//System.out.println(">>> " + resting  + " " + swelling + " " + germ + " " + hyphae);
+	}
+
+
 };
 
 } // namespace print

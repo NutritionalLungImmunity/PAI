@@ -28,7 +28,7 @@ public:
     int getClassId() const override;
     virtual double getKd() override;
     virtual void degrade() override;
-    virtual int getIndex(const char* str) const override;
+    virtual int getIndex(const std::string& str) const override;
     virtual void computeTotalMolecule(int x, int y, int z) override;
 
 

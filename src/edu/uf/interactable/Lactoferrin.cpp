@@ -5,6 +5,7 @@
  *      Author: henriquedeassis
  */
 
+#include<iostream>
 #include "Lactoferrin.h"
 #include "../utils/Util.h"
 #include "../utils/Id.h"
@@ -53,8 +54,8 @@ double Lactoferrin::getKd() {
     return -1;
 }
 
-int Lactoferrin::getIndex(const char* str) const{
-	return INDEXES.at(str);
+int Lactoferrin::getIndex(const std::string& str) const{
+	            return INDEXES.at(str);
 }
 
 void Lactoferrin::degrade() {}

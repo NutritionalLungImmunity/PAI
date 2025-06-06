@@ -19,6 +19,8 @@ using namespace afumigatus;
 
 const string PneumocyteStateModel::name = "PneumocyteStateModel";
 
+int PneumocyteStateModel::activeCount= 0;
+
 PneumocyteStateModel::PneumocyteStateModel()
     : iterations1(0), iterations2(0) {
     this->booleanNetwork = new int[size]();
@@ -52,16 +54,14 @@ void PneumocyteStateModel::processBooleanNetwork() {
         -this->booleanNetwork[ACTIVE] + N
     );
     this->booleanNetwork[ACTIVE] = max(
-        min(
-            getInput(TNFa::getMolecule()),
-            this->booleanNetwork[MIX_ACTIVE]
-        ),
+            this->booleanNetwork[MIX_ACTIVE],
         N * countActive()
     );
 
     this->iterations1 = getInput(Afumigatus::DEF_OBJ) > 0 ? 0 : this->iterations1;
-    this->iterations2 = (getInput(Afumigatus::DEF_OBJ) > 0 || /*getInput(IL1::getMolecule()) > 0 ||*/ getInput(TNFa::getMolecule()) > 0) ? 0 : this->iterations2;
+    this->iterations2 = getInput(Afumigatus::DEF_OBJ) > 0 ? 0 : this->iterations2;
 
+    if(this->hasPhenotype(MIP2::getMolecule()->getPhenotype()))PneumocyteStateModel::activeCount--;
     this->inputs.clear();
     this->clearPhenotype();
     this->computePhenotype();
@@ -74,6 +74,7 @@ void PneumocyteStateModel::computePhenotype() {
         //this->addPhenotype(MCP1::getMolecule()->getPhenotype(), this->booleanNetwork[ACTIVE]);
         this->addPhenotype(MIP1B::getMolecule()->getPhenotype(), this->booleanNetwork[ACTIVE]);
         this->addPhenotype(MIP2::getMolecule()->getPhenotype(), this->booleanNetwork[ACTIVE]);
+        PneumocyteStateModel::activeCount++;
     }
     if (this->booleanNetwork[MIX_ACTIVE] > 0) {
         this->addPhenotype(TNFa::getMolecule()->getPhenotype(), this->booleanNetwork[MIX_ACTIVE]);

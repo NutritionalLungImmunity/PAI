@@ -13,6 +13,7 @@
 #include "../diffusion/Diffuse.h"
 #include "../utils/Constants.h"
 #include <unordered_map>
+#include<string>
 
 namespace edu {
 namespace uf {
@@ -29,7 +30,7 @@ public:
     int getClassId() const override;
     virtual double getKd() override;
     virtual void degrade() override;
-    virtual int getIndex(const char* str) const override;
+    virtual int getIndex(const std::string& str) const override;
     virtual void computeTotalMolecule(int x, int y, int z) override;
 
 
@@ -45,7 +46,7 @@ protected:
 private:
     Lactoferrin(double**** qttys, int xbin, int ybin, int zbin, char wbin, Diffuse* diffuse);
     static Lactoferrin* molecule;
-    const unordered_map<const char*, int> INDEXES = {
+    const unordered_map<std::string, int> INDEXES = {
     		    {"Lactoferrin", 0},
     		    {"LactoferrinFe", 1},
 				{"LactoferrinFe2", 2}

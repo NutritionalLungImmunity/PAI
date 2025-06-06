@@ -10,6 +10,7 @@
 #include "../PositionalInfectiousAgent.h"
 #include "../../primitives/Interactions.h"
 #include "../../utils/Constants.h"
+#include "../Siderophore.h"
 
 namespace edu {
 namespace uf {
@@ -27,7 +28,7 @@ const double TAFC::THRESHOLD = utils::constexprants::K_M_TF_TAFC * utils::conste
 TAFC* TAFC::molecule = nullptr;
 
 TAFC::TAFC(double**** qttys, int xbin, int ybin, int zbin, char wbin, Diffuse* diffuse)
-    : Siderophore(qttys, xbin, ybin, zbin, wbin, diffuse) {}
+    : Siderophore::Siderophore(qttys, xbin, ybin, zbin, wbin, diffuse) {}
 
 TAFC* TAFC::getMolecule(Diffuse* diffuse, int xbin, int ybin, int zbin, char wbin) {
 	if (molecule == nullptr) {

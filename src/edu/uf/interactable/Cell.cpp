@@ -16,24 +16,30 @@ namespace interactable {
 
 using namespace utils;
 
-unordered_map<int, Cell*> Cell::cells;
+//unordered_map<int, Cell*>Cell::cells; //remove and change to local function to avoid initialization access issue 
+
+unordered_map<int, Cell*>& Cell::getCells() {
+    static std::unordered_map<int, Cell*> cells;
+    return cells;
+}
 
 Cell::Cell(IntracellularModel* intracellularModel){
 	this->intracellularModel = intracellularModel;
 	this->clock = new Clock(utils::constexprants::INV_UNIT_T, Rand::getRand().randunif(0, utils::constexprants::INV_UNIT_T));
 	this->id = utils::Id::getId();
 	this->externalState = 0;
-	cells[id] = this;
+	Cell::getCells()[id] = this;
 	this->ironPool = 0;
 	this->engulfed = false;
 }
 
 void Cell::remove(int id) {
-    cells.erase(id);
+    getCells().erase(id);
 }
 
 Cell* Cell::get(int id) {
-    return cells[id];
+
+    return getCells()[id];
 }
 
 void Cell::setExternalState(int state) {

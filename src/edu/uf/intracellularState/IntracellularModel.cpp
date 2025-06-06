@@ -106,15 +106,31 @@ int IntracellularModel::getInput(const interactable::Binder* i) const {
     return 0;
 }
 
-int IntracellularModel::amax(const int* a, int length) const {
-    int maxVal = a[0];
-    for (int i = 1; i < length; ++i) {
-        if (a[i] > maxVal) {
-            maxVal = a[i];
-        }
-    }
-    return maxVal;
+// int IntracellularModel::amax(const int* a, int length) const {
+//     int maxVal = a[0];
+//     for (int i = 1; i < length; ++i) {
+//         if (a[i] > maxVal) {
+//             maxVal = a[i];
+//         }
+//     }
+//     return maxVal;
+// }
+template<typename Container>
+auto IntracellularModel::amax(const Container& container) -> typename Container::value_type {
+    return *std::max_element(container.begin(), container.end());
 }
+template<typename T>
+T IntracellularModel::amax(const T* arr, int size) {
+    T maxVal = arr[0];
+    for (int i = 1; i < size; ++i) {
+        if (arr[i] > maxVal)
+         maxVal = arr[i];
+    }
+    return maxVal;  
+}
+
+template auto IntracellularModel::amax<std::vector<int>>(const std::vector<int>&) -> int;
+template int IntracellularModel::amax<int>(const int*, int);
 
 int IntracellularModel::max(int i, int j) const {
     return (i > j) ? i : j;

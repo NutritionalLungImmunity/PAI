@@ -59,7 +59,7 @@ void IL10::degrade() {
     //degrade(utils::constexprants::TNF_HALF_LIFE, 0);
 }
 
-int IL10::getIndex(const char* str) const {
+int IL10::getIndex(const std::string& str) const {
     return 0;
 }
 

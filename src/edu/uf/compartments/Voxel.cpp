@@ -30,7 +30,7 @@ int Voxel::_xbin = 0;
 int Voxel::_ybin = 0;
 int Voxel::_zbin = 0;
 
-Voxel::Voxel(int x, int y, int z, int numSamples) : x(x), y(y), z(z), p(0.0), tissueType(EPITHELIUM), numSamples(numSamples), externalState(0) {generator = Rand::getRand().getGenerator();}
+Voxel::Voxel(int x, int y, int z, int numSamples) : x(x), y(y), z(z), p(0.0), tissueType(EPITHELIUM), numSamples(numSamples), externalState(0) {}
 
 int Voxel::getX() const {
 	return x;
@@ -268,11 +268,11 @@ void Voxel::interact() {
     	infIndices = Rand::getRand().sample(infMolSize, numSamples);
     }
 
-    shuffle(&mols[0], &mols[molSize-1], generator);
-    shuffle(&infectiousMolecules[0], &infectiousMolecules[infMolSize-1], generator);
+    shuffle(&mols[0], &mols[molSize-1], Rand::getRand().getGenerator());
+    shuffle(&infectiousMolecules[0], &infectiousMolecules[infMolSize-1], Rand::getRand().getGenerator());
 
     int l[5] = {0, 1, 2, 3, 4};
-    shuffle(&l[0], &l[4], generator);
+    shuffle(&l[0], &l[4], Rand::getRand().getGenerator());
     for (int k : l) {
         switch (k) {
             case 0:

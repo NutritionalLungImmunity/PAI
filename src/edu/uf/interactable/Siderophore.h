@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include "../diffusion/Diffuse.h"
 #include "Molecule.h"
+#include<string>
 
 
 
@@ -25,7 +26,7 @@ using namespace edu::uf::diffusion;
 class Siderophore : public Molecule{
 
 private:
-	const unordered_map<const char*, int> INDEXES = {
+	const unordered_map<std::string, int> INDEXES = {
 		    {"SID", 0},
 		    {"SIDBI", 1}
 		};
@@ -47,7 +48,7 @@ public:
 
     virtual void degrade() override {} //REVIEW
 
-    virtual int getIndex(const char* str) const override{
+    virtual int getIndex(const std::string& str) const override{
         return Siderophore::INDEXES.at(str);
     }
 

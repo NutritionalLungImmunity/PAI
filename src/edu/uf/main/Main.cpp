@@ -22,6 +22,7 @@
 #include "../compartments/Voxel.h"
 
 #include <chrono>
+#include <vector>
 using namespace std::chrono;
 
 
@@ -51,7 +52,7 @@ void baseModel() {
     initialize->initializeNeutrophils(0);
     initialize->infect(std::stoi(input[1]), edu::uf::intracellularState::AspergillusIntracellularModel::RESTING_CONIDIA, edu::uf::utils::constexprants::CONIDIA_INIT_IRON, -1, false);
 
-    Recruiter** recruiters = new Recruiter*[]{new MacrophageRecruiter(), new NeutrophilRecruiter()};
+    std::vector<Recruiter*> recruiters = {new MacrophageRecruiter(), new NeutrophilRecruiter()};
 
     run->run(2160, xbin, ybin, zbin, recruiters, 2, false, "", -1, stat);
 
@@ -59,11 +60,19 @@ void baseModel() {
 }
 
 int main() {
-	auto start = high_resolution_clock::now();
+	//printf("t\t Pathogen\t Resting\t Swelling\t Germinating\t Hyphae\t TAFC_tot\t TAFC1\t TAFC2\t Lactoferrin1\t Lactoferrin2\t Lactoferrin3\t Transferrin_tot\t Transferrin1\t Transferrin2\t Transferrin3\t TGFb\t IL10\t TNFa\t MIP1B\t MIP2\t Macrophage\t ActivePneumocytes\t Neutrophil\n");
+	// auto start = high_resolution_clock::now();
+    // baseModel();
+    // auto stop = high_resolution_clock::now();
+    // auto duration = duration_cast<microseconds>(stop - start);
+    // printf("%d", duration.count());
+     auto start = std::chrono::steady_clock::now();
     baseModel();
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
-    printf("Total execution time: %d micro-seconds\n", duration.count());
+    auto stop = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    printf("%lld", duration.count());
+    
+    //printf("Total execution time: %d micro-seconds\n", duration.count());
     /*printf("Voxel.Interact: %d\n", edu::uf::control::Exec::interactTime);
     printf("Exec.gc: %d\n", edu::uf::control::Exec::gcTime);
     printf("Voxel.next: %d\n", edu::uf::control::Exec::nextTime);

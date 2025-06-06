@@ -16,6 +16,7 @@
 #include "../utils/Constants.h"
 #include "../utils/Rand.h"
 #include "../utils/Id.h"
+#include "../utils/Util.h"
 
 namespace edu {
 namespace uf {
@@ -37,25 +38,26 @@ void AspergillusMacrophage::computePhenotype() {
 	//printf("M0\n");
     if (booleanNetwork[NFkB] > 0 || booleanNetwork[STAT1] > 0 || booleanNetwork[STAT5] > 0) {
         //getPhenotype().put(IL6::getMolecule()->getPhenotype(), max({booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}));
-        getPhenotype()[TNFa::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[MIP1B::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[MIP2::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[IL10::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[M1] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
+        getPhenotype()[TNFa::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[MIP1B::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[MIP2::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[IL10::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[M1] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+
     }
     if (booleanNetwork[STAT6] > 0) {
         //getPhenotype().put(IL4::getMolecule()->getPhenotype(), booleanNetwork[STAT6]);
     }
     if (booleanNetwork[ERK] > 0) {
         //getPhenotype().put(IL6::getMolecule()->getPhenotype(), max({booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}));
-        getPhenotype()[TNFa::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[IL10::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[M2B] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
+        getPhenotype()[TNFa::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[IL10::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[M2B] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
     }
     if (booleanNetwork[STAT3] > 0) {
-        getPhenotype()[TGFb::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[IL10::getMolecule()->getPhenotype()] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
-        getPhenotype()[M2C] = amax(new int[]{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]}, 3);
+        getPhenotype()[TGFb::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[IL10::getMolecule()->getPhenotype()] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
+        getPhenotype()[M2C] = amax(std::vector<int>{booleanNetwork[NFkB], booleanNetwork[STAT1], booleanNetwork[STAT5]});
     }
 }
 

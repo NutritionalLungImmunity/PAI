@@ -59,7 +59,7 @@ void MIP2::degrade() {
     //degrade(utils::constexprants::TNF_HALF_LIFE, 0);
 }
 
-int MIP2::getIndex(const char* str) const {
+int MIP2::getIndex(const std::string& str) const {
     return 0;
 }
 

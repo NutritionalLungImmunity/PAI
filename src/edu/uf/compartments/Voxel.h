@@ -108,7 +108,7 @@ private:
     std::vector<Voxel*> neighbors;
     int numSamples;
     int externalState;
-    std::mt19937_64 generator;
+    // std::mt19937_64 generator;
 
     static int _xbin;
     static int _ybin;

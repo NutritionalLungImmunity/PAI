@@ -28,7 +28,7 @@ using namespace intracellularState;
 
 class Cell : public Interactable {
 private:
-    static unordered_map<int, Cell*> cells;
+    //static unordered_map<int, Cell*>cells; //remove and change to local function to avoid initialization access issue 
     int id;
     double ironPool;
     bool engulfed;
@@ -37,6 +37,7 @@ private:
     int externalState;
 
 public:
+    static unordered_map<int, Cell*>& getCells();
     Cell(IntracellularModel* intracellularModel);
 
     static void remove(int id);

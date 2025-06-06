@@ -55,7 +55,7 @@ double Transferrin::getKd() {
     return utils::constexprants::Kd_TfR2;
 }
 
-int Transferrin::getIndex(const char* str) const{
+int Transferrin::getIndex(const std::string& str) const{
 	return INDEXES.at(str);
 }
 

@@ -45,6 +45,7 @@ void FMacrophageBooleanNetwork::processBooleanNetwork() {
                     break;
                 case TLR4:
                     //booleanNetwork[TLR4] = min(getInput(TLRBinder::getBinder()), gnot(booleanNetwork[FCGR], N));
+                	booleanNetwork[TLR4] = min(getInput(Afumigatus::DEF_OBJ), gnot(booleanNetwork[FCGR], N));
                     break;
                 case FCGR:
                     booleanNetwork[FCGR] = 0;

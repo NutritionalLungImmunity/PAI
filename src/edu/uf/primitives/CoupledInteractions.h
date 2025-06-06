@@ -93,7 +93,7 @@ public:
 	        	double prInteract = (aspergillus->getBooleanNetwork()->getState(AspergillusIntracellularModel::STATUS) == AspergillusIntracellularModel::HYPHAE) ? utils::constexprants::PR_MA_HYPHAE : utils::constexprants::PR_MA_PHAG;
 	            if (Rand::getRand().randunif() < prInteract) {
 	            	intAspergillus(mac, aspergillus, x,  y, z, aspergillus->getBooleanNetwork()->getState(AspergillusIntracellularModel::STATUS) != AspergillusIntracellularModel::HYPHAE);
-	                if (aspergillus->getBooleanNetwork()->getState(AspergillusIntracellularModel::STATUS) == AspergillusIntracellularModel::HYPHAE && mac->getBooleanNetwork()->hasPhenotype(new int[]{AspergillusMacrophage::M1, AspergillusMacrophage::M2B}, 2)) {
+	                if (aspergillus->getBooleanNetwork()->getState(AspergillusIntracellularModel::STATUS) == AspergillusIntracellularModel::HYPHAE && mac->getBooleanNetwork()->hasPhenotype(new int[2]{AspergillusMacrophage::M1, AspergillusMacrophage::M2B}, 2)) {
 	                	aspergillus->getBooleanNetwork()->setState(IntracellularModel::LIFE_STATUS, getDeadState(aspergillus, IntracellularModel::DYING));
 	                    if (aspergillus->getNextSepta() != nullptr) {
 	                    	aspergillus->getNextSepta()->setRoot(true);

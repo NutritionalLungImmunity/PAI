@@ -19,8 +19,8 @@ namespace utils {
 class constexprants{
 public:
 
+	//static constexpr double PI = 3.141592653589793;
 	static constexpr double D = 16;
-
 	static constexpr int TIME_STEP_SIZE = 2; // minutes
 	static constexpr int HALF_HOUR = 30; // minutes
 	static constexpr int CYT_BIND_T = 35; // minutes

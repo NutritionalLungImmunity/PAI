@@ -16,8 +16,8 @@ OBJS += \
 # Each subdirectory must supply rules for building sources it contributes
 src/edu/uf/main/run/%.o: ../src/edu/uf/main/run/%.cpp src/edu/uf/main/run/subdir.mk
 	@echo 'Building file: $<'
-	@echo 'Invoking: Cross G++ Compiler'
-	g++ -std=c++2a -O2 -g3 -Wall -c -fmessage-length=0 -v -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
+	@echo 'Invoking: GCC C++ Compiler'
+	g++ -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
