@@ -8,17 +8,17 @@ tags:
 authors:
   - name: Henrique de Assis Lopes Ribeiro
     orcid: 0000-0001-9802-5211
-    affiliation: 1 
-    corresponding: true # (This is how to denote the corresponding author)
+    -affiliation: 1 
+    -corresponding: true # (This is how to denote the corresponding author)
   - name: Sandra A Tsiorintsoa
-    orcid: 0000-0002-7925-987X
+    -orcid: 0000-0002-7925-987X
     affiliation: 1
   - name: Reinhard Laubenbacher
-    affiliation: 1
-    orcid: 0000-0002-9143-9451
+    -affiliation: 1
+    -orcid: 0000-0002-9143-9451
 affiliations:
-   index: 1
- - name: Department of Medicine, Division of Pulmonary, Critical Care, and Sleep Medicine, University of Florida, Gainesville 32610, FL, USA.
+  -index: 1
+  -name: Department of Medicine, Division of Pulmonary, Critical Care, and Sleep Medicine, University of Florida, Gainesville 32610, FL, USA.
 date: 1 June 2025
 bibliography: paper.bib
 ---
