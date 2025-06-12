@@ -583,21 +583,6 @@ public class Interactions {
     }
     
     /**
-     * This method handles the interaction between leukocytes (e.g., neutrophils and macrophages) 
-     * and Klebsiella pneumonia. If Klebsiella is free and the leukocyte phagosome is not full, 
-     * the leukocyte will phagocytose the bacteria. The Klebsiella will become "INTERNALIZING" 
-     * (I.e., not free), and if the leukocyte is a macrophage, LPS will activate its TLR4 to the 
-     * maximum level (4). This method just calls the method intKlebsiela.
-     * @param leuk a leukocyte
-     * @param klebsiella
-     * @return
-     */
-    public static boolean intKlebsiella(Leukocyte leuk, InfectiousAgent klebsiella) {
-    	CoupledInteractions.intKlebsiela(leuk, klebsiella);
-    	return true;
-    }
-    
-    /**
      * Method handling the interaction between infectious agents (e.g., Afumigatus and Klebsiella) 
      * and siderophores (e.g., TAFC, Aerobactin, etc). If the infectious agent is in a state where 
      * it is able to uptake that particular siderophore, the local quantity of siderophore bound to 
@@ -743,20 +728,6 @@ public class Interactions {
     	}
     	return true;
     }
-    
-    /**
-	 * Method handling the mechanics of Klebsiela-leukocyte interaction. If Klebsiella is 
-	 * the free phenotype and the leukocyte phagosome is not full, the leukocyte will 
-	 * phagocytose the bacteria. The "spatial" status of the cells (free/internalizing) 
-	 * is coded as a phenotype in this model. Upon interaction, the Klebsiella will become 
-	 * "INTERNALIZING" (I.e., not free). If the leukocyte is a macrophage, LPS will activate 
-	 * its TLR4 to the maximum level (4). 
-	 * @param phagocyte
-	 * @param klebsiela
-	 */
-	public static void intKlebsiela(Leukocyte leukocyte, InfectiousAgent klebsiela) {
-       CoupledInteractions.intKlebsiela(leukocyte, klebsiela);
-   }
     
 }
 
