@@ -68,12 +68,12 @@ This project uses CMake to configure and build on multiple platforms. Below are 
 ### Running the Executable
 
 ```bash 
-./ISSpp
+./PAIpp
 ```
 From Command Prompt or PowerShell:
 
 ```batch
-ISSpp.exe
+PAIpp.exe
 ```
 
 ## Windows (Cygwin)
@@ -112,12 +112,12 @@ ISSpp.exe
 ### Running the Executable
 
 ```bash 
-./ISSpp
+./PAIpp
 ```
 From Command prompt or PowerShell:
 
 ```batch
-ISSpp.exe
+PAIpp.exe
 ```
 
 ## Linux (Ubuntu/Debian)
@@ -156,7 +156,7 @@ sudo apt-get install cmake
 ### Running the Executable
 
 ```bash 
-./ISSpp
+./PAIpp
 ```
 ## macOS
 
@@ -195,7 +195,5 @@ brew install cmake
 Run the executable directly:
 
 ```bash
-./ISSpp
+./PAIpp
 ```
-
-
