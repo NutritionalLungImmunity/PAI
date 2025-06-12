@@ -171,28 +171,6 @@ public class InitializeBaseModel extends Initialize{
     }
     
     public void initializeTypeIPneumocytes(int numCells) {
-    	int xbin = GridFactory.getXbin();
-    	int ybin = GridFactory.getYbin();
-    	int zbin = GridFactory.getZbin();
-    	
-    	int x0 = 0;
-    	int y0 = 0;
-    	int z0 = 0;
-    	
-    	double p  = numCells/((double) xbin*ybin*zbin);
-    	Voxel[][][] grid = GridFactory.getGrid();
-    	PneumocyteI cell = new PneumocyteI(IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.PNEUMOCYTE_I_KLEBSIELLA_MODEL));
-    	
-    	for(int x = 0; x < xbin; x++)
-    		for(int y = 0; y < ybin; y++)
-    			for(int z = 0; z < zbin; z++) {
-    				if(rand.nextDouble() < p || !grid[x][y][z].getNeighbors().contains(grid[x0][y0][z0]))
-    					cell = new PneumocyteI(IntracellularModelFactory.createBooleanNetwork(IntracellularModelFactory.PNEUMOCYTE_I_KLEBSIELLA_MODEL));
-                    grid[x][y][z].setCell(cell);
-                    x0 = x;
-                    y0 = y;
-                    z0 = z;
-    			}
     }
 
     public List<Macrophage> initializeMacrophage(int numMacrophages) {
