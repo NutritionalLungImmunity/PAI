@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Define the project name and version
-project(ISSpp VERSION 1.0 LANGUAGES CXX)
+project(PAIpp VERSION 1.0 LANGUAGES CXX)
 
 # Set C++ standard to C++17
 set(CMAKE_CXX_STANDARD 17)
@@ -32,10 +32,10 @@ message(STATUS "Collected sources: ${SOURCES}")
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 # Add executable using the collected files
-add_executable(ISSpp ${SOURCES})
+add_executable(PAIpp ${SOURCES})
 
 # Add src/ to the include path
-target_include_directories(ISSpp PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(PAIpp PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 
 
