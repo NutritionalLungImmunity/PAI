@@ -13,7 +13,6 @@ import edu.uf.interactable.Afumigatus.Afumigatus;
 import edu.uf.intracellularState.AspergillusIntracellularModel;
 import edu.uf.intracellularState.AspergillusMacrophage;
 import edu.uf.intracellularState.IntracellularModel;
-import edu.uf.intracellularState.Klebsiella.KlebsiellaIntracellularModel;
 import edu.uf.utils.Constants;
 import edu.uf.utils.Rand;
 
@@ -202,33 +201,6 @@ public class CoupledInteractions {
             }
         }
     }
-	
-	/**
-	 * Method handling the mechanics of Klebsiela-leukocyte interaction. If Klebsiella is 
-	 * the free phenotype and the leukocyte phagosome is not full, the leukocyte will 
-	 * phagocytose the bacteria. The "spatial" status of the cells (free/internalizing) 
-	 * is coded as a phenotype in this model. Upon interaction, the Klebsiella will become 
-	 * "INTERNALIZING" (I.e., not free). If the leukocyte is a macrophage, LPS will activate 
-	 * its TLR4 to the maximum level (4). 
-	 * @param phagocyte
-	 * @param klebsiela
-	 */
-	static void intKlebsiela(Leukocyte leukocyte, InfectiousAgent klebsiela) {
-       if(klebsiela.getBooleanNetwork().hasPhenotype(KlebsiellaIntracellularModel.FREE)) {
-           if (!leukocyte.isDead()) {
-           	if(leukocyte.getPhagosome().size() < leukocyte.getMaxCell()) {
-                       //phagocyte.phagosome.hasConidia = true;
-           		klebsiela.getBooleanNetwork().setState(IntracellularModel.LOCATION, KlebsiellaIntracellularModel.INTERNALIZING);
-           		klebsiela.setEngulfed(true);
-           		leukocyte.getPhagosome().add(klebsiela);
-               }
-           }
-           //phagocyte.getBooleanNetwork().addPhenotype(Cell.INTERACTING);
-           if(leukocyte instanceof Macrophage) {
-           	leukocyte.bind(LPS.getMolecule(), 4);
-           }
-       }
-   }
 	
 	/**
 	 * This method returns the state "state" if the cell life status is "DEAD." 
