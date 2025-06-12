@@ -1,2 +1,3 @@
-# jISS
-java Immune System Simulator
+# jPAI
+java Pulmonary Agent-based Infection simulator
+
