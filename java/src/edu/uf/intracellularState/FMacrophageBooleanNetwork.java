@@ -17,9 +17,6 @@ import edu.uf.interactable.TGFb;
 import edu.uf.interactable.TLRBinder;
 import edu.uf.interactable.TNFa;
 import edu.uf.interactable.Afumigatus.Afumigatus;
-import edu.uf.interactable.invitro.BGlucan;
-//import edu.uf.interactable.covid.SAMP;
-import edu.uf.interactable.invitro.GM_CSF;
 import edu.uf.utils.Constants;
 
 public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
@@ -170,7 +167,7 @@ public abstract class FMacrophageBooleanNetwork extends IntracellularModel{
 						this.booleanNetwork[TNFR] = getInput(Molecule.searchMolecule(TNFa.NAME));
 						break;
 					case 22:
-						this.booleanNetwork[Dectin] = max(getInput(Afumigatus.DEF_OBJ), getInput(Molecule.searchMolecule(BGlucan.NAME)));
+						this.booleanNetwork[Dectin] = getInput(Afumigatus.DEF_OBJ);
 						break;
 					case 23:
 						this.booleanNetwork[SOCS1] = this.booleanNetwork[STAT6];
