@@ -58,6 +58,7 @@ Core dynamics include:
  - Chemotaxis-driven movement and recruitment of leukocytes.
  - Fungal iron acquisition via siderophores (e.g., TAFC) competing with host defense molecules (e.g., Lactoferrin).
  - Cell state transitions (e.g., activation, apoptosis) driven by intracellular Boolean Networks.
+
 Each agent (cell or molecule) operates autonomously, interacts within its voxel, and can change state over time. The simulation captures emergent behaviors like inflammation resolution, immune recruitment, and fungal clearance or persistence.
 
 
