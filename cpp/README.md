@@ -1,4 +1,4 @@
-# ISSpp
+# PAIpp
 
 This project is a C++ cross-platform project built with CMake. Buidable on Windows, Linux, and macOS via terminal.
 
@@ -10,10 +10,10 @@ See [INSTALL.md](INSTALL.md) for platform-specific instructions.
 
 ```bash
 git clone https://github.com/...
-cd ISS++
+cd PAI++
 cmake -S . -B build
 cmake --build build
-./build/ISSpp
+./build/PAIpp
 ```
 
 ### macOS
@@ -31,7 +31,7 @@ brew install cmake
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/ISSpp
+./build/PAIpp
 ```
 
 ### Windows (MinGW)
@@ -47,7 +47,7 @@ cmake --build build
 ```bash
 cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
-./build/ISSpp.exe
+./build/PAIpp.exe
 ```
 
 From Command prompt or PowerShell:
@@ -55,7 +55,7 @@ From Command prompt or PowerShell:
 ```batch
 cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
-.\build\ISSpp.exe
+.\build\PAIpp.exe
 ```
 
 ### Windows (Cygwin)
@@ -71,7 +71,7 @@ cmake --build build
 ```bash
 cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
-./build/ISSpp.exe
+./build/PAIpp.exe
 ```
 
 From Command prompt or PowerShell:
@@ -79,7 +79,7 @@ From Command prompt or PowerShell:
 ```batch
 cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
-.\build\ISSpp.exe
+.\build\PAIpp.exe
 ```
 
 ### Linux/Unix/
@@ -99,7 +99,7 @@ sudo apt install cmake
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/ISSpp
+./build/PAIpp
 ```
 
 ## Clean build
