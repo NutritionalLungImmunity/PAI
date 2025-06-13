@@ -131,7 +131,7 @@ Make sure both `jPAI.jar` and `test_pai.py` are in the same directory. Then run:
 
 ```bash
 python3 test_pai.py
-
+```
 
 test_pai.py was tested with Python version 3.7.2
 
