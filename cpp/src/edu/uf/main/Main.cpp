@@ -29,7 +29,7 @@ using namespace std::chrono;
 using namespace edu::uf::compartments;
 using namespace edu::uf::main::print;
 
-void baseModel() {
+void baseModel(int argc, char* argv[]) {
     std::unique_ptr<edu::uf::main::initialize::Initialize> initialize(new edu::uf::main::initialize::InitializeBaseModel());
     std::unique_ptr<edu::uf::main::run::Run> run(new edu::uf::main::run::RunSingleThread());
     PrintBaseModel* stat = new PrintBaseModel();
@@ -38,7 +38,7 @@ void baseModel() {
     int ybin = 10;
     int zbin = 10;
 
-    std::vector<std::string> input = {"0", "1920", "15", "640"};
+    std::vector<std::string> input = {argv[1], argv[2], argv[3], argv[4]};
 
     double f = 0.1;
     double pdeFactor = edu::uf::utils::constexprants::D / (30 / edu::uf::utils::constexprants::TIME_STEP_SIZE);
@@ -59,15 +59,13 @@ void baseModel() {
     stat->close();
 }
 
-int main() {
-	//printf("t\t Pathogen\t Resting\t Swelling\t Germinating\t Hyphae\t TAFC_tot\t TAFC1\t TAFC2\t Lactoferrin1\t Lactoferrin2\t Lactoferrin3\t Transferrin_tot\t Transferrin1\t Transferrin2\t Transferrin3\t TGFb\t IL10\t TNFa\t MIP1B\t MIP2\t Macrophage\t ActivePneumocytes\t Neutrophil\n");
-	// auto start = high_resolution_clock::now();
-    // baseModel();
-    // auto stop = high_resolution_clock::now();
-    // auto duration = duration_cast<microseconds>(stop - start);
-    // printf("%d", duration.count());
-     auto start = std::chrono::steady_clock::now();
-    baseModel();
+int main(int argc, char* argv[]) {
+    if (argc != 5) {
+        std::cerr << "Usage: ./PAIpp <t0> <Aspergillus> <Macrophage> <Pneumocyte>" << std::endl;
+        return 1;
+    }
+    auto start = std::chrono::steady_clock::now();
+    baseModel(argc, argv);
     auto stop = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     printf("%lld", duration.count());
