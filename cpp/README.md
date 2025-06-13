@@ -13,7 +13,7 @@ git clone https://github.com/...
 cd PAI++
 cmake -S . -B build
 cmake --build build
-./build/PAIpp
+./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 ### macOS
@@ -31,7 +31,7 @@ brew install cmake
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/PAIpp
+./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 ### Windows (MinGW)
@@ -47,7 +47,7 @@ cmake --build build
 ```bash
 cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
-./build/PAIpp.exe
+./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 From Command prompt or PowerShell:
@@ -55,7 +55,7 @@ From Command prompt or PowerShell:
 ```batch
 cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
-.\build\PAIpp.exe
+.\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 ### Windows (Cygwin)
@@ -71,7 +71,7 @@ cmake --build build
 ```bash
 cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
-./build/PAIpp.exe
+./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 From Command prompt or PowerShell:
@@ -79,7 +79,7 @@ From Command prompt or PowerShell:
 ```batch
 cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
-.\build\PAIpp.exe
+.\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 ### Linux/Unix/
@@ -99,7 +99,7 @@ sudo apt install cmake
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/PAIpp
+./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 ## Clean build
