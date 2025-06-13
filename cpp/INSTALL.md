@@ -73,7 +73,7 @@ This project uses CMake to configure and build on multiple platforms. Below are 
 From Command Prompt or PowerShell:
 
 ```batch
-PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+.\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 ## Windows (Cygwin)
@@ -122,12 +122,12 @@ Example:
 ```
 
 ```batch
-./PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+.\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 Example:
 ```batch
-./PAIpp.exe 15 1920 15 640
+.\PAIpp.exe 15 1920 15 640
 ```
 
 
