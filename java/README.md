@@ -31,3 +31,5 @@ python3 test_jpai.py
 ```
 
 test_jpai.py was tested with Python version 3.7.2
+
+test_jpai.py does not work in Windows.
