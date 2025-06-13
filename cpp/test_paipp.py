@@ -2,7 +2,6 @@ import sys
 import subprocess
 import os
 import math
-import platform
 
 
 def out_of_range1(diff, k, time):
@@ -80,14 +79,10 @@ def test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, re
 
 pass_all_tests = True
 
-if platform.system() == "Windows":
-    app_name = "./PAIpp.exe"
-else:
-    app_name = "./PAIpp"
 
 with open("file.tsv", "w") as outfile:
     result=subprocess.run(
-        [app_name, "15", "1920", "15", "640"],
+        ["./PAIpp", "15", "1920", "15", "640"],
         stdout=outfile,
         stderr=subprocess.STDOUT  # optional: combine stdout and stderr
     )
@@ -118,7 +113,7 @@ if os.path.exists(file_path):
 
 with open("file.tsv", "w") as outfile:
     result = subprocess.run(
-        [app_name, "15", "1000", "150", "640"],
+        ["./PAIpp", "15", "1000", "150", "640"],
         stdout=outfile,
         stderr=subprocess.STDOUT  # optional: combine stdout and stderr
     )
