@@ -167,7 +167,7 @@ sudo apt-get install cmake
 ### Running the Executable
 
 ```bash 
-./PAIpp
+./PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 ## macOS
 
