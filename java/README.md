@@ -8,3 +8,26 @@ java Pulmonary Agent-based Infection simulator
 
 ```bash
 java -jar jPAI.jar
+```
+
+## Test
+
+The script `test_pai.py`:
+
+- Runs the `jPAI.jar` simulation with two different sets of inputs
+- Captures its tabular output
+- Checks key quantities at specific iterations (0, 180, 360, 720, 1440, and. 2045):
+  - **Aspergillus** (column 2)
+  - **TNF** (column 19)
+  - **Macrophages** (column 22)
+- Confirms these outputs are within expected ranges.
+
+### How to Run
+
+Make sure both `jPAI.jar` and `test_pai.py` are in the same directory. Then run:
+
+```bash
+python3 test_pai.py
+```
+
+test_pai.py was tested with Python version 3.7.2
