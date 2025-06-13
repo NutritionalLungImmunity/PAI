@@ -35,7 +35,7 @@ public class Main {
 		int zbin = 10;
 
         
-        String[] input = new String[]{"0", "1920", "15", "640"};
+        String[] input = new String[]{args[0], args[1], args[2], args[3]};
         
         
         
@@ -48,7 +48,7 @@ public class Main {
         initialize.initializeMolecules(diffusion, false);
         initialize.initializePneumocytes(Integer.parseInt(input[3]));
         initialize.initializeMacrophage(Integer.parseInt(input[2]));
-        initialize.initializeNeutrophils(0);
+        initialize.initializeNeutrophils(Integer.parseInt(input[0]));
         initialize.infect(Integer.parseInt(input[1]), AspergillusIntracellularModel.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
         stat.grid = GridFactory.getGrid();
 
