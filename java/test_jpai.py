@@ -58,7 +58,7 @@ def test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, re
         k = int(sp[0])
         if k == times[i]:
             afumigatus = int(sp[1]) if i == 0 else math.log(float(sp[1]))
-            tnf = int(sp[18]) if i == 0 else math.log(float(sp[18]))
+            tnf = 0 if i == 0 else math.log(float(sp[18]))
             ma = int(sp[21]) if i == 0 else math.log(float(sp[21]))
             afumigatus_diff = afumigatus - ref_afumigatus[i]
             tnf_diff = tnf - ref_tnf[i]
