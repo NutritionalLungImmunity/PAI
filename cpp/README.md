@@ -135,6 +135,6 @@ python3 test_paipp.py
 
 test_paipp.py was tested with Python version 3.7.2.
 
-test_paipp.py does not work in Windows.
+This test is designed to see if output values are within reasonable bounds. Because of the stochastic nature of the simulator, passing the test is probable but not guaranteed.
 
 
