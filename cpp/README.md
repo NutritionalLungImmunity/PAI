@@ -133,6 +133,8 @@ Make sure both `PAIpp` and `test_paipp.py` are in the same directory. Then run:
 python3 test_paipp.py
 ```
 
-test_paipp.py was tested with Python version 3.7.2
+test_paipp.py was tested with Python version 3.7.2.
+
+test_paipp.py does not work in Windows.
 
 
