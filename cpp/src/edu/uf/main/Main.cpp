@@ -49,7 +49,7 @@ void baseModel(int argc, char* argv[]) {
     initialize->initializeMolecules(diffusion.get(), false);
     initialize->initializePneumocytes(std::stoi(input[3]));
     initialize->initializeMacrophage(std::stoi(input[2]));
-    initialize->initializeNeutrophils(0);
+    initialize->initializeNeutrophils(std::stoi(input[0]));
     initialize->infect(std::stoi(input[1]), edu::uf::intracellularState::AspergillusIntracellularModel::RESTING_CONIDIA, edu::uf::utils::constexprants::CONIDIA_INIT_IRON, -1, false);
 
     std::vector<Recruiter*> recruiters = {new MacrophageRecruiter(), new NeutrophilRecruiter()};
