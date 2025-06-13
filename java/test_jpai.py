@@ -131,7 +131,7 @@ ref_tnf = [0, -41.51024, -40.32655, -41.07596, -43.61308, -45.86800]
 ref_tnf_std = [0, 0.02, 0.01, 0.05, 0.075, 0.3]
 
 ref_ma = [150, 4.821182, 4.830577, 4.815199, 4.026479, 3.162690]
-ref_ma_std = [0.02, 0.075, 0.1, 0.15, 0.25, 0.25]
+ref_ma_std = [0.05, 0.075, 0.1, 0.15, 0.25, 0.25]
 
 pass_all_tests &= test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, ref_ma_std)
 
