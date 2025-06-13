@@ -113,6 +113,8 @@ From Command prompt or PowerShell:
 rmdir /s /q build
 ```
 
+## Test
+
 The script `test_pai.py`:
 
 - Runs the `jPAI.jar` simulation with two different sets of inputs
