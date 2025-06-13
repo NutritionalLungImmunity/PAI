@@ -129,9 +129,9 @@ The script `test_pai.py`:
 
 Make sure both `jPAI.jar` and `test_pai.py` are in the same directory. Then run:
 
-test_pai.py was tested with Python version 3.7.2
-
 ```bash
 python3 test_pai.py
+
+test_pai.py was tested with Python version 3.7.2
 
 
