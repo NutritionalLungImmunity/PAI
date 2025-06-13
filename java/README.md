@@ -12,7 +12,7 @@ java -jar jPAI.jar
 
 ## Test
 
-The script `test_pai.py`:
+The script `test_jpai.py`:
 
 - Runs the `jPAI.jar` simulation with two different sets of inputs
 - Captures its tabular output
@@ -24,10 +24,10 @@ The script `test_pai.py`:
 
 ### How to Run
 
-Make sure both `jPAI.jar` and `test_pai.py` are in the same directory. Then run:
+Make sure both `jPAI.jar` and `test_jpai.py` are in the same directory. Then run:
 
 ```bash
-python3 test_pai.py
+python3 test_jpai.py
 ```
 
-test_pai.py was tested with Python version 3.7.2
+test_jpai.py was tested with Python version 3.7.2
