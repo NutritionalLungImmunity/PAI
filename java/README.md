@@ -7,8 +7,14 @@ java Pulmonary Agent-based Infection simulator
   If you have `jPAI.jar`:
 
 ```bash
-java -jar jPAI.jar
+java -jar jPAI.jar <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
+
+Example
+```bash
+java -jar jPAI.jar 15 1920 15 640
+```
+
 
 ## Test
 
