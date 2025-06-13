@@ -127,12 +127,12 @@ The script `test_paipp.py`:
 
 ### How to Run
 
-Make sure both `PAIpp` and `test_pai.py` are in the same directory. Then run:
+Make sure both `PAIpp` and `test_paipp.py` are in the same directory. Then run:
 
 ```bash
-python3 test_pai.py
+python3 test_paipp.py
 ```
 
-test_pai.py was tested with Python version 3.7.2
+test_paipp.py was tested with Python version 3.7.2
 
 
