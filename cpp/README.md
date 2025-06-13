@@ -125,9 +125,10 @@ The script `test_pai.py`:
   - **Macrophages** (column 22)
 - Confirms these outputs are within expected ranges.
 
-## How to Run
+### How to Run
 
 Make sure both `jPAI.jar` and `test_pai.py` are in the same directory. Then run:
+test__pai.py was tested with Python version 3.7.2
 
 ```bash
 python3 test_pai.py
