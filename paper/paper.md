@@ -95,7 +95,7 @@ We built this model initially in Java (jPAI), but we created a C++ version (PAI+
 
 Figure 3C shows that the running time (wall time) of both implementations is similar (~11 sec), with C++ being slightly faster. The Benchmark.pdf file shows that this advantage of C++ is higher or lower depending on the environment. In Debian (via Windows Subsystem Linux – Maroon), it was almost twice as fast as in Windows, even though this was the same computer, and Debian was running on top of Windows. On the other hand, there were major differences in the memory usage (Figure 3D). While PAI++ uses a few megabytes, the Java version takes more than a hundred megabytes. The difference is probably due to the garbage collection. While the C++ version has code to explicitly free the memory every time an agent is deleted, the jPAI version depends on the Java garbage collection system. A more thorough comparison of results, running time, and memory usage is provided in the Benchmark.pdf file. The similarity between the two implementations serves as an important benchmark for model reproducibility, a key target in the modeling community (@donkin2017; @masison2021).
 
-We provided documentation only for the Java version of the code. However, a C++ documentation would be almost identical.
+We provided documentation only for the Java version of the code. However, a C++ code follows the same structure.
 
 
 # References
