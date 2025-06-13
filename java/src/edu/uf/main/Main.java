@@ -50,7 +50,6 @@ public class Main {
         initialize.initializeMacrophage(Integer.parseInt(input[2]));
         initialize.initializeNeutrophils(Integer.parseInt(input[0]));
         initialize.infect(Integer.parseInt(input[1]), AspergillusIntracellularModel.RESTING_CONIDIA, Constants.CONIDIA_INIT_IRON, -1, false);
-        stat.grid = GridFactory.getGrid();
 
         Recruiter[] recruiters = new Recruiter[2];
         recruiters[0] = new MacrophageRecruiter();
