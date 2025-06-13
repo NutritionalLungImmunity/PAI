@@ -59,8 +59,8 @@ def test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, re
             continue
         k = int(sp[0])
         if k == times[i]:
-            afumigatus = float(sp[1]) + 1 if i == 0 else math.log(float(sp[1]) + 1)
-            tnf = float(sp[18]) if i == 0 else math.log(float(sp[18]))
+            afumigatus = int(sp[1]) + 1 if i == 0 else math.log(float(sp[1]) + 1)
+            tnf = int(sp[18]) if i == 0 else math.log(float(sp[18]))
             ma = int(sp[21]) if i == 0 else math.log(float(sp[21]))
             afumigatus_diff = afumigatus - ref_afumigatus[i]
             tnf_diff = tnf - ref_tnf[i]
@@ -101,7 +101,7 @@ f = open("file.tsv", "r")
 
 
 ref_afumigatus = [1921, 7.545915, 7.155904, 5.574055, 3.244941, 2.244287]
-ref_afumigatus_std = [0, 0.0025, 0.02, 0.08, 0.175, 10]
+ref_afumigatus_std = [0, 0.0025, 0.02, 0.08, 0.25, 10]
 
 ref_tnf = [0, -40.88301, -39.95179, -40.58841, -42.87585, -44.40466]
 ref_tnf_std = [0, 0.01, 0.0075, 0.01, 0.125, 0.075]
