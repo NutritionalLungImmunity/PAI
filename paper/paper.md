@@ -8,17 +8,18 @@ tags:
 authors:
   - name: Henrique AL Ribeiro
     orcid: 0000-0001-9802-5211
-    -affiliation: 1 
-    -corresponding: true
+    affiliation: 1 
+    corresponding: true
   - name: Sandra A Tsiorintsoa
-    -orcid: 0000-0002-7925-987X
-    -affiliation: 1
+    orcid: 0000-0002-7925-987X
+    affiliation: 1
   - name: Reinhard Laubenbacher
-    -affiliation: 1
-    -orcid: 0000-0002-9143-9451
+    affiliation: 1
+    orcid: 0000-0002-9143-9451
 affiliations:
-  -index: 1
   -name: Department of Medicine, Division of Pulmonary, Critical Care, and Sleep Medicine, University of Florida, Gainesville 32610, FL, USA.
+  index: 1
+
 date: 12 June 2025
 bibliography: paper.bib
 ---
