@@ -12,7 +12,7 @@ authors:
     -corresponding: true
   - name: Sandra A Tsiorintsoa
     -orcid: 0000-0002-7925-987X
-    affiliation: 1
+    -affiliation: 1
   - name: Reinhard Laubenbacher
     -affiliation: 1
     -orcid: 0000-0002-9143-9451
