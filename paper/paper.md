@@ -17,7 +17,7 @@ authors:
     affiliation: 1
     orcid: 0000-0002-9143-9451
 affiliations:
-  -name: Department of Medicine, Division of Pulmonary, Critical Care, and Sleep Medicine, University of Florida, Gainesville 32610, FL, USA.
+  - name: Department of Medicine, Division of Pulmonary, Critical Care, and Sleep Medicine, University of Florida, Gainesville 32610, FL, USA.
   index: 1
 
 date: 12 June 2025
