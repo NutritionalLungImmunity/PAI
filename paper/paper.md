@@ -62,7 +62,7 @@ A typical instantiation of the PAI model, as used in @ribeiro2022, involves a 10
 
 ## Benchmark
 
-PAI++ contains only the code of the @ribeiro2022 model, which is the focus of this paper, while jPAI contains other pieces of code not discussed here. The code used for this benchmark is a simplification of @ribeiro2022. Within this context, PAI++ and jPAI are nearly identical (Figure 3A-B). The similarity between the two implementations serves as an important benchmark for model reproducibility, a key target in the modeling community (@donkin2017; @masison2021). Figure 3C shows that the running time (wall time) of both implementations is similar (~11 sec), with C++ being slightly faster. On the other hand, there were major differences in the memory usage (Figure 3D).
+PAI++ contains only the code of the @ribeiro2022 model, which is the focus of this paper, while jPAI contains other pieces of code not discussed here. The code used for this benchmark is a simplification of @ribeiro2022. Within this context, PAI++ and jPAI are nearly identical (Figure 3A-B). The similarity between the two implementations serves as an important benchmark for model reproducibility, a key target in the modeling community (@donkin2017; @masison2021). Figure 3C shows that the running time (wall time) of both implementations is similar (~11 sec), with C++ being slightly faster. On the other hand, there were major differences in the memory usage (Figure 3D). A more thorough benchmark is provided in Benchmark.pdf.
 
 We provided documentation only for the Java version of the code. However, a C++ code follows the same structure.
 
