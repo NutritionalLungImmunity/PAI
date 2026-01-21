@@ -1,6 +1,8 @@
 # jPAI
 java Pulmonary Agent-based Infection simulator
 
+This is a java cross-platform project build with javac. Buidable on Windows, Linux, and macOS via terminal.
+
 - Java Runtime Environment (JRE) 8 or later  
   (Tested with Java 18.0.2)
 
@@ -15,6 +17,28 @@ Example
 java -jar jPAI.jar 15 1920 15 640
 ```
 
+## Build Instructions
+
+- java 1.8
+- javac 1.8
+
+### Unix/macOS/Linux
+
+```bash
+git clone https://github.com/NutritionalLungImmunity/PAI.git
+cd PAI/java
+javac -d bin $(find . -name "*.java")
+jar cfe jPAI.jar edu.uf.main.Main -C bin .
+```
+
+### Windows
+
+Command Prompt or PowerShell
+
+```batch
+javac -d bin $(Get-ChildItem -Path . -Filter *.java -Recurse | ForEach-Object { $_.FullName })
+jar cfe jPAI.jar edu.uf.main.Main -C bin .
+```
 
 ## Test
 

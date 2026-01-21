@@ -80,6 +80,8 @@ def test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, re
 
 pass_all_tests = True
 
+print("Test is starting")
+
 if platform.system() == "Windows":
     app_name = "./PAIpp.exe"
 else:

@@ -6,7 +6,7 @@ This project uses CMake to configure and build on multiple platforms. Below are 
 
 ### Prerequisites
 
-- **MinGW**: Install MinGW to get a compatible GCC toolchain. You can download MinGW from [here](https://sourceforge.net/projects/mingw/).
+- **MinGW**: Install MinGW to get a compatible GCC toolchain. You can download MinGW from [here](https://sourceforge.net/projects/mingw/). Mark **ming32-gcc-g++** and **mingw32-make** for installation and add **MinGW\bin** to PATH.
 - **CMake**: Download and install CMake from [here](https://cmake.org/download/).
 
 ### Building the Project
@@ -36,6 +36,25 @@ This project uses CMake to configure and build on multiple platforms. Below are 
     cmake -S -B build -G "MinGW Makefiles"
     cmake --build build
 ```
+### Running the Executable
+Run the executable directly:
+
+```bash
+./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+
+Example:
+```bash
+./build/PAIpp.exe 15 1920 15 640
+```
+```batch
+.\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+
+Example:
+```batch
+.\build\PAIpp.exe 15 1920 15 640
+```
 ## Windows (Visual Studio)
 
 ### Prerequisites
@@ -64,23 +83,30 @@ This project uses CMake to configure and build on multiple platforms. Below are 
     cmake -S -B build -G "Visual Studio 16 2019"
     cmake --build build
 ```
-
 ### Running the Executable
+Run the executable directly:
 
-```bash 
-./PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```bash
+./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-From Command Prompt or PowerShell:
 
+Example:
+```bash
+./build/PAIpp.exe 15 1920 15 640
+```
 ```batch
-.\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+.\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
+Example:
+```batch
+.\build\PAIpp.exe 15 1920 15 640
+```
 ## Windows (Cygwin)
 
 ### Prerequisites
 
-- **Cygwin**: Install MinGW to get a compatible GCC toolchain. You can download MinGW from [here](https://sourceforge.net/projects/mingw/).
+- **Cygwin**: Install MinGW to get a compatible GCC toolchain. You can download MinGW from [here](https://www.cygwin.com/).
 - **CMake**: Download and install CMake from [here](https://cmake.org/download/).
 
 ### Building the Project
@@ -108,28 +134,35 @@ From Command Prompt or PowerShell:
     cmake -S -B build -G "Unix Makefiles"
     cmake --build build
 ```
-
 ### Running the Executable
+Run the executable directly:
 
-```bash 
-./PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```bash
+./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-From Command prompt or PowerShell:
+Example:
+```bash
+./build/PAIpp.exe 15 1920 15 640
+```
+```batch
+.\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
 
 Example:
 ```batch
-./PAIpp 15 1920 15 640
+.\build\PAIpp.exe 15 1920 15 640
 ```
+### Running the Executable
+Run the executable directly:
 
-```batch
-.\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```bash
+./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 Example:
-```batch
-.\PAIpp.exe 15 1920 15 640
+```bash
+./build/PAIpp 15 1920 15 640
 ```
-
 
 ## Linux (Ubuntu/Debian)
 
@@ -164,11 +197,6 @@ sudo apt-get install cmake
     ```bash
     make
     ```
-### Running the Executable
-
-```bash 
-./PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
-```
 ## macOS
 
 ### Prerequisites
@@ -206,10 +234,10 @@ brew install cmake
 Run the executable directly:
 
 ```bash
-./PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
 Example:
-```batch
-./PAIpp 15 1920 15 640
+```bash
+./build/PAIpp 15 1920 15 640
 ```

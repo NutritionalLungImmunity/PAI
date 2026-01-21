@@ -78,6 +78,8 @@ def test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, re
 
 pass_all_tests = True
 
+print("Test is starting")
+
 with open("file.tsv", "w") as outfile:
     result=subprocess.run(
         ["java", "-jar", "jPAI.jar", "15", "1920", "15", "640"],

@@ -9,11 +9,15 @@ See [INSTALL.md](INSTALL.md) for platform-specific instructions.
 ### Quick Start (Unix/macOS/Linux)
 
 ```bash
-git clone https://github.com/...
-cd PAI++
+git clone https://github.com/NutritionalLungImmunity/PAI.git
+cd PAI/cpp
 cmake -S . -B build
 cmake --build build
 ./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+Example
+```bash
+./build/PAIpp 15 1920 15 640
 ```
 
 ### macOS
@@ -33,12 +37,16 @@ cmake -S . -B build
 cmake --build build
 ./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
+Example
+```bash
+./build/PAIpp 15 1920 15 640
+```
 
 ### Windows (MinGW)
 
 #### Requirements
 
-- MinGW-w64
+- MinGW
 - Add mingw32-make to PATH
 - CMake
 
@@ -49,6 +57,10 @@ cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
 ./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
+Example
+```bash
+./build/PAIpp.exe 15 1920 15 640
+```
 
 From Command prompt or PowerShell:
 
@@ -57,7 +69,10 @@ cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
 .\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-
+Example
+```batch
+.\build\PAIpp.exe 15 1920 15 640
+```
 ### Windows (Cygwin)
 
 #### Requirements
@@ -73,6 +88,10 @@ cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
 ./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
+Example
+```bash
+./build/PAIpp.exe 15 1920 15 640
+```
 
 From Command prompt or PowerShell:
 
@@ -81,7 +100,10 @@ cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
 .\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-
+Example
+```batch
+.\build\PAIpp.exe 15 1920 15 640
+```
 ### Linux/Unix/
 
 #### Requirements
@@ -100,6 +122,10 @@ sudo apt install cmake
 cmake -S . -B build
 cmake --build build
 ./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+Example
+```bash
+./build/PAIpp 15 1920 15 640
 ```
 
 ## Clean build
