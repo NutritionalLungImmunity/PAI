@@ -13,36 +13,36 @@ Without installing any dependencies, this project has a ready-to-run Docker imag
 ### Pull the Image 
 
 ```bash
-docker pull ghcr.io/nutritionallungimmunity/pai/paiimage
+docker pull ghcr.io/nutritionallungimmunity/pai:latest
 ```
 ### Run the Container
 
 **For C++**: 
 ```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai/paiimage cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 Example
 ```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai/paiimage cpp 15 1920 15 640
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640
 ```
 
 **For Java**: 
 ```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai/paiimage java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 Example
 ```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai/paiimage java 15 1920 15 640
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java 15 1920 15 640
 ```
 
 **For C++ test**: 
 ```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai/paiimage ctest
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest ctest
 ```
 
 **For Java test**: 
 ```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai/paiimage jtest
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest jtest
 ```
 
 ## To create a local image
