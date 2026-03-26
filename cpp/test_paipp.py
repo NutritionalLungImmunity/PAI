@@ -54,6 +54,8 @@ def test(f, ref_afumigatus, ref_tnf, ref_ma, ref_afumigatus_std, ref_tnf_std, re
     i = 0
     pass_all_tests = True
     for line in f:
+        if "Iterations" in line:
+            continue
         sp = line.split("\t")
         if len(sp) != 24:
             continue
