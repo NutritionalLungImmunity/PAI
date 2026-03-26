@@ -21,6 +21,17 @@ public class PrintBaseModel extends PrintStat{
 
 	@Override
 	public void printStatistics(int k, File file){
+
+		if(k == 0)
+			System.out.println(
+				"Iterations\tTotal_Afumigatus\tResting_Conidia\tSwelling_Conidia\tGerminating_Conidia\tHyphae\t" +
+				"Total_TAFC\tFree-TAFC\tTAFC_Bound_to_Iron\t" +
+				"Apolactoferrin\tLactoferrin_Bound_to_Iron\tLactoferrin_Bount_to_two_Iron\t" +
+				"Total_Transferrin\tApotransferrin\tTransferrin_Bound_to_Iron\tTransferrin_Bount_to_two_Iron\t"  +
+				"TGF-b\tIL10\tTNF-a\tMIP1-b\tMIP-2\t" +
+				"Macrophages\tType-II-Pneumocytes\tNeutrophils"
+			);
+
 		if(k%15 != 0)return;
 		String str = k + "\t" + 
 	              Afumigatus.getTotalCells0() + "\t" +
