@@ -73,18 +73,33 @@ public class Main {
 	
 	
 	public static void main(String[] args) throws Exception {
-		System.out.println("jISS");
+		
+		//System.out.println("jISS");
+
+
+		if (args.length != 4) {
+        	System.err.println("Usage: java -jar jPAI.jar <t0> <Aspergillus> <Macrophage> <Pneumocyte>");
+        	System.err.println("or if on docker:");
+        	System.err.println("docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <t0> <Aspergillus> <Macrophage> <Pneumocyte>");
+        	System.err.println("\nExample usage with meaningful biological values from Ribeiro, HAL et al. 2022");
+			System.err.println("java -jar jPAI.jar 15 1920 15 640");
+        	System.err.println("or if on docker:");
+        	System.err.println("docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java 15 1920 15 640");
+			return;
+    	}
+
+
 		long tic = System.currentTimeMillis();
 		Main.baseModel(args);
 		long toc = System.currentTimeMillis();
-		System.out.println("Total: " + (toc - tic));
+		/*System.out.println("Total: " + (toc - tic));
 		System.out.println("Voxel.Interact: " + Exec.interactTime);
 		System.out.println("Exec.gc: " + Exec.gcTime);
 		System.out.println("Voxel.next: " + Exec.nextTime);
 		System.out.println("Molecule.degrade: " + Exec.degradeTime);
 		System.out.println("Exec.next: " + RunSingleThread.eNextTime);
 		System.out.println("Exec.recruit: " + RunSingleThread.recruitTime);
-		System.out.println("Exec.diffusion: " + RunSingleThread.diffusionTime);
+		System.out.println("Exec.diffusion: " + RunSingleThread.diffusionTime);*/
 		
 		
 	}
