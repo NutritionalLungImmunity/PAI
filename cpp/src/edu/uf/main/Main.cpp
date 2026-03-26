@@ -62,6 +62,13 @@ void baseModel(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     if (argc != 5) {
         std::cerr << "Usage: ./PAIpp <t0> <Aspergillus> <Macrophage> <Pneumocyte>" << std::endl;
+        std::cerr << "or if on docker:" << std::endl;
+        std::cerr << "docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <t0> <Aspergillus> <Macrophage> <Pneumocyte>" << std::endl;
+        std::cerr <<"\nExample usage with meaningful biological values from Ribeiro, HAL et al. 2022" << std::endl;
+		std::cerr <<"./PAIpp 15 1920 15 640"<< std::endl;
+        std::cerr <<"or if on docker:"<< std::endl;
+        std::cerr <<"docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640"<< std::endl;
+        
         return 1;
     }
     auto start = std::chrono::steady_clock::now();
