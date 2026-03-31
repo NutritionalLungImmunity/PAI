@@ -184,12 +184,12 @@ Example
 java -jar jPAI.jar 15 1920 15 640
 ```
 
-## Build Instructions
+### Build Instructions
 
 - java 1.8
 - javac 1.8
 
-### Unix/macOS/Linux
+#### Unix/macOS/Linux
 
 ```bash
 git clone https://github.com/NutritionalLungImmunity/PAI.git
@@ -198,7 +198,7 @@ javac -d bin $(find . -name "*.java")
 jar cfe jPAI.jar edu.uf.main.Main -C bin .
 ```
 
-### Windows
+#### Windows
 
 Command Prompt or PowerShell
 
@@ -207,7 +207,7 @@ javac -d bin $(Get-ChildItem -Path . -Filter *.java -Recurse | ForEach-Object { 
 jar cfe jPAI.jar edu.uf.main.Main -C bin .
 ```
 
-## Test
+### Test
      
 The script `test_jpai.py`:
 
@@ -219,7 +219,7 @@ The script `test_jpai.py`:
   - **Macrophages** (column 22)
 - Confirms these outputs are within expected ranges.
 
-### How to Run
+#### How to Run
 
 Make sure both `jPAI.jar` and `test_jpai.py` are in the same directory. Then run:
 
@@ -244,7 +244,7 @@ docker pull ghcr.io/nutritionallungimmunity/pai:latest
 ```
 ## Run the Container
 
-**For C++**: 
+**For C++: PAIpp**: 
 ```bash
 docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
@@ -253,7 +253,7 @@ Example
 docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640
 ```
 
-**For Java**: 
+**For Java: jPAI**: 
 ```bash
 docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
@@ -273,12 +273,15 @@ docker run --rm ghcr.io/nutritionallungimmunity/pai:latest jtest
 ```
 
 ## To create a local image
+
+A local image can be created without pulling the built docker image.
+
 ```bash
 docker build -t <myimage> .
 ```
 Example
 ```bash
-docker build -t paiimage .
+docker build -t pai .
 ```
 
 
