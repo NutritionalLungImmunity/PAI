@@ -4,55 +4,7 @@ java Pulmonary Agent-based Infection simulator
 
 This project is a C++ and Java cross-platform project. Buidable on Windows, Linux, and macOS via terminal and has a built docker image.
 
-## Using this project with Docker
-
-Without installing any dependencies, this project has a ready-to-run Docker image.
-
-- Docker version 29.1.3 (https://www.docker.com/)
-
-### Pull the Image 
-
-```bash
-docker pull ghcr.io/nutritionallungimmunity/pai:latest
-```
-### Run the Container
-
-**For C++**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
-```
-Example
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640
-```
-
-**For Java**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
-```
-Example
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java 15 1920 15 640
-```
-
-**For C++ test**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest ctest
-```
-
-**For Java test**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest jtest
-```
-
-## To create a local image
-```bash
-docker build -t <myimage> .
-```
-Example
-```bash
-docker build -t paiimage .
-```
+## Using this projet without Docker
 
 Without a Docker, this project can be build and run separately.
 
@@ -62,7 +14,7 @@ This is the C++ cross-platform project built with CMake. Buidable on Windows, Li
 
 ## Build Instructions
 
-See [INSTALL.md](INSTALL.md) in **cpp/** directory for platform-specific instructions.
+See [INSTALL.md](cpp/INSTALL.md) in **cpp/** directory for platform-specific instructions.
 
 ### Quick Start (Unix/macOS/Linux)
 
@@ -188,6 +140,58 @@ From Command prompt or PowerShell:
 rmdir /s /q build
 ```
 
+
+## Using this project with Docker
+
+Without installing any dependencies, this project has a ready-to-run Docker image.
+
+- Docker version 29.1.3 (https://www.docker.com/)
+
+### Pull the Image 
+
+```bash
+docker pull ghcr.io/nutritionallungimmunity/pai:latest
+```
+### Run the Container
+
+**For C++**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+Example
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640
+```
+
+**For Java**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+Example
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java 15 1920 15 640
+```
+
+**For C++ test**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest ctest
+```
+
+**For Java test**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest jtest
+```
+
+## To create a local image
+```bash
+docker build -t <myimage> .
+```
+Example
+```bash
+docker build -t paiimage .
+```
+
+
 ## Test
 
 The script `test_paipp.py`:
@@ -256,7 +260,7 @@ jar cfe jPAI.jar edu.uf.main.Main -C bin .
 ```
 
 ## Test
-
+     
 The script `test_jpai.py`:
 
 - Runs the `jPAI.jar` simulation with two different sets of inputs
