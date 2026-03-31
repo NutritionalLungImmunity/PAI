@@ -4,19 +4,19 @@ java Pulmonary Agent-based Infection simulator
 
 This project is a C++ and Java cross-platform project. Buidable on Windows, Linux, and macOS via terminal and has a built docker image.
 
-## Using this projet without Docker
+# Using this projet without Docker
 
 Without a Docker, this project can be build and run separately.
 
-# PAIpp
+## PAIpp
 
 This is the C++ cross-platform project built with CMake. Buidable on Windows, Linux, and macOS via terminal.
 
-## Build Instructions
+### Build Instructions
 
 See [INSTALL.md](cpp/INSTALL.md) in **cpp/** directory for platform-specific instructions.
 
-### Quick Start (Unix/macOS/Linux)
+#### Quick Start (Unix/macOS/Linux)
 
 ```bash
 git clone https://github.com/NutritionalLungImmunity/PAI.git
@@ -26,9 +26,9 @@ cmake --build build
 ./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
-### macOS
+#### macOS
 
-#### Requirements
+##### Requirements
 
 - Xcode CLI Tools (for clang++ and make)
 
@@ -36,7 +36,7 @@ cmake --build build
 xcode-select --install
 brew install cmake
 ```
-#### Build
+##### Build
 
 ```bash
 cmake -S . -B build
@@ -44,15 +44,15 @@ cmake --build build
 ./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
-### Windows (MinGW)
+#### Windows (MinGW)
 
-#### Requirements
+##### Requirements
 
 - MinGW
 - Add mingw32-make to PATH
 - CMake
 
-#### Build
+##### Build
 
 ```bash
 cmake -G "MinGW Makefiles" -S . -B build
@@ -75,15 +75,15 @@ Example
 ```batch
 .\build\PAIpp.exe 15 1920 15 640
 ```
-### Windows (Cygwin)
+#### Windows (Cygwin)
 
-#### Requirements
+##### Requirements
 
 - Cygwin
 - Add cygwin to PATH
 - CMake
 
-#### Build
+##### Build
 
 ```bash
 cmake -G "Unix Makefiles" -S . -B build
@@ -106,9 +106,9 @@ Example
 .\build\PAIpp.exe 15 1920 15 640
 ```
 
-### Linux/Unix/
+#### Linux/Unix/
 
-#### Requirements
+##### Requirements
 
 - g++
 - cmake
@@ -118,7 +118,7 @@ sudo apt get update
 sudo apt install g++
 sudo apt install cmake
 ```
-#### Build
+##### Build
 
 ```bash
 cmake -S . -B build
@@ -129,7 +129,7 @@ Example
 ```bash
 ./build/PAIpp 15 1920 15 640
 ```
-## Clean build
+### Clean build
 
 ```bash
 rm -rf build
@@ -140,59 +140,7 @@ From Command prompt or PowerShell:
 rmdir /s /q build
 ```
 
-
-## Using this project with Docker
-
-Without installing any dependencies, this project has a ready-to-run Docker image.
-
-- Docker version 29.1.3 (https://www.docker.com/)
-
-### Pull the Image 
-
-```bash
-docker pull ghcr.io/nutritionallungimmunity/pai:latest
-```
-### Run the Container
-
-**For C++**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
-```
-Example
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640
-```
-
-**For Java**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
-```
-Example
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java 15 1920 15 640
-```
-
-**For C++ test**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest ctest
-```
-
-**For Java test**: 
-```bash
-docker run --rm ghcr.io/nutritionallungimmunity/pai:latest jtest
-```
-
-## To create a local image
-```bash
-docker build -t <myimage> .
-```
-Example
-```bash
-docker build -t paiimage .
-```
-
-
-## Test
+### Test
 
 The script `test_paipp.py`:
 
@@ -204,7 +152,7 @@ The script `test_paipp.py`:
   - **Macrophages** (column 22)
 - Confirms these outputs are within expected ranges.
 
-### How to Run
+#### How to Run
 
 Make sure both `PAIpp` and `test_paipp.py` are in the same directory. Then run:
 
@@ -217,7 +165,7 @@ test_paipp.py was tested with Python version 3.7.2.
 This test is designed to see if output values are within reasonable bounds. Because of the stochastic nature of the simulator, passing the test is probable but not guaranteed.
 
 
-# jPAI
+## jPAI
 java Pulmonary Agent-based Infection simulator
 
 This is the java cross-platform project build with javac. Buidable on Windows, Linux, and macOS via terminal.
@@ -282,4 +230,56 @@ python3 test_jpai.py
 test_jpai.py was tested with Python version 3.7.2
 
 This test is designed to see if output values are within reasonable bounds. Because of the stochastic nature of the simulator, passing the test is probable but not guaranteed.
+
+# Using this project with Docker
+
+Without installing any dependencies, this project has a ready-to-run Docker image.
+
+- Docker version 29.1.3 (https://www.docker.com/)
+
+## Pull the Image 
+
+```bash
+docker pull ghcr.io/nutritionallungimmunity/pai:latest
+```
+## Run the Container
+
+**For C++**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+Example
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest cpp 15 1920 15 640
+```
+
+**For Java**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
+```
+Example
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest java 15 1920 15 640
+```
+
+**For C++ test**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest ctest
+```
+
+**For Java test**: 
+```bash
+docker run --rm ghcr.io/nutritionallungimmunity/pai:latest jtest
+```
+
+## To create a local image
+```bash
+docker build -t <myimage> .
+```
+Example
+```bash
+docker build -t paiimage .
+```
+
+
 
