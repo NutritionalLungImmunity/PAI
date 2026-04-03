@@ -14,7 +14,7 @@ This is the C++ cross-platform project built with CMake. Buidable on Windows, Li
 
 ### Build Instructions
 
-See [INSTALL.md](cpp/INSTALL.md) in **cpp/** directory for platform-specific instructions.
+See [INSTALL.md](INSTALL.md) for platform-specific instructions.
 
 #### Quick Start (Unix/macOS/Linux)
 
