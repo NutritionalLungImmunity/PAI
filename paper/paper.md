@@ -42,7 +42,20 @@ Understanding the complex interplay between immune cells, pathogens, and signali
 
 PAI addresses this gap by providing a scalable, extensible agent-based modeling framework for simulating the tissue-scale immune response to lung infections, such as *Aspergillus fumigatus*. PAI has been used before, and the mathematical and biological components are better explained in @ribeiro2022. While in @ribeiro2023, we modified it to simulate and generate a hypothesis about Covid-Associated-Pulmonary-Aspergillosis. @qu2025 expanded the original model to simulate the effect of NETosis and hemorrhage on Aspergillosis. However, none of these papers provides detailed information about the software. 
 
-# Model
+
+# State of the Field
+
+Several ABMs of the Immune System have been proposed. For example, the Celada-Seiden (@celada1992) model and its successors, such as C-IMMSIM (@rapin2010), introduced the concept of representing immune cells and molecules as discrete interacting agents governed by probabilistic rules. C-IMMSIM (@basak2021) has been widely used to study vaccination strategies and systemic immune responses. However, its design is largely focused on systemic and lymphoid processes rather than the lung environment. In contrast, GRAN-SIM (@segovia2004) represents a highly specialized and biologically detailed ABM tailored to the study of tuberculosis granulomas. Its high level of specialization enables deep mechanistic insights but also limits its generalizability.
+
+The PAI framework addresses this gap by integrating a spatially explicit, voxel-based representation of the lung with a modular and extensible agent architecture. Unlike general immune simulators, it explicitly models the pulmonary microenvironment, and unlike highly specialized models, it is structured to support adaptation to multiple pathogens and biological hypotheses.
+
+
+# Research Impact Statement
+
+Pulmonary infections such as invasive aspergillosis and viral pneumonias remain major causes of morbidity and mortality, particularly in immunocompromised populations (@pappas2010), yet their underlying immune dynamics are difficult to study experimentally due to spatial complexity and limited access to human lung tissue. The Pulmonary Agent-based Infection simulator (PAI) addresses this challenge by providing a biologically grounded, spatially explicit computational framework that enables in silico experimentation on host–pathogen interactions within the lung microenvironment. PAI has been applied in hypothesis generation, experimental design, and therapeutic exploration, including the study of immune modulation, co-infections, and treatment strategies (@ribeiro2022; @ribeiro2023; @qu2025). 
+
+
+# Software Design
 
 ## Architecture
 
@@ -60,12 +73,16 @@ A typical instantiation of the PAI model, as used in @ribeiro2022, involves a 10
 
 ![Figure 3: jPAI and PAI++ comparison. A: Macrophage time series. B: TNF-a time series. C: Running time. D: Memory usage. Memory recorded with Valgrind (C++) and JProfiler (Java). All figures represent the average of 100 simulations. Simulations initialized with 10X10X10 voxels, 640 pneumocytes, 1920 conidia, 15 macrophages, and 2160 iterations. PAI++ compiled with g++ 12.4.0 using the MinGW toolchain with level three optimization; jPAI run with Java 23.0.1. Execution environment: Windows 10 Education 64-Bit Dell laptop, Intel® Core™ Ultra 7 155U (14CPUs), ~2.1GHz, 16384MB RAM. A-B: paired t-test. C-D: Wilcoxon rank-sum test. (ns not significant p > 0.05; **** p < 0.0001). \label{fig:benchmark}](Benchmark.png)
 
-## Benchmark
+# Benchmark
 
 PAI++ contains only the code of the @ribeiro2022 model, which is the focus of this paper, while jPAI contains other pieces of code not discussed here. The code used for this benchmark is a simplification of @ribeiro2022. Within this context, PAI++ and jPAI are nearly identical (Figure 3A-B). The similarity between the two implementations serves as an important benchmark for model reproducibility, a key target in the modeling community (@donkin2017; @masison2021). Figure 3C shows that the running time (wall time) of both implementations is similar (~11 sec), with C++ being slightly faster. On the other hand, there were major differences in the memory usage (Figure 3D). A more thorough benchmark is provided in Benchmark.pdf.
 
 We provided documentation only for the Java version of the code. However, a C++ code follows the same structure.
 
+
+# AI Usage Disclosure
+
+Generative AI tools were used to assist with paper writing and documentation. The software implementation, algorithmic design, benchmarking, and core technical contributions were developed without AI assistance. However, AI was used to assist with translating code from Java to C++, although there was extensive manual input in the form of coding, checking, and debugging. All AI-assisted content has been reviewed and validated by the authors for technical accuracy and scholarly integrity.
 
 # References
 
