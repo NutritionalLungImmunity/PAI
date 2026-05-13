@@ -79,6 +79,12 @@ PAI++ contains only the code of the @ribeiro2022 model, which is the focus of th
 
 We provided documentation only for the Java version of the code. However, a C++ code follows the same structure.
 
+# Output Description and Code Availability
+
+The model outputs several values. For cells such as Aspergillus fumigatus and its several life stages (resting conidia, swelling conidia, germinating conidia, and hyphae), Macrophages, Neutrophils, and Type-II pneumocytes, the outputs are integer counts of these cells. For molecules (Lactoferin, Transferrin, and TAFC and its bound to iron forms, TNF-a, TGF-b, IL10, MIP1-b, MIP-2), the outputs are double floating point numbers representing the quantity of these molecules in mols (not concentration in molar). Concentration can be obtained by dividing these numbers by the simulated volume, 6.4e-8 liters. More details are provided in the documentation. 
+
+Code is available at: https://github.com/NutritionalLungImmunity/PAI.git
+
 
 # AI Usage Disclosure
 
