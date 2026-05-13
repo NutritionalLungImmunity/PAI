@@ -59,7 +59,7 @@ cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
 ./build/PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-Example
+Example (with values from Ribeiro HAL, et al. 2022)
 ```bash
 ./build/PAIpp.exe 15 1920 15 640
 ```
@@ -71,7 +71,7 @@ cmake -G "MinGW Makefiles" -S . -B build
 cmake --build build
 .\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-Example
+Example (with values from Ribeiro HAL, et al. 2022)
 ```batch
 .\build\PAIpp.exe 15 1920 15 640
 ```
@@ -101,7 +101,7 @@ cmake -G "Unix Makefiles" -S . -B build
 cmake --build build
 .\build\PAIpp.exe <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-Example
+Example (with values from Ribeiro HAL, et al. 2022)
 ```batch
 .\build\PAIpp.exe 15 1920 15 640
 ```
@@ -125,7 +125,7 @@ cmake -S . -B build
 cmake --build build
 ./build/PAIpp <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
-Example
+Example (with values from Ribeiro HAL, et al. 2022)
 ```bash
 ./build/PAIpp 15 1920 15 640
 ```
@@ -179,7 +179,7 @@ This is the java cross-platform project build with javac. Buidable on Windows, L
 java -jar jPAI.jar <num_neutrophils> <num_aspergillus> <num_macrophages> <num_pneumocytes>
 ```
 
-Example
+Example (with values from Ribeiro HAL, et al. 2022)
 ```bash
 java -jar jPAI.jar 15 1920 15 640
 ```
