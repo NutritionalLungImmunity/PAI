@@ -6,7 +6,7 @@ This project is a C++ and Java cross-platform project. Buidable on Windows, Linu
 
 Obs 1: Documentation is provided only for the Java version of the code. However, the C++ version is very similar, and the Java documentation can be consulted for the C++ code.
 
-Obs 2: The Java, but not the C++ version of the simulator, contains additional code that is beyond the scope of this README. The main function in Java does not, however, call this code. 
+Obs 2: The Java version has additional code not present in the C++ version. However, this code is currently not being used.
 
 # Using this projet without Docker
 
