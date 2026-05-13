@@ -3,6 +3,7 @@
 java Pulmonary Agent-based Infection simulator
 
 This project is a C++ and Java cross-platform project. Buidable on Windows, Linux, and macOS via terminal and has a built docker image.
+Obs: Documentation is provided only for the Java version of the code. However, the C++ version is very similar, and the Java documentation can be consulted for the C++ code.
 
 # Using this projet without Docker
 
