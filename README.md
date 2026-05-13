@@ -288,5 +288,35 @@ Example
 docker build -t pai .
 ```
 
+# Outputs
+
+The output from PAI is as follows: 
+
+| Column name | Description | 
+|-------------|-------------|
+| Iteration | Iteration number|
+|Total_Afumigatus| Total number of afumigatus cells|
+|Resting_Conidia| Number of resting conidia|
+|Swelling_Conidia| Number of swelling conidia|
+|Germinating_Conidia | Number of conidia initiating the germination| 
+|Hyphae| Number of hyphae cells. In this simulator, we consider each segment of 40 micrometers as a "cell" |
+|Total_TAFC| Total amount of TAFC in mols. TAFC is an iron chelator secreted by the fungus|
+|Free-TAFC| Non-iron-bound TAFC in mols|
+|TAFC_Bound_to_Iron| TAFC bound to iron in mols|
+|Apolactoferrin| Non-bound-to-iron Lactoferrin in mols. (Host iron chelator produced by neutrophils)|
+|Lactoferrin_Bound_to_Iron| Lactoferrin bound to one iron ion in mols|
+|Lactoferrin_Bount_to_two_Iron| Lactoferrin bound to two iron ions in mols|
+|Total_Transferrin| Total transferrin in mols (Another host iron chelator)|
+|Apotransferrin| Non-bound-to-iron transferrin in mols|
+|Transferrin_Bound_to_Iron| Transferrin bound to one iron ion in mols|
+|Transferrin_Bount_to_two_Iron| Transferrin bound to two iron ions in mols|
+|TGF-b | Tumor growth factor beta in mols|
+|IL10| Interleukin 10 in mols|
+|TNF-a| Tumor necrosis factor alpha in mols|
+|MIP1-b| Macrophage inflammatory protein 1 beta in mols|
+|MIP-2 | Macrophage inflammatory protein 2 in mols|
+|Macrophages | Number of macrophages|
+|Type-II-Pneumocytes | Number of Type-II Pneumocytes|
+|Neutrophils  | Number of Neutrophils|
 
 
